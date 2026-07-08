@@ -1,0 +1,1408 @@
+{
+  "id": "java-devops-core",
+  "name": "Java & DevOps · Core",
+  "description": "Graduate-level Java & DevOps. Practical, reasoning-based questions.",
+  "order": 1,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "DevOps",
+      "text": "Why do developers usually create feature branches?",
+      "options": [
+        "To automatically delete the branch on push",
+        "To make the repository clone much faster",
+        "To permanently hide history from teammates",
+        "To isolate work before merging into main"
+      ],
+      "correct": 3,
+      "explanation": "Feature branches let you work without destabilising shared code, and merge only when the change is ready and reviewed.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q002",
+      "topic": "DevOps",
+      "text": "What is the main purpose of a pull request?",
+      "options": [
+        "To delete a branch once it is finished",
+        "To push code directly to main without any review",
+        "To permanently lock the main branch",
+        "To request review and discuss before merging"
+      ],
+      "correct": 3,
+      "explanation": "A PR is a checkpoint for review, discussion and knowledge sharing before code reaches the main branch.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q003",
+      "topic": "DevOps",
+      "text": "You hit a merge conflict. What is the right approach?",
+      "options": [
+        "Delete the file and commit an empty version",
+        "Always keep your own side and discard theirs",
+        "Read both changes, resolve deliberately, then test",
+        "Force-push straight over the branch to erase the clash"
+      ],
+      "correct": 2,
+      "explanation": "A conflict means two changes touched the same lines. You have to understand both intents and combine them, not blindly pick a side.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q004",
+      "topic": "DevOps",
+      "text": "You accidentally pushed an API key in a commit. What should you do first?",
+      "options": [
+        "Make the repository private and leave it there",
+        "Delete it in a later commit and move on",
+        "Rotate and revoke the key; it stays in history",
+        "Nothing; Git encrypts committed secrets for you"
+      ],
+      "correct": 2,
+      "explanation": "The secret is compromised the moment it's pushed and remains in history. Rotating it is the only real fix; scrubbing history is secondary.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q005",
+      "topic": "DevOps",
+      "text": "Why prefer small, frequent commits over one huge commit?",
+      "options": [
+        "They are easier to review, revert and bisect",
+        "They make the repository clone much faster",
+        "They use noticeably less storage on the server",
+        "Git refuses to accept overly large commits"
+      ],
+      "correct": 0,
+      "explanation": "Small commits make reviews meaningful and let you pinpoint or undo a specific change instead of an all-or-nothing blob.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q006",
+      "topic": "DevOps",
+      "text": "On a shared branch others have pulled, which is safer to undo a bad commit?",
+      "options": [
+        "git commit --amend on the pushed commit",
+        "git reset --hard to erase it from the branch",
+        "git revert, which adds a reversing commit",
+        "Delete the branch and recreate it fresh"
+      ],
+      "correct": 2,
+      "explanation": "revert adds a new commit that undoes the change without rewriting shared history, so it won't break everyone else's clones.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q007",
+      "topic": "DevOps",
+      "text": "What belongs in .gitignore?",
+      "options": [
+        "The main application source code files",
+        "Build output, local config and secrets",
+        "The project's README and documentation",
+        "Every file the project needs to compile"
+      ],
+      "correct": 1,
+      "explanation": "Generated artefacts and secrets shouldn't be versioned. Keeping them out avoids noise and accidental credential leaks.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q008",
+      "topic": "DevOps",
+      "text": "Why review a diff before committing?",
+      "options": [
+        "To catch debug code, secrets and stray changes",
+        "To make the commit upload a little faster",
+        "Because Git refuses to commit a diff nobody has read",
+        "To automatically format the changed lines"
+      ],
+      "correct": 0,
+      "explanation": "A quick self-review before committing catches leftover debugging, stray files and secrets before they enter history.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q009",
+      "topic": "DevOps",
+      "text": "In a CI/CD pipeline, what is the main benefit of failing early on tests?",
+      "options": [
+        "Developers can safely skip writing more tests",
+        "The pipeline uses far less disk space overall",
+        "Bugs are discovered sooner, when cheap to fix",
+        "The final build artifact comes out smaller"
+      ],
+      "correct": 2,
+      "explanation": "Fast failure gives quick feedback so problems are fixed before they reach later stages or production.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q010",
+      "topic": "DevOps",
+      "text": "A build works locally but fails in the pipeline. What should you check first?",
+      "options": [
+        "The number of branches currently in the repo",
+        "The colour scheme of the pipeline dashboard",
+        "Whether the repository has accumulated enough total stars",
+        "Env vars, tool versions, missing files, OS differences"
+      ],
+      "correct": 3,
+      "explanation": "'Works on my machine' failures almost always come from differences between your laptop and the clean CI environment.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q011",
+      "topic": "DevOps",
+      "text": "Why automate builds and deployments instead of doing them by hand?",
+      "options": [
+        "It makes the compiled binary itself run much faster",
+        "It removes the need for any tests at all",
+        "Repeatable, consistent results with fewer errors",
+        "It lets you skip code review entirely"
+      ],
+      "correct": 2,
+      "explanation": "Automation makes the process deterministic and auditable, removing the mistakes that come with manual steps.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q012",
+      "topic": "DevOps",
+      "text": "A test fails intermittently in CI. What's the healthiest response?",
+      "options": [
+        "Disable all tests until the release ships",
+        "Delete the test so the pipeline stays green",
+        "Re-run the pipeline repeatedly until it happens to pass",
+        "Investigate and fix it, or quarantine it clearly"
+      ],
+      "correct": 3,
+      "explanation": "Flaky tests erode trust in the pipeline. Blindly re-running hides real bugs; fix the cause or isolate it explicitly.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q013",
+      "topic": "DevOps",
+      "text": "Why keep pipeline runs fast?",
+      "options": [
+        "It reduces the storage the pipeline consumes",
+        "Slow pipelines make the artifact more reliable",
+        "Speed has no real effect on the developers",
+        "Fast feedback keeps developers productive"
+      ],
+      "correct": 3,
+      "explanation": "Slow pipelines discourage frequent integration and delay feedback, which is where most of CI's value comes from.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q014",
+      "topic": "DevOps",
+      "text": "Best place to store deploy credentials used by the pipeline?",
+      "options": [
+        "In the CI/CD secrets store, injected at runtime",
+        "Hard-coded directly inside the pipeline script",
+        "Committed to the repository in a plain file",
+        "Emailed to whoever happens to run the deploy"
+      ],
+      "correct": 0,
+      "explanation": "Secrets belong in a managed store and are injected as needed, never committed where anyone with repo access can read them.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q015",
+      "topic": "DevOps",
+      "text": "Why build an artifact once and promote the same one through environments?",
+      "options": [
+        "To guarantee what you tested is what you ship",
+        "To make each environment build a bit faster",
+        "Because rebuilding per stage is not allowed",
+        "To reduce the number of branches you need"
+      ],
+      "correct": 0,
+      "explanation": "Rebuilding per environment risks subtle differences. Promoting one immutable artifact means staging and prod run identical bits.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q016",
+      "topic": "DevOps",
+      "text": "What is a Docker container?",
+      "options": [
+        "A full virtual machine with its own kernel",
+        "A lightweight isolated environment for an app",
+        "A remote server that hosts your source code",
+        "A registry that stores built container images"
+      ],
+      "correct": 1,
+      "explanation": "A container packages an app with its dependencies so it runs consistently across machines and environments.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q017",
+      "topic": "DevOps",
+      "text": "Why are environment variables commonly used for configuration?",
+      "options": [
+        "Because code cannot read values from a file",
+        "To make the application start up much faster",
+        "To keep configuration outside the source code",
+        "To encrypt the configuration automatically"
+      ],
+      "correct": 2,
+      "explanation": "Values that differ per environment (URLs, keys, flags) live outside the code so the same build runs everywhere.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q018",
+      "topic": "DevOps",
+      "text": "What's the difference between a Docker image and a container?",
+      "options": [
+        "An image runs while a container is just stored",
+        "A container is the template; an image runs it",
+        "They are two names for the exact same thing",
+        "An image is the template; a container runs it"
+      ],
+      "correct": 3,
+      "explanation": "An image is the immutable blueprint; a container is a live, running instance created from that image.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q019",
+      "topic": "DevOps",
+      "text": "Your Docker image is huge and slow to pull. A good first step?",
+      "options": [
+        "Use a smaller base image or a multi-stage build",
+        "Add more image layers to spread out the download",
+        "Pull the image over a faster network link",
+        "Run the container with far more memory"
+      ],
+      "correct": 0,
+      "explanation": "Multi-stage builds drop build-time tooling from the final image, and a slimmer base cuts size directly.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q020",
+      "topic": "DevOps",
+      "text": "Why is baking secrets into an image a bad idea?",
+      "options": [
+        "The build simply takes much longer to finish",
+        "It makes the image considerably larger on disk",
+        "Anyone who can pull the image can read them",
+        "Docker refuses to run an image holding secrets"
+      ],
+      "correct": 2,
+      "explanation": "Image layers are readable by anyone with access to the image, so embedded secrets are effectively published.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q021",
+      "topic": "DevOps",
+      "text": "A container exits immediately after starting. What do you check first?",
+      "options": [
+        "How many other containers are running on the same host",
+        "The colour of the terminal running it",
+        "The container logs and the main process's exit",
+        "The total number of images in the registry"
+      ],
+      "correct": 2,
+      "explanation": "The logs usually show why the main process died; a container stops as soon as its main process exits.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q022",
+      "topic": "DevOps",
+      "text": "Why run a container process as a non-root user when possible?",
+      "options": [
+        "It reduces the final size of the image on disk",
+        "It makes the container start up much faster",
+        "Root is not permitted inside any container",
+        "Least privilege limits damage if it's compromised"
+      ],
+      "correct": 3,
+      "explanation": "Running as non-root follows least privilege, so a compromised process can't freely affect the host or other workloads.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q023",
+      "topic": "DevOps",
+      "text": "What is the smallest deployable unit in Kubernetes?",
+      "options": [
+        "A container",
+        "A pod",
+        "A node",
+        "A service"
+      ],
+      "correct": 1,
+      "explanation": "A pod wraps one or more tightly-coupled containers and is the unit Kubernetes schedules and manages.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q024",
+      "topic": "DevOps",
+      "text": "What is a readiness probe for?",
+      "options": [
+        "Restarting a pod that has become stuck",
+        "Deciding when a pod should receive traffic",
+        "Scaling the number of replicas up or down",
+        "Choosing which node a pod is placed on"
+      ],
+      "correct": 1,
+      "explanation": "Readiness gates traffic: a pod is kept out of the load-balancer rotation until it reports ready.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q025",
+      "topic": "DevOps",
+      "text": "Liveness vs readiness probe — key difference?",
+      "options": [
+        "Both do exactly the same thing to the pod",
+        "Readiness restarts a stuck one; liveness gates traffic",
+        "Liveness restarts a stuck one; readiness gates traffic",
+        "Neither affects live traffic routing at all"
+      ],
+      "correct": 2,
+      "explanation": "A failing liveness probe restarts the container; a failing readiness probe just removes it from serving traffic.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q026",
+      "topic": "DevOps",
+      "text": "A pod is in CrashLoopBackOff. What do you look at first?",
+      "options": [
+        "The colour shown next to the pod in the UI",
+        "The pod's current and previous container logs",
+        "How many nodes the cluster currently has",
+        "The total number of pods across all namespaces"
+      ],
+      "correct": 1,
+      "explanation": "CrashLoopBackOff means the container keeps dying; the logs (including the previous crashed instance) usually show why.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q027",
+      "topic": "DevOps",
+      "text": "A new rollout broke production. Quickest safe action?",
+      "options": [
+        "Roll back to the previous known-good revision",
+        "Delete the whole deployment and start over",
+        "Restart every node in the cluster at once",
+        "Scale the broken version up to more replicas"
+      ],
+      "correct": 0,
+      "explanation": "Restore service first by rolling back, then diagnose the bad release calmly out of the critical path.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q028",
+      "topic": "DevOps",
+      "text": "Where should a database password live in Kubernetes?",
+      "options": [
+        "In a ConfigMap",
+        "In a Secret",
+        "In the container image",
+        "In a plain environment file"
+      ],
+      "correct": 1,
+      "explanation": "Secrets are the intended place for sensitive values; ConfigMaps are for non-confidential configuration.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q029",
+      "topic": "DevOps",
+      "text": "Risk of running pods with no resource requests/limits?",
+      "options": [
+        "One workload can starve the others on the node",
+        "Pods will simply refuse to start at all",
+        "The scheduler places every pod on one node",
+        "Kubernetes automatically doubles the limits"
+      ],
+      "correct": 0,
+      "explanation": "Without limits a noisy pod can consume a node's CPU/memory and degrade everything else scheduled there.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q030",
+      "topic": "DevOps",
+      "text": "A stateless web service is overloaded. Simplest scaling move?",
+      "options": [
+        "Restart the pod repeatedly until it copes",
+        "Give the single pod a much bigger CPU",
+        "Add more replicas behind the service",
+        "Move the pod onto a slightly faster node"
+      ],
+      "correct": 2,
+      "explanation": "Stateless services scale horizontally: more identical replicas share the load behind one service endpoint.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q031",
+      "topic": "DevOps",
+      "text": "Why does Kubernetes use declarative manifests?",
+      "options": [
+        "You describe desired state and it reconciles",
+        "You list each command to run, step by step",
+        "You must apply changes manually every time",
+        "It only works for stateless applications"
+      ],
+      "correct": 0,
+      "explanation": "You declare what you want; the control loop continuously works to make reality match that desired state.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q032",
+      "topic": "DevOps",
+      "text": "Why run 'terraform plan' before 'apply'?",
+      "options": [
+        "To review exactly what will change beforehand",
+        "To make the following apply run much faster",
+        "Because apply needs a plan file to exist",
+        "To automatically format the Terraform code"
+      ],
+      "correct": 0,
+      "explanation": "plan is a dry run showing adds/changes/destroys, so you catch surprises before touching real infrastructure.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q033",
+      "topic": "DevOps",
+      "text": "Why shouldn't you hand-edit Terraform state?",
+      "options": [
+        "Editing it is fine and the usual way to fix things",
+        "The state file is far too large to open safely",
+        "Terraform encrypts the state so you can't read it",
+        "It maps config to real resources; edits cause drift"
+      ],
+      "correct": 3,
+      "explanation": "State is the source of truth linking code to real resources. Editing it by hand easily desyncs Terraform from reality.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q034",
+      "topic": "DevOps",
+      "text": "Someone changed a resource in the AWS console that Terraform manages. What happens?",
+      "options": [
+        "Terraform deletes the resource on the next apply",
+        "Drift: the next plan wants to revert it to code",
+        "Nothing at all; Terraform never notices it",
+        "The state file is corrupted and must be rebuilt"
+      ],
+      "correct": 1,
+      "explanation": "Terraform compares real state to code; out-of-band changes show as drift and will be reconciled on the next apply.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q035",
+      "topic": "DevOps",
+      "text": "Main reason to use Infrastructure as Code over clicking in a console?",
+      "options": [
+        "Clicking in a console cannot create resources",
+        "It always provisions resources much more quickly",
+        "It removes the need to understand the cloud",
+        "Repeatable, reviewable, version-controlled infra"
+      ],
+      "correct": 3,
+      "explanation": "IaC makes infra changes auditable and reproducible, and lets you review them like any other code.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q036",
+      "topic": "DevOps",
+      "text": "You need a secret value in Terraform. What do you avoid?",
+      "options": [
+        "Marking the variable as sensitive in config",
+        "Passing it in through a variable at apply time",
+        "Storing it in a dedicated secrets manager",
+        "Committing it in plain text inside the repo"
+      ],
+      "correct": 3,
+      "explanation": "Never commit secrets in code or tfvars; use a secrets manager or injected variables, and mark outputs sensitive.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q037",
+      "topic": "DevOps",
+      "text": "An app is running but users report errors. What do you check first?",
+      "options": [
+        "The number of commits made in the last week",
+        "The colour theme used on the application login page",
+        "How many total users are registered in it",
+        "Logs, recent deploys, health, config, dependencies"
+      ],
+      "correct": 3,
+      "explanation": "Production issues need runtime evidence first: logs, recent changes, health checks, config and external dependencies.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q038",
+      "topic": "DevOps",
+      "text": "Why prefer structured (e.g. JSON) logs over free-form text?",
+      "options": [
+        "Free-form text cannot be written to a file",
+        "They take up considerably less disk space than text",
+        "They make the application itself run faster",
+        "They're far easier to search, filter and aggregate"
+      ],
+      "correct": 3,
+      "explanation": "Structured fields let tools query and correlate logs reliably instead of fragile text parsing.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q039",
+      "topic": "DevOps",
+      "text": "You need to follow a single request across several services. What helps most?",
+      "options": [
+        "A longer request timeout",
+        "A single combined log file",
+        "Distributed tracing",
+        "More CPU on each service"
+      ],
+      "correct": 2,
+      "explanation": "Traces stitch together a request's path across services, which metrics and individual logs alone can't show.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q040",
+      "topic": "DevOps",
+      "text": "First thing to do when a real incident starts?",
+      "options": [
+        "Blame whoever made the most recent commit",
+        "Immediately rewrite the failing component",
+        "Wait quietly to see if it resolves itself",
+        "Assess impact and severity, then communicate"
+      ],
+      "correct": 3,
+      "explanation": "Understanding blast radius and telling stakeholders comes first; coordinated response beats silent lone debugging.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q041",
+      "topic": "DevOps",
+      "text": "A non-critical alert pages the team every night. Best response?",
+      "options": [
+        "Ignore the pages and hope it stops eventually",
+        "Delete the monitoring for that system entirely",
+        "Tune the threshold so the alert is actionable",
+        "Page a larger group so someone always answers"
+      ],
+      "correct": 2,
+      "explanation": "Noisy alerts cause fatigue and missed real ones. Alerts should be actionable; tune or remove the noise.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q042",
+      "topic": "DevOps",
+      "text": "Production is down after a deploy and the cause is unclear. Usual first move?",
+      "options": [
+        "Scale the broken deploy up to more replicas",
+        "Debug live in production before restoring it",
+        "Wait for the next scheduled release to fix it",
+        "Roll back to restore service, then investigate"
+      ],
+      "correct": 3,
+      "explanation": "Under an outage, restoring service (rollback) usually beats debugging forward while users are affected.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q043",
+      "topic": "DevOps",
+      "text": "Why do health checks matter for a platform like Kubernetes or a load balancer?",
+      "options": [
+        "They reduce the memory each instance uses",
+        "They make each request noticeably faster",
+        "They encrypt all of the traffic reaching the instances",
+        "They let the platform replace unhealthy instances"
+      ],
+      "correct": 3,
+      "explanation": "Health checks give the platform a signal to stop routing to, restart, or replace instances that aren't working.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q044",
+      "topic": "DevOps",
+      "text": "A request returns HTTP 500. Where do you look?",
+      "options": [
+        "The user's browser console and cookies",
+        "Server-side logs — it is a server error",
+        "The DNS records for the application domain",
+        "The client's local network configuration"
+      ],
+      "correct": 1,
+      "explanation": "5xx means the server failed to handle a valid request, so the evidence is in server-side logs and code.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q045",
+      "topic": "DevOps",
+      "text": "Behind a reverse proxy you get 502/504 errors. Likely area?",
+      "options": [
+        "The user typing the wrong URL in the browser",
+        "The upstream backend being down or unreachable",
+        "A missing favicon on the front-end site",
+        "Too many CSS files loading on the page"
+      ],
+      "correct": 1,
+      "explanation": "502/504 mean the proxy couldn't get a good/timely response from the backend, so investigate the upstream service.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q046",
+      "topic": "DevOps",
+      "text": "What does the principle of least privilege mean?",
+      "options": [
+        "Grant broad access now and trim it back later",
+        "Give everyone admin so nothing ever blocks",
+        "Grant only the access that is actually needed",
+        "Share one powerful account across the team"
+      ],
+      "correct": 2,
+      "explanation": "Minimising granted permissions limits the damage from mistakes or compromised credentials.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q047",
+      "topic": "DevOps",
+      "text": "Why externalise configuration per environment (12-factor style)?",
+      "options": [
+        "Because code cannot read from a config file",
+        "So each environment can run its own different build",
+        "So one build runs unchanged across all environments",
+        "To make the application start up much faster"
+      ],
+      "correct": 2,
+      "explanation": "Config in the environment (not the code) lets the identical artifact behave correctly everywhere.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q048",
+      "topic": "DevOps",
+      "text": "What does a load balancer primarily do?",
+      "options": [
+        "Compile the application before it is deployed",
+        "Store the application's files and serve them",
+        "Encrypt every request that reaches the backend",
+        "Distribute traffic across instances for scale"
+      ],
+      "correct": 3,
+      "explanation": "It spreads requests across healthy backends, improving throughput and tolerating individual instance failures.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q049",
+      "topic": "DevOps",
+      "text": "Why is it valuable for a deploy/operation to be idempotent?",
+      "options": [
+        "Running it again always doubles what it did",
+        "Running it again safely yields the same state",
+        "It can only ever be run one single time",
+        "It runs noticeably faster on the second run"
+      ],
+      "correct": 1,
+      "explanation": "Idempotent operations can be retried without harm, which is essential for reliable automation and recovery.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q050",
+      "topic": "Java",
+      "text": "What happens if you call .equals() on a variable that is null?",
+      "options": [
+        "Returns true because both sides are null",
+        "Quietly returns false without any error",
+        "Throws a NullPointerException",
+        "Fails to compile before it can even run"
+      ],
+      "correct": 2,
+      "explanation": "You can't call a method on null. Prefer \"literal\".equals(var) or Objects.equals(a, b) to stay null-safe.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q051",
+      "topic": "Java",
+      "text": "Difference between == and .equals() for objects?",
+      "options": [
+        "equals only works on primitive number types",
+        "== compares values; equals compares references",
+        "They behave identically for all object types",
+        "== compares references; equals compares values"
+      ],
+      "correct": 3,
+      "explanation": "== asks 'same object?'; .equals() can be overridden to ask 'logically equal?'. Confusing them is a classic bug.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q052",
+      "topic": "Java",
+      "text": "Safest way to compare two possibly-null objects for equality?",
+      "options": [
+        "b.equals(a) directly",
+        "a.equals(b) directly",
+        "a == b by reference identity",
+        "Objects.equals(a, b)"
+      ],
+      "correct": 3,
+      "explanation": "Objects.equals handles nulls for you, avoiding an NPE when the first reference is null.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q053",
+      "topic": "Java",
+      "text": "If you override equals(), what else must you override?",
+      "options": [
+        "toString()",
+        "hashCode()",
+        "compareTo()",
+        "clone()"
+      ],
+      "correct": 1,
+      "explanation": "Equal objects must have equal hash codes, or HashMap/HashSet will behave incorrectly.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q054",
+      "topic": "Java",
+      "text": "Why is comparing strings with == often a bug?",
+      "options": [
+        "== always returns true for two equal strings",
+        "== is far slower than calling the equals method",
+        "== cannot be used on strings and won't compile",
+        "== compares references, not the character contents"
+      ],
+      "correct": 3,
+      "explanation": "Two strings with the same text can be different objects; use .equals() to compare their contents.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q055",
+      "topic": "Java",
+      "text": "Key difference between checked and unchecked exceptions?",
+      "options": [
+        "Checked ones must be handled or declared",
+        "Unchecked ones must be handled or declared",
+        "Both types must always be caught explicitly",
+        "Neither kind ever needs to be handled at all"
+      ],
+      "correct": 0,
+      "explanation": "The compiler enforces checked exceptions; unchecked ones (like NullPointerException) usually signal programming errors.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q056",
+      "topic": "Java",
+      "text": "Why is catching an exception and doing nothing dangerous?",
+      "options": [
+        "It automatically retries the failed operation",
+        "It makes the program run considerably faster",
+        "It is required whenever you catch an exception",
+        "It hides failures and makes bugs invisible"
+      ],
+      "correct": 3,
+      "explanation": "Swallowing exceptions silently loses the error, so problems surface later in confusing ways with no trail.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q057",
+      "topic": "Java",
+      "text": "What does try-with-resources give you?",
+      "options": [
+        "Automatic retrying of any code that throws",
+        "Automatic closing of resources, avoiding leaks",
+        "A guaranteed speed-up for file operations",
+        "Silent swallowing of every exception thrown"
+      ],
+      "correct": 1,
+      "explanation": "Resources declared in try-with-resources are closed automatically, even on exceptions, preventing leaks.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q058",
+      "topic": "Java",
+      "text": "A method can't produce a valid result. Better than returning null?",
+      "options": [
+        "Return the number minus one to signal failure",
+        "Return an empty string in every failure case",
+        "Throw a clear exception or return an Optional",
+        "Print an error message and then return null"
+      ],
+      "correct": 2,
+      "explanation": "Signalling absence explicitly (exception or Optional) prevents silent nulls that blow up far from the cause.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q059",
+      "topic": "Java",
+      "text": "Why catch specific exception types rather than Exception?",
+      "options": [
+        "So you handle each failure appropriately",
+        "So the program always runs a little faster",
+        "Because catching Exception fails to compile",
+        "So every exception is silently ignored"
+      ],
+      "correct": 0,
+      "explanation": "Catching broadly can swallow unexpected errors; specific catches let you react correctly and let others propagate.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q060",
+      "topic": "Java",
+      "text": "What is the finally block for?",
+      "options": [
+        "Cleanup that runs whether or not it threw",
+        "Code that runs only when no exception occurs",
+        "Code that runs only when an exception occurs",
+        "A faster alternative to a normal catch block"
+      ],
+      "correct": 0,
+      "explanation": "finally always executes, making it the place for cleanup that must happen regardless of the outcome.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q061",
+      "topic": "Java",
+      "text": "Which collection does not allow duplicate elements?",
+      "options": [
+        "Set",
+        "List",
+        "Map",
+        "Queue"
+      ],
+      "correct": 0,
+      "explanation": "A Set stores unique elements; a List allows duplicates and a Map stores key-value pairs.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q062",
+      "topic": "Java",
+      "text": "You need ordered items and duplicates are allowed. Which fits?",
+      "options": [
+        "Map",
+        "Set",
+        "List",
+        "HashSet"
+      ],
+      "correct": 2,
+      "explanation": "A List keeps insertion order and permits duplicates, which a Set does not.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q063",
+      "topic": "Java",
+      "text": "You look values up by a unique key. Which fits best?",
+      "options": [
+        "Map",
+        "List",
+        "Set",
+        "Array"
+      ],
+      "correct": 0,
+      "explanation": "A Map is designed for key-to-value lookups, far cheaper than scanning a List.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q064",
+      "topic": "Java",
+      "text": "Many random-access reads by index vs frequent inserts in the middle — ArrayList vs LinkedList?",
+      "options": [
+        "LinkedList for random access; ArrayList for inserts",
+        "ArrayList for random access; LinkedList for inserts",
+        "Both perform identically for every operation",
+        "ArrayList cannot be indexed by position at all"
+      ],
+      "correct": 1,
+      "explanation": "ArrayList gives O(1) indexed access; LinkedList avoids shifting on inserts/removes but is slow to index.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q065",
+      "topic": "Java",
+      "text": "You modify a list while iterating it with a for-each loop. Likely result?",
+      "options": [
+        "The loop simply skips the changed element",
+        "The list is silently sorted as you go",
+        "A ConcurrentModificationException",
+        "Nothing; modifying during iteration is fine"
+      ],
+      "correct": 2,
+      "explanation": "Structural changes during iteration throw ConcurrentModificationException; use an Iterator's remove or a copy.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q066",
+      "topic": "Java",
+      "text": "What makes a good HashMap key?",
+      "options": [
+        "A mutable object whose fields change over time",
+        "An immutable object with stable equals/hashCode",
+        "Any object, since keys are copied on insert",
+        "Only a plain String may ever be used as a key"
+      ],
+      "correct": 1,
+      "explanation": "If a key's hashCode changes after insertion, you can't find it again; immutable keys keep lookups reliable.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q067",
+      "topic": "Java",
+      "text": "What is the purpose of an interface in Java?",
+      "options": [
+        "To define a contract that classes implement",
+        "To store the shared state for its subclasses",
+        "To run code faster than a normal class would",
+        "To prevent a class from ever being extended"
+      ],
+      "correct": 0,
+      "explanation": "An interface specifies what methods a type provides, decoupling callers from any particular implementation.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q068",
+      "topic": "Java",
+      "text": "When is an interface preferable to an abstract class?",
+      "options": [
+        "When you want to store mutable instance state",
+        "When you need to share fields between classes",
+        "When only one class will ever implement it",
+        "When you need a contract with no shared state"
+      ],
+      "correct": 3,
+      "explanation": "Interfaces express capabilities without shared state; abstract classes suit shared code/state and single inheritance.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q069",
+      "topic": "Java",
+      "text": "Why is composition often preferred over inheritance?",
+      "options": [
+        "It removes the need to write or define any interfaces",
+        "It is always faster than using inheritance",
+        "It's more flexible and avoids fragile hierarchies",
+        "Inheritance simply cannot be used in Java"
+      ],
+      "correct": 2,
+      "explanation": "Composing behaviour keeps designs flexible and avoids tightly-coupled hierarchies that are hard to change.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q070",
+      "topic": "Java",
+      "text": "Main reason to use dependency injection?",
+      "options": [
+        "It makes the application start up much faster",
+        "Loose coupling and easier testing with fakes",
+        "It removes the need to write any constructors",
+        "It automatically validates all of your inputs"
+      ],
+      "correct": 1,
+      "explanation": "Passing dependencies in lets you substitute test doubles and change implementations without editing the class.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q071",
+      "topic": "Java",
+      "text": "What does encapsulation give you?",
+      "options": [
+        "Running several methods at the same time",
+        "Copying one object's fields into another object verbatim",
+        "Letting any class read and change every field",
+        "Hiding internal state behind a controlled interface"
+      ],
+      "correct": 3,
+      "explanation": "By keeping fields private and exposing behaviour, you can change internals without breaking callers.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q072",
+      "topic": "Java",
+      "text": "Why mark a field final when it shouldn't change?",
+      "options": [
+        "It encrypts the field's value while in memory",
+        "It makes the field load much faster at runtime",
+        "It shows intent and prevents accidental reassignment",
+        "It allows the field to be freely changed from anywhere"
+      ],
+      "correct": 2,
+      "explanation": "final documents immutability and lets the compiler catch accidental writes, aiding correctness and thread-safety.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q073",
+      "topic": "Java",
+      "text": "Why avoid making everything static?",
+      "options": [
+        "It creates global state that's hard to test",
+        "Static fields simply cannot be read at runtime",
+        "It makes the whole program run much slower",
+        "Static methods are not allowed to be called"
+      ],
+      "correct": 0,
+      "explanation": "Static state is effectively global, making behaviour order-dependent and awkward to isolate in tests.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q074",
+      "topic": "Java",
+      "text": "The Single Responsibility Principle says a class should…",
+      "options": [
+        "Contain as many methods as possible",
+        "Have one single reason to change",
+        "Never be split into separate classes",
+        "Depend on every other class in the system"
+      ],
+      "correct": 1,
+      "explanation": "Focusing a class on one responsibility keeps it easier to understand, test and change safely.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q075",
+      "topic": "Java",
+      "text": "A benefit of immutable objects?",
+      "options": [
+        "They're inherently thread-safe and predictable",
+        "They use far less memory than mutable objects",
+        "Their fields can still be changed when needed",
+        "They are always faster to create than mutable"
+      ],
+      "correct": 0,
+      "explanation": "If state never changes after construction, objects can be shared across threads without synchronisation.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q076",
+      "topic": "Java",
+      "text": "What is Optional designed to express?",
+      "options": [
+        "The possible absence of a value, instead of null",
+        "A value that is guaranteed to always be present",
+        "A collection holding many values at once",
+        "A number that may be positive or negative"
+      ],
+      "correct": 0,
+      "explanation": "Optional makes 'maybe no value' explicit in the type, nudging callers to handle the empty case.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q077",
+      "topic": "Java",
+      "text": "Where is Optional NOT intended to be used?",
+      "options": [
+        "To avoid returning a bare null reference",
+        "As the return type of a lookup that may miss",
+        "To signal that a method might find nothing",
+        "As fields and method parameters everywhere"
+      ],
+      "correct": 3,
+      "explanation": "Optional is meant for return values; using it for fields/params adds overhead and awkwardness without much gain.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q078",
+      "topic": "Java",
+      "text": "Streams vs classic loops — a fair statement?",
+      "options": [
+        "Streams often read better but aren't always faster",
+        "Streams are always strictly faster than equivalent loops",
+        "Loops cannot express the same transformations",
+        "Streams and loops are identical in every way"
+      ],
+      "correct": 0,
+      "explanation": "Choose streams for clarity on data pipelines; performance depends on the case, not on syntax alone.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q079",
+      "topic": "Java",
+      "text": "What does 'var' (local variable type inference) change?",
+      "options": [
+        "Reduces boilerplate; the type is still static",
+        "Makes the variable's type change at runtime",
+        "Turns Java into a dynamically typed language",
+        "Lets a variable hold any type interchangeably"
+      ],
+      "correct": 0,
+      "explanation": "var infers the compile-time type from the initializer; the variable remains strongly, statically typed.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q080",
+      "topic": "Java",
+      "text": "Two threads update the same mutable counter without coordination. Risk?",
+      "options": [
+        "A deadlock the first time both threads run",
+        "A compile error before the program can run",
+        "A race condition producing lost updates",
+        "Nothing; the counter stays perfectly correct"
+      ],
+      "correct": 2,
+      "explanation": "Unsynchronised access to shared mutable state can interleave and lose updates; you need synchronisation or atomics.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q081",
+      "topic": "Java",
+      "text": "What causes a race condition?",
+      "options": [
+        "Outcome depending on unsynchronised timing",
+        "Running too many threads on a single core",
+        "A method that is declared as being final",
+        "Using an immutable object across threads"
+      ],
+      "correct": 0,
+      "explanation": "When correctness depends on the interleaving of threads over shared state, results become nondeterministic.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q082",
+      "topic": "Java",
+      "text": "Why does immutability help with concurrency?",
+      "options": [
+        "Immutable data is automatically synchronised",
+        "Immutable objects run faster on every CPU",
+        "Immutable data can't be corrupted by writes",
+        "It lets threads change shared state safely"
+      ],
+      "correct": 2,
+      "explanation": "If nothing can mutate an object, multiple threads can read it safely with no locking.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q083",
+      "topic": "Java",
+      "text": "What typically causes a deadlock?",
+      "options": [
+        "An exception that is caught but never logged anywhere",
+        "A single thread running for far too long",
+        "Too many objects being created at once",
+        "Threads waiting on each other's locks in a cycle"
+      ],
+      "correct": 3,
+      "explanation": "Circular lock dependencies mean each thread holds what another needs, so none can proceed.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q084",
+      "topic": "Java",
+      "text": "What does 'volatile' guarantee?",
+      "options": [
+        "That only one thread may ever read the field",
+        "That the whole operation is fully atomic",
+        "Visibility of the latest value across threads",
+        "A large speed-up for every field access"
+      ],
+      "correct": 2,
+      "explanation": "volatile ensures reads see the latest write, but it does not make compound actions like i++ atomic.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q085",
+      "topic": "Java",
+      "text": "Building a big string by concatenating in a loop — better approach?",
+      "options": [
+        "Add the pieces with the + operator",
+        "Use a StringBuilder",
+        "Store each piece in a separate variable",
+        "Concatenate them all on a single line"
+      ],
+      "correct": 1,
+      "explanation": "String is immutable, so += in a loop creates many objects; StringBuilder appends in place efficiently.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q086",
+      "topic": "Java",
+      "text": "You suspect a performance problem. First step?",
+      "options": [
+        "Rewrite the slowest-looking method by guess",
+        "Measure and profile to find the real bottleneck",
+        "Add more servers before looking at anything",
+        "Switch to a different programming language"
+      ],
+      "correct": 1,
+      "explanation": "Optimise based on evidence, not guesses; profiling shows where time is actually spent.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q087",
+      "topic": "Java",
+      "text": "Autoboxing inside a hot loop can hurt because…",
+      "options": [
+        "It makes the loop silently skip some of its iterations",
+        "It converts the numbers into text each pass",
+        "It silently creates wrapper objects, adding GC pressure",
+        "It has no measurable effect on performance"
+      ],
+      "correct": 2,
+      "explanation": "Repeated boxing of primitives to wrappers allocates objects you didn't intend, which can dominate a tight loop.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q088",
+      "topic": "Java",
+      "text": "Your code calls a service once per item in a large loop. Concern?",
+      "options": [
+        "The loop will simply refuse to compile",
+        "Many round-trips (N+1) — consider batching",
+        "Each call makes the next one run faster",
+        "Nothing; per-item calls are always ideal"
+      ],
+      "correct": 1,
+      "explanation": "Per-item remote calls multiply latency; batching or a bulk API drastically cuts total round-trips.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q089",
+      "topic": "Java",
+      "text": "Good logging practice?",
+      "options": [
+        "Use appropriate levels and never log secrets",
+        "Log everything, passwords included, at all times",
+        "Only ever log at the single highest level",
+        "Write every log line to standard output only"
+      ],
+      "correct": 0,
+      "explanation": "Sensible levels keep logs useful, and secrets must never be written to logs regardless of level.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q090",
+      "topic": "Java",
+      "text": "Main value of unit tests?",
+      "options": [
+        "A replacement for ever reading the code again",
+        "A guarantee the code has no bugs whatsoever",
+        "Fast feedback and protection against regressions",
+        "Slower delivery in exchange for nicer reports"
+      ],
+      "correct": 2,
+      "explanation": "Unit tests catch breakages quickly as code changes, giving confidence to refactor and ship.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q091",
+      "topic": "Java",
+      "text": "Unit test vs integration test — the difference?",
+      "options": [
+        "Integration tests a piece alone; unit tests together",
+        "Unit tests a piece alone; integration tests together",
+        "They are two names for the same kind of test",
+        "Unit tests can only ever be run in production"
+      ],
+      "correct": 1,
+      "explanation": "Unit tests isolate one unit; integration tests verify that multiple parts interact correctly.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q092",
+      "topic": "Java",
+      "text": "A single test asserts ten unrelated things and fails. Problem?",
+      "options": [
+        "It is the ideal way to keep the suite small",
+        "Hard to tell what broke; test one behaviour each",
+        "The test will always pass no matter what",
+        "Ten assertions make the test run much faster"
+      ],
+      "correct": 1,
+      "explanation": "Focused tests pinpoint failures; a sprawling test tells you something broke but not what.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q093",
+      "topic": "Java",
+      "text": "Which inputs most often reveal bugs and deserve tests?",
+      "options": [
+        "Only the typical, everyday happy-path values and flows",
+        "Edge cases: null, empty, boundaries, invalid input",
+        "Whatever inputs are quickest to type by hand",
+        "Inputs that are already known to work fine"
+      ],
+      "correct": 1,
+      "explanation": "Bugs cluster at boundaries and unusual inputs; happy-path-only tests miss the risky cases.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q094",
+      "topic": "Java",
+      "text": "Why do code review beyond catching bugs?",
+      "options": [
+        "It is the only way to run the test suite",
+        "It spreads knowledge and improves consistency",
+        "It makes the merged code run measurably faster",
+        "It removes the need to write any documentation"
+      ],
+      "correct": 1,
+      "explanation": "Review shares context across the team and keeps the codebase coherent, not just bug-free.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q095",
+      "topic": "Java",
+      "text": "Why replace 'magic numbers' with named constants?",
+      "options": [
+        "It reduces the size of the compiled binary",
+        "Named constants make the program run faster",
+        "Numbers simply cannot appear in the source",
+        "Names explain intent and centralise changes"
+      ],
+      "correct": 3,
+      "explanation": "A named constant documents what the value means and lets you change it in one place.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q096",
+      "topic": "Java",
+      "text": "Why do meaningful variable and method names matter?",
+      "options": [
+        "Short cryptic names make the program run faster",
+        "Code is read far more than written; names aid it",
+        "The compiler rejects names over eight letters",
+        "Names have no real effect on maintainability"
+      ],
+      "correct": 1,
+      "explanation": "Readable names reduce the effort to understand and safely change code later.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q097",
+      "topic": "Java",
+      "text": "You find unused (dead) code. What's usually best?",
+      "options": [
+        "Leave it in place in case it is needed one day",
+        "Remove it — version control remembers it anyway",
+        "Comment it out and keep it there indefinitely",
+        "Copy it into every file so nothing is lost"
+      ],
+      "correct": 1,
+      "explanation": "Dead code adds noise and confusion; Git history preserves it if you ever need it back.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q098",
+      "topic": "Java",
+      "text": "How should you treat input coming from users or external systems?",
+      "options": [
+        "Validate it before you use it anywhere",
+        "Trust it, since the sender has already checked",
+        "Log it verbatim and then use it directly",
+        "Pass it straight into a query without checks"
+      ],
+      "correct": 0,
+      "explanation": "External input is untrusted; validating it prevents crashes and security issues like injection.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q099",
+      "topic": "Java",
+      "text": "Reading a Java stack trace, where do you usually start?",
+      "options": [
+        "The top exception and the first line in your code",
+        "The very last line, regardless of its content",
+        "The longest line found anywhere in the trace",
+        "A line chosen at random from the middle"
+      ],
+      "correct": 0,
+      "explanation": "The top shows the exception; scanning down to the first frame in your code usually points at the cause.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q100",
+      "topic": "DevOps",
+      "text": "Why deploy images by an explicit version tag rather than ':latest' in production?",
+      "options": [
+        "You get a known, reproducible version to ship",
+        "The image will always download much faster",
+        "':latest' cannot be used in a production cluster",
+        "Explicit tags make the container use less memory"
+      ],
+      "correct": 0,
+      "explanation": "':latest' can point at different images over time, so a pinned version keeps deploys reproducible and rollbacks meaningful.",
+      "difficulty": "hard"
+    }
+  ]
+}

@@ -1,0 +1,428 @@
+{
+  "id": "containers-k8s",
+  "name": "Containers & Kubernetes",
+  "description": "Containers and orchestration: images, pods, controllers, networking and operations. 30-question seed set, growing to 300.",
+  "order": 14,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "A container differs from a virtual machine because it…",
+      "options": [
+        "Shares the host OS kernel instead of running its own",
+        "Includes a full guest operating system",
+        "Always runs faster regardless of workload",
+        "Cannot be moved between machines in practice as a rule"
+      ],
+      "correct": 0,
+      "explanation": "Containers package the app and deps but share the host kernel — lighter and faster to start than a VM."
+    },
+    {
+      "id": "q002",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "A Docker image is…",
+      "options": [
+        "A read-only template used to create containers",
+        "A running instance of a container",
+        "A network bridge between containers",
+        "A log of container activity"
+      ],
+      "correct": 0,
+      "explanation": "The image is the blueprint; a container is a running instance of it."
+    },
+    {
+      "id": "q003",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "A Dockerfile is used to…",
+      "options": [
+        "Route traffic between services in practice",
+        "Store secrets for the container",
+        "Define how to build an image step by step",
+        "Monitor a running container's health"
+      ],
+      "correct": 2,
+      "explanation": "Each instruction becomes a layer; the file is the reproducible recipe for the image."
+    },
+    {
+      "id": "q004",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "In Kubernetes, the smallest deployable unit is…",
+      "options": [
+        "A service",
+        "A pod",
+        "A container",
+        "A node"
+      ],
+      "correct": 1,
+      "explanation": "A pod wraps one or more containers that share network and storage — Kubernetes schedules pods, not bare containers."
+    },
+    {
+      "id": "q005",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "A Kubernetes Deployment is responsible for…",
+      "options": [
+        "Building container images in practice as a rule in practice",
+        "Storing persistent data for pods",
+        "Keeping a desired number of pod replicas running",
+        "Routing external traffic to services"
+      ],
+      "correct": 2,
+      "explanation": "Declare how many replicas you want; the Deployment reconciles reality toward it, including rollouts."
+    },
+    {
+      "id": "q006",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "A Kubernetes Service exists to…",
+      "options": [
+        "Store configuration as key-value pairs",
+        "Build and push images automatically",
+        "Give pods a stable network endpoint",
+        "Limit how much CPU a pod can use"
+      ],
+      "correct": 2,
+      "explanation": "Pods come and go with changing IPs; a Service is the stable name and address in front of them."
+    },
+    {
+      "id": "q007",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "kubectl is…",
+      "options": [
+        "A container runtime like Docker",
+        "The cluster's internal database",
+        "The Kubernetes scheduler component",
+        "The command-line tool to talk to a cluster"
+      ],
+      "correct": 3,
+      "explanation": "Your client for the API server: get, apply, describe, logs — the day-to-day interface."
+    },
+    {
+      "id": "q008",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "A container registry stores…",
+      "options": [
+        "Pod logs and metrics",
+        "Cluster configuration and secrets",
+        "Built images ready to be pulled",
+        "Running containers awaiting scheduling"
+      ],
+      "correct": 2,
+      "explanation": "Docker Hub, ECR, ACR, GHCR — you push images there and clusters pull them to run."
+    },
+    {
+      "id": "q009",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "A Kubernetes namespace is used to…",
+      "options": [
+        "Encrypt traffic between pods",
+        "Divide a cluster into isolated logical groups",
+        "Store persistent volumes",
+        "Define container build steps in practice as a rule"
+      ],
+      "correct": 1,
+      "explanation": "Logical partitioning for teams or environments, with their own quotas and access."
+    },
+    {
+      "id": "q010",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "medium",
+      "text": "Docker Compose is typically used to…",
+      "options": [
+        "Orchestrate thousands of nodes in production",
+        "Define and run multi-container apps locally",
+        "Replace Kubernetes in production clusters",
+        "Scan images for vulnerabilities"
+      ],
+      "correct": 1,
+      "explanation": "One YAML file to spin up an app plus its database and cache on a dev machine."
+    },
+    {
+      "id": "q011",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A ReplicaSet's job is to…",
+      "options": [
+        "Store configuration for pods",
+        "Ensure a specified number of pod copies exist",
+        "Expose pods to external traffic in practice as a rule",
+        "Roll out new versions gradually"
+      ],
+      "correct": 1,
+      "explanation": "Deployments manage ReplicaSets, which in turn keep the exact replica count alive."
+    },
+    {
+      "id": "q012",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A ConfigMap holds…",
+      "options": [
+        "Persistent application data in practice",
+        "Container image layers",
+        "Sensitive secrets like passwords",
+        "Non-confidential configuration data"
+      ],
+      "correct": 3,
+      "explanation": "Config decoupled from images; for secrets you use a Secret object instead."
+    },
+    {
+      "id": "q013",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A liveness probe tells Kubernetes…",
+      "options": [
+        "Whether a container should be restarted",
+        "When to scale the deployment up",
+        "How much memory a pod is using",
+        "Whether a pod is ready to receive traffic"
+      ],
+      "correct": 0,
+      "explanation": "Liveness failing → restart the container. Readiness is the separate 'ready for traffic' check."
+    },
+    {
+      "id": "q014",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A readiness probe failing causes Kubernetes to…",
+      "options": [
+        "Delete and recreate the pod",
+        "Scale the deployment down",
+        "Remove the pod from Service endpoints",
+        "Restart the failing container immediately"
+      ],
+      "correct": 2,
+      "explanation": "Not ready → traffic stops flowing to it, but it isn't killed — it may just need warm-up time."
+    },
+    {
+      "id": "q015",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A StatefulSet is preferred over a Deployment when pods need…",
+      "options": [
+        "Fewer resources than usual",
+        "To run as briefly as possible",
+        "To be completely stateless",
+        "Stable identities and persistent per-pod storage"
+      ],
+      "correct": 3,
+      "explanation": "Databases and clustered apps need stable names and their own volumes across restarts."
+    },
+    {
+      "id": "q016",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A DaemonSet ensures that…",
+      "options": [
+        "Pods restart on a fixed schedule",
+        "A copy of a pod runs on every (or selected) node",
+        "Traffic is balanced across pods in practice as a rule",
+        "Exactly one replica runs cluster-wide"
+      ],
+      "correct": 1,
+      "explanation": "Perfect for per-node agents: log shippers, monitoring, CNI components."
+    },
+    {
+      "id": "q017",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A multi-stage Docker build primarily reduces…",
+      "options": [
+        "Build time on the CI server",
+        "The final image size by discarding build tooling",
+        "The number of running containers",
+        "Network traffic during pulls in practice as a rule"
+      ],
+      "correct": 1,
+      "explanation": "Compile in a fat stage, copy only the artefact into a slim final stage — smaller, safer images."
+    },
+    {
+      "id": "q018",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "An Ingress in Kubernetes provides…",
+      "options": [
+        "HTTP routing to services by host and path",
+        "Automatic image builds in practice as a rule",
+        "Pod-to-pod network encryption",
+        "Persistent storage for stateful apps"
+      ],
+      "correct": 0,
+      "explanation": "One entry point with rules routing to backing Services — TLS termination usually lives here too."
+    },
+    {
+      "id": "q019",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A Kubernetes Secret, by default, stores data…",
+      "options": [
+        "Encrypted with a per-cluster master key",
+        "Base64-encoded, not truly encrypted at rest",
+        "Only in the pod's memory in practice as a rule",
+        "In plaintext visible to all namespaces"
+      ],
+      "correct": 1,
+      "explanation": "Base64 is encoding, not encryption; enable encryption-at-rest and RBAC to actually protect them."
+    },
+    {
+      "id": "q020",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "hard",
+      "text": "A resource 'request' versus 'limit' in Kubernetes means…",
+      "options": [
+        "Minimum guaranteed versus maximum allowed",
+        "CPU versus memory allocation",
+        "Preferred versus required nodes",
+        "Startup versus running allocation in practice"
+      ],
+      "correct": 0,
+      "explanation": "The scheduler places by requests; the kubelet throttles or kills at limits."
+    },
+    {
+      "id": "q021",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "A pod stuck in CrashLoopBackOff means…",
+      "options": [
+        "It is waiting for a persistent volume",
+        "Its image cannot be pulled from the registry",
+        "It cannot be scheduled onto any node",
+        "It keeps starting, failing and being restarted with growing delay"
+      ],
+      "correct": 3,
+      "explanation": "The container exits repeatedly; Kubernetes backs off exponentially. Check logs and the liveness probe."
+    },
+    {
+      "id": "q022",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "A PodDisruptionBudget protects workloads during…",
+      "options": [
+        "Image vulnerability scans in practice as a rule",
+        "Secret rotation",
+        "Network partitions",
+        "Voluntary disruptions like node drains"
+      ],
+      "correct": 3,
+      "explanation": "It caps how many pods may be down at once, so a node upgrade can't take the whole app offline."
+    },
+    {
+      "id": "q023",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "The Horizontal Pod Autoscaler scales based on…",
+      "options": [
+        "The number of nodes in the cluster",
+        "The size of the container image",
+        "The time of day in practice as a rule in practice",
+        "Observed metrics compared against a target"
+      ],
+      "correct": 3,
+      "explanation": "CPU, memory or custom metrics drive replica count toward the target you set."
+    },
+    {
+      "id": "q024",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "A container escaping to the host most often exploits…",
+      "options": [
+        "A kernel vulnerability or an over-privileged container",
+        "A missing readiness probe",
+        "An oversized image layer",
+        "A weak container registry password"
+      ],
+      "correct": 0,
+      "explanation": "Shared kernel plus --privileged or a mounted docker socket turns a container break-out into host control."
+    },
+    {
+      "id": "q025",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "In Kubernetes, taints and tolerations are used to…",
+      "options": [
+        "Control which pods may schedule onto which nodes",
+        "Roll back a failed deployment in practice as a rule",
+        "Encrypt pod-to-pod traffic",
+        "Limit a pod's CPU usage"
+      ],
+      "correct": 0,
+      "explanation": "A node taint repels pods unless they carry a matching toleration — how you reserve nodes for specific workloads."
+    },
+    {
+      "id": "q026",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "A service mesh (e.g. Istio, Linkerd) primarily adds…",
+      "options": [
+        "Automatic image building",
+        "Persistent storage for stateful apps in practice as a rule",
+        "mTLS, traffic control and observability via sidecars",
+        "A faster container runtime"
+      ],
+      "correct": 2,
+      "explanation": "Sidecar proxies handle encryption, routing and telemetry without changing application code."
+    },
+    {
+      "id": "q027",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "The CNI (Container Network Interface) is responsible for…",
+      "options": [
+        "Configuring pod networking and IP allocation",
+        "Building container images reproducibly",
+        "Storing secrets securely at rest",
+        "Scheduling pods onto nodes"
+      ],
+      "correct": 0,
+      "explanation": "Calico, Cilium and friends plug in here to give every pod an address and enforce network policy."
+    },
+    {
+      "id": "q028",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "A Kubernetes Operator extends the cluster by…",
+      "options": [
+        "Replacing the default scheduler",
+        "Providing a web dashboard",
+        "Caching container images locally",
+        "Encoding operational knowledge as a custom controller"
+      ],
+      "correct": 3,
+      "explanation": "A custom resource plus a controller automates day-2 tasks — backups, failover — the way a human operator would."
+    },
+    {
+      "id": "q029",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "etcd in a Kubernetes control plane stores…",
+      "options": [
+        "Ingress TLS certificates only",
+        "Container image layers",
+        "The entire cluster state and configuration",
+        "Pod logs and metrics"
+      ],
+      "correct": 2,
+      "explanation": "The single source of truth; losing etcd without a backup means losing the cluster's brain."
+    },
+    {
+      "id": "q030",
+      "topic": "Containers & Kubernetes",
+      "difficulty": "pro",
+      "text": "A rolling update with maxUnavailable=0 and maxSurge=1 will…",
+      "options": [
+        "Delete all old pods before creating new ones",
+        "Add a new pod before removing an old one, one at a time",
+        "Pause until manually approved in practice as a rule in practice",
+        "Update every pod simultaneously"
+      ],
+      "correct": 1,
+      "explanation": "Zero downtime: capacity never dips below desired because a surge pod comes up before an old one goes."
+    }
+  ]
+}

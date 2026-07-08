@@ -1,0 +1,428 @@
+{
+  "id": "cicd-iac",
+  "name": "CI/CD & IaC",
+  "description": "Pipelines and infrastructure as code: integration, delivery strategies, Terraform and GitOps. 30-question seed set, growing to 300.",
+  "order": 15,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "CI (continuous integration) means…",
+      "options": [
+        "Deploying to production several times a day in practice",
+        "Merging and automatically testing code changes often",
+        "Writing code without any version control",
+        "Manually integrating changes once a month"
+      ],
+      "correct": 1,
+      "explanation": "Small changes, merged frequently, verified by an automated build and tests each time."
+    },
+    {
+      "id": "q002",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "A CI pipeline typically starts when…",
+      "options": [
+        "Code is pushed or a pull request is opened",
+        "The production server runs out of memory",
+        "A scheduled maintenance window opens in practice",
+        "A developer manually clicks deploy"
+      ],
+      "correct": 0,
+      "explanation": "A push or PR triggers the pipeline: build, test, and report status back automatically."
+    },
+    {
+      "id": "q003",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "The main benefit of automated tests in a pipeline is…",
+      "options": [
+        "They make the code compile faster",
+        "They replace the need for code review",
+        "They catch regressions before code merges",
+        "They reduce the size of the repository in practice"
+      ],
+      "correct": 2,
+      "explanation": "Fast feedback: a break is caught in minutes, not in production a week later."
+    },
+    {
+      "id": "q004",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "Infrastructure as Code (IaC) means…",
+      "options": [
+        "Coding directly on production servers",
+        "Defining infrastructure in version-controlled files",
+        "Writing application logic in config files",
+        "Storing code inside the infrastructure"
+      ],
+      "correct": 1,
+      "explanation": "Servers, networks and policies described in files you review, version and re-apply — not clicked by hand."
+    },
+    {
+      "id": "q005",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "Terraform is primarily a tool for…",
+      "options": [
+        "Monitoring application logs",
+        "Running unit tests in parallel",
+        "Building container images in practice as a rule",
+        "Provisioning infrastructure declaratively"
+      ],
+      "correct": 3,
+      "explanation": "You declare the desired infrastructure; Terraform plans and applies the changes to reach it."
+    },
+    {
+      "id": "q006",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "CD can stand for continuous delivery, meaning…",
+      "options": [
+        "Every change auto-deploys to production",
+        "Code is continuously deleted after testing",
+        "Developers deliver code once per quarter",
+        "Changes are always ready to deploy at the click of a button"
+      ],
+      "correct": 3,
+      "explanation": "Delivery keeps main always releasable; deployment (the other CD) pushes automatically all the way to prod."
+    },
+    {
+      "id": "q007",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "A build artifact is…",
+      "options": [
+        "A bug introduced during the build",
+        "The output produced by a successful build",
+        "A server that runs the pipeline in practice",
+        "A comment left in the pipeline config"
+      ],
+      "correct": 1,
+      "explanation": "The compiled binary, image or package the pipeline produces and passes to later stages."
+    },
+    {
+      "id": "q008",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "Version control (e.g. Git) in a CI/CD flow provides…",
+      "options": [
+        "Encryption of network traffic in practice as a rule",
+        "Automatic scaling of the application",
+        "The single source of truth for code and history",
+        "A place to store production databases"
+      ],
+      "correct": 2,
+      "explanation": "Everything flows from the repo: pipelines trigger on it, and history makes every change auditable."
+    },
+    {
+      "id": "q009",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "A pipeline 'stage' is…",
+      "options": [
+        "A branch in the Git repository",
+        "A logical grouping of steps that run in order",
+        "A type of automated test",
+        "A physical server in the build farm"
+      ],
+      "correct": 1,
+      "explanation": "Build, test, deploy — stages structure the pipeline and often gate one another."
+    },
+    {
+      "id": "q010",
+      "topic": "CI/CD & IaC",
+      "difficulty": "medium",
+      "text": "Rolling back a deployment means…",
+      "options": [
+        "Restarting the CI server",
+        "Pausing all traffic to the service in practice",
+        "Reverting to a previously working version",
+        "Deleting the application entirely"
+      ],
+      "correct": 2,
+      "explanation": "When a release misbehaves, return to the last known-good version while you investigate."
+    },
+    {
+      "id": "q011",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "Terraform state is used to…",
+      "options": [
+        "Map declared resources to real-world ones",
+        "Log every command that was run",
+        "Cache downloaded provider plugins in practice",
+        "Store your cloud provider credentials"
+      ],
+      "correct": 0,
+      "explanation": "State links config to actual infrastructure so Terraform knows what to change, keep or destroy."
+    },
+    {
+      "id": "q012",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "A key reason to run 'terraform plan' before 'apply' is to…",
+      "options": [
+        "Speed up the apply step afterwards",
+        "Encrypt the state file",
+        "Preview changes before they happen",
+        "Format the configuration files"
+      ],
+      "correct": 2,
+      "explanation": "Plan shows what will be created, changed or destroyed — your last chance to catch a destructive diff."
+    },
+    {
+      "id": "q013",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "Idempotency in IaC means…",
+      "options": [
+        "Applying the same config repeatedly yields the same result",
+        "Every apply creates new resources in practice as a rule in practice",
+        "Each run uses a unique identifier",
+        "Configuration cannot be changed once applied"
+      ],
+      "correct": 0,
+      "explanation": "Re-applying an unchanged config changes nothing — the property that makes IaC safe to run often."
+    },
+    {
+      "id": "q014",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "A pipeline secret (e.g. an API token) should be…",
+      "options": [
+        "Committed to the repo in an encrypted file",
+        "Stored in a secret store and injected at runtime",
+        "Emailed to whoever runs the pipeline",
+        "Hardcoded in the pipeline YAML for simplicity"
+      ],
+      "correct": 1,
+      "explanation": "Secret managers or masked CI variables — never in the repo, never in logs."
+    },
+    {
+      "id": "q015",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "Blue-green deployment works by…",
+      "options": [
+        "Running two colours of server for aesthetics in practice",
+        "Splitting users randomly forever",
+        "Deploying only on alternating days",
+        "Switching traffic between two identical environments"
+      ],
+      "correct": 3,
+      "explanation": "Deploy to the idle environment, test, then flip traffic — instant cutover and instant rollback."
+    },
+    {
+      "id": "q016",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "A canary release means…",
+      "options": [
+        "Rolling back automatically every hour",
+        "Deploying to all users at once in practice as a rule",
+        "Testing only in a staging environment",
+        "Exposing a new version to a small subset first"
+      ],
+      "correct": 3,
+      "explanation": "A small slice gets the new version; if metrics hold, you widen it — limiting blast radius."
+    },
+    {
+      "id": "q017",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "Terraform modules exist to…",
+      "options": [
+        "Run tests against infrastructure",
+        "Encrypt provider credentials",
+        "Store the state file remotely",
+        "Package and reuse configuration"
+      ],
+      "correct": 3,
+      "explanation": "Reusable, parameterised building blocks — write a VPC once, instantiate it many times."
+    },
+    {
+      "id": "q018",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "A remote state backend is preferred over local state because it…",
+      "options": [
+        "Removes the need for a plan step in practice",
+        "Runs applies faster than local state",
+        "Enables team sharing and state locking",
+        "Encrypts the Terraform binary"
+      ],
+      "correct": 2,
+      "explanation": "Shared state plus locking stops two engineers from applying at once and corrupting it."
+    },
+    {
+      "id": "q019",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "A pipeline 'gate' or manual approval is used to…",
+      "options": [
+        "Speed up the deployment process",
+        "Automatically merge pull requests in practice as a rule",
+        "Require human sign-off before a sensitive stage",
+        "Cache build dependencies"
+      ],
+      "correct": 2,
+      "explanation": "A deliberate pause — often before production — where a person takes responsibility for proceeding."
+    },
+    {
+      "id": "q020",
+      "topic": "CI/CD & IaC",
+      "difficulty": "hard",
+      "text": "Artifact versioning matters because it…",
+      "options": [
+        "Makes artifacts smaller on disk",
+        "Lets you deploy and roll back to an exact build",
+        "Speeds up the build stage in practice as a rule in practice",
+        "Encrypts the artifact in transit"
+      ],
+      "correct": 1,
+      "explanation": "Immutable, versioned artifacts mean the thing you tested is exactly the thing you ship — and can revert to."
+    },
+    {
+      "id": "q021",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "Terraform state locking prevents…",
+      "options": [
+        "Concurrent applies from corrupting the state",
+        "Providers from being upgraded",
+        "Secrets from being stored in state",
+        "The state file from growing too large in practice"
+      ],
+      "correct": 0,
+      "explanation": "A lock (e.g. via DynamoDB or the backend) serialises applies so two runs can't clash on the same state."
+    },
+    {
+      "id": "q022",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "A GitOps workflow makes the source of truth…",
+      "options": [
+        "A Git repository that a controller reconciles to the cluster",
+        "The CI server's local disk",
+        "A ticket in the issue tracker in practice as a rule in practice",
+        "A manually maintained spreadsheet"
+      ],
+      "correct": 0,
+      "explanation": "Commit the desired state; an agent (Argo CD, Flux) continuously converges the cluster to match it."
+    },
+    {
+      "id": "q023",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "'terraform import' is used to…",
+      "options": [
+        "Bring existing infrastructure under Terraform management",
+        "Download provider plugins",
+        "Copy state between backends in practice as a rule in practice",
+        "Merge two configurations"
+      ],
+      "correct": 0,
+      "explanation": "Adopt resources created outside Terraform into state so it can manage them going forward."
+    },
+    {
+      "id": "q024",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "A count/for_each pitfall in Terraform is that using count with a list means…",
+      "options": [
+        "State locking is disabled in practice as a rule in practice",
+        "Resources can never be updated",
+        "The plan step is skipped entirely",
+        "Removing a middle item reindexes and recreates others"
+      ],
+      "correct": 3,
+      "explanation": "count keys by position; for_each keys by a stable identifier, so removing one doesn't churn the rest."
+    },
+    {
+      "id": "q025",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "Ephemeral (disposable) CI runners improve security by…",
+      "options": [
+        "Running builds much faster",
+        "Sharing caches across every job",
+        "Never needing credentials",
+        "Discarding all state after each job"
+      ],
+      "correct": 3,
+      "explanation": "A fresh environment per job means a compromised build can't linger and poison the next one."
+    },
+    {
+      "id": "q026",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "A deployment strategy's 'bake time' refers to…",
+      "options": [
+        "How long the image takes to build",
+        "A period of monitoring a release before proceeding",
+        "How long secrets remain valid",
+        "The time to warm up a cache"
+      ],
+      "correct": 1,
+      "explanation": "Let the canary or new version soak while you watch metrics, so problems surface before full rollout."
+    },
+    {
+      "id": "q027",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "Pipeline caching (e.g. of dependencies) trades speed against the risk of…",
+      "options": [
+        "Stale or poisoned cache entries",
+        "Slower first builds in practice as a rule",
+        "Larger artifact sizes",
+        "Losing the state file"
+      ],
+      "correct": 0,
+      "explanation": "A wrong or tampered cache entry silently corrupts builds — scope and key caches carefully, and expire them."
+    },
+    {
+      "id": "q028",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "Terraform workspaces are commonly used to…",
+      "options": [
+        "Manage multiple state instances of one config",
+        "Store secrets separately from state in practice",
+        "Replace modules entirely",
+        "Encrypt the backend"
+      ],
+      "correct": 0,
+      "explanation": "One config, several states — e.g. dev and prod — though separate backends are often clearer at scale."
+    },
+    {
+      "id": "q029",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "A supply-chain attack on a CI pipeline typically…",
+      "options": [
+        "Guesses the repository password",
+        "Overloads the runner with traffic",
+        "Compromises a dependency or build step to inject malicious code",
+        "Deletes the state file"
+      ],
+      "correct": 2,
+      "explanation": "Poison a dependency or the build itself and the malware ships signed as legitimate — pin and verify everything."
+    },
+    {
+      "id": "q030",
+      "topic": "CI/CD & IaC",
+      "difficulty": "pro",
+      "text": "Drift detection in IaC means…",
+      "options": [
+        "Measuring how fast the pipeline runs",
+        "Finding differences between declared and actual infrastructure",
+        "Tracking how often code is merged",
+        "Detecting slow-running tests"
+      ],
+      "correct": 1,
+      "explanation": "Someone clicked a change in the console; drift detection surfaces the gap so you can reconcile or re-apply."
+    }
+  ]
+}

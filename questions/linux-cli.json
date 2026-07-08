@@ -1,0 +1,372 @@
+{
+  "id": "linux-cli",
+  "name": "Linux & Command Line",
+  "description": "Shell essentials: permissions, processes, pipes, logs and networking basics.",
+  "order": 5,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Linux",
+      "text": "Which command changes a file's permissions?",
+      "options": [
+        "chmod, which sets the read/write/execute bits",
+        "chgrp, which moves the file into another group",
+        "ls, which lists the files in the directory",
+        "chown, which transfers the file to a new owner"
+      ],
+      "correct": 0,
+      "explanation": "chmod sets the read/write/execute bits; chown changes ownership and chgrp changes the group.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q002",
+      "topic": "Linux",
+      "text": "In rwx permissions, what does the 'x' allow for a file?",
+      "options": [
+        "Reading the contents of the file",
+        "Executing or running the file directly",
+        "Renaming the file to something else",
+        "Deleting the file from its directory"
+      ],
+      "correct": 1,
+      "explanation": "x means execute for files (run it) and, for directories, permission to enter/traverse them.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q003",
+      "topic": "Linux",
+      "text": "What does the pipe '|' do?",
+      "options": [
+        "Turns the rest of the line into a comment",
+        "Redirects the output into a named file",
+        "Feeds one command's output into the next",
+        "Runs the command as a background job"
+      ],
+      "correct": 2,
+      "explanation": "Pipes chain commands, e.g. `cat log | grep ERROR` feeds cat's output into grep.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q004",
+      "topic": "Linux",
+      "text": "'>' vs '>>' when redirecting output?",
+      "options": [
+        "'>>' deletes the file before writing to it",
+        "'>' overwrites the file; '>>' appends to it",
+        "'>' appends to the file; '>>' overwrites it",
+        "Both simply overwrite the target file"
+      ],
+      "correct": 1,
+      "explanation": "Use >> to add to a file without wiping it; > truncates and replaces the contents.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q005",
+      "topic": "Linux",
+      "text": "kill vs kill -9 (SIGKILL)?",
+      "options": [
+        "The two commands behave exactly the same way",
+        "kill -9 is the gentler of the two signals",
+        "kill restarts the process instead of ending it",
+        "Plain kill asks nicely; -9 forces a stop"
+      ],
+      "correct": 3,
+      "explanation": "Prefer plain kill so the process can shut down cleanly; -9 is a last resort that skips cleanup.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q006",
+      "topic": "Linux",
+      "text": "How do you follow a log file as it grows?",
+      "options": [
+        "head file, which shows only the first lines",
+        "tail -f, which streams new lines as written",
+        "cat file, which prints it once and exits",
+        "less file, which opens it a single time"
+      ],
+      "correct": 1,
+      "explanation": "tail -f streams new lines as they're written — the standard way to watch logs live.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q007",
+      "topic": "Linux",
+      "text": "What does sudo do?",
+      "options": [
+        "Permanently deletes files without confirming",
+        "Reports how much disk space is being used",
+        "Runs a command with elevated root privileges",
+        "Searches a file for lines matching a pattern"
+      ],
+      "correct": 2,
+      "explanation": "sudo executes a single command as root (or another user), used for privileged operations.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q008",
+      "topic": "Linux",
+      "text": "grep is used to…",
+      "options": [
+        "Terminate a running process by its name",
+        "Change the permissions on a group of files",
+        "Copy files from one directory to another",
+        "Search text for lines matching a pattern"
+      ],
+      "correct": 3,
+      "explanation": "grep filters input to lines matching a pattern, e.g. finding errors in a log.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q009",
+      "topic": "Linux",
+      "text": "Which shows currently running processes with live CPU/memory usage?",
+      "options": [
+        "ls, a listing of files in the directory",
+        "grep, a search through lines of text",
+        "cd, which changes the current directory",
+        "top (or htop), a live view of processes"
+      ],
+      "correct": 3,
+      "explanation": "top gives a live view of processes and resource use; ps gives a one-shot snapshot.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q010",
+      "topic": "Linux",
+      "text": "$PATH is…",
+      "options": [
+        "The directories the shell searches for programs",
+        "A single file listing your recent commands",
+        "The full path to your personal home directory",
+        "A permission bit controlling who may execute"
+      ],
+      "correct": 0,
+      "explanation": "When you type a command, the shell looks through the directories in $PATH to find it.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q011",
+      "topic": "Linux",
+      "text": "df -h vs du?",
+      "options": [
+        "df shows free space; du shows space used",
+        "Both report exactly the same disk figures",
+        "df shows used space; du shows what is free",
+        "df lists files; du counts words in them"
+      ],
+      "correct": 0,
+      "explanation": "df answers 'how full is the disk?'; du answers 'what's taking up space here?'.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q012",
+      "topic": "Linux",
+      "text": "An absolute path starts with…",
+      "options": [
+        "'/', the root of the whole filesystem",
+        "'~', a shortcut to your home directory",
+        "'./', meaning the current working directory",
+        "a letter naming the drive it lives on"
+      ],
+      "correct": 0,
+      "explanation": "Absolute paths begin at / and are unambiguous; relative paths are interpreted from the current directory.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q013",
+      "topic": "Linux",
+      "text": "What does chmod +x script.sh do?",
+      "options": [
+        "Opens the script in the default text editor",
+        "Makes the script executable so you can run it",
+        "Runs the script immediately as the root user",
+        "Permanently deletes the script from the disk"
+      ],
+      "correct": 1,
+      "explanation": "It adds the execute bit so you can run the file directly, e.g. ./script.sh.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q014",
+      "topic": "Linux",
+      "text": "The exit code of the last command is in $?. What does 0 mean?",
+      "options": [
+        "That the command could not be found on PATH",
+        "Success; any non-zero value signals an error",
+        "That permission to run the command was denied",
+        "Failure; the command did not run correctly"
+      ],
+      "correct": 1,
+      "explanation": "Convention: 0 means success, any non-zero value signals an error — scripts check this to branch.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q015",
+      "topic": "Linux",
+      "text": "Which safely copies a file to a remote host over SSH?",
+      "options": [
+        "mv, which renames or moves a local file",
+        "scp (or rsync), copying over the SSH connection",
+        "cp, which only copies on the local machine",
+        "cat, which prints a file to the screen"
+      ],
+      "correct": 1,
+      "explanation": "scp uses the SSH connection to copy files between machines; rsync is similar with delta transfers.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q016",
+      "topic": "Linux",
+      "text": "Files beginning with a dot (e.g. .bashrc) are…",
+      "options": [
+        "Always executable programs or scripts",
+        "Reserved strictly for system use only",
+        "Hidden by default; ls -a reveals them",
+        "Broken files the system could not read"
+      ],
+      "correct": 2,
+      "explanation": "Dotfiles are hidden from a normal ls; they usually hold configuration.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q017",
+      "topic": "Linux",
+      "text": "less vs cat for viewing a large file?",
+      "options": [
+        "less paginates and lets you scroll and search",
+        "cat pages through the file one screen at a time",
+        "less loads the whole file into an editor",
+        "They behave identically for large files"
+      ],
+      "correct": 0,
+      "explanation": "For big files less is far more usable — you can page through and search without flooding the terminal.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q018",
+      "topic": "Linux",
+      "text": "What does cron do?",
+      "options": [
+        "Compresses files to save space on disk",
+        "Ends processes that use too much CPU",
+        "Edits text files from the command line",
+        "Runs commands automatically on a schedule"
+      ],
+      "correct": 3,
+      "explanation": "cron executes jobs at defined times/intervals — the classic way to schedule recurring tasks.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q019",
+      "topic": "Linux",
+      "text": "stdout vs stderr?",
+      "options": [
+        "stderr is the input typed in by the user",
+        "They are one combined stream, not two",
+        "stdout is normal output; stderr is for errors",
+        "stdout carries errors; stderr carries results"
+      ],
+      "correct": 2,
+      "explanation": "Separating them lets you redirect errors independently, e.g. 2> errors.log.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q020",
+      "topic": "Linux",
+      "text": "rm -rf / would (in principle)…",
+      "options": [
+        "Reboot the machine back to a clean state",
+        "Simply list the files under the root directory",
+        "Recursively force-delete everything — catastrophic",
+        "Do nothing because root is always protected"
+      ],
+      "correct": 2,
+      "explanation": "It's the canonical dangerous command; -r recurses, -f forces, and / is everything. Handle with extreme care.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q021",
+      "topic": "Linux",
+      "text": "which command tells you…",
+      "options": [
+        "The size on disk of a given file",
+        "The permission bits set on a file",
+        "How much disk space a folder is using",
+        "The path of the program that would run"
+      ],
+      "correct": 3,
+      "explanation": "which resolves a command name to the actual binary found on your $PATH.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q022",
+      "topic": "Linux",
+      "text": "How do you run a long task in the background from the shell?",
+      "options": [
+        "Append '&' to start it in the background",
+        "Press Ctrl-C to detach it from the shell",
+        "Type 'bg' before the command to launch it",
+        "Prefix it with sudo to free the terminal"
+      ],
+      "correct": 0,
+      "explanation": "Appending & starts the job in the background; jobs, fg and bg manage it afterwards.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q023",
+      "topic": "Linux",
+      "text": "chown is for…",
+      "options": [
+        "Compressing a file to take less space",
+        "Searching a file for a matching pattern",
+        "Setting the read/write/execute permission bits",
+        "Changing a file's owner and its group"
+      ],
+      "correct": 3,
+      "explanation": "chown reassigns ownership; combine with chmod to control who can do what.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q024",
+      "topic": "Linux",
+      "text": "man ls does what?",
+      "options": [
+        "Opens the manual page documenting ls",
+        "Deletes the ls command from the system",
+        "Runs ls and saves the output to a file",
+        "Lists every manual page installed locally"
+      ],
+      "correct": 0,
+      "explanation": "man shows built-in documentation for a command — the first place to look for options.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q025",
+      "topic": "Linux",
+      "text": "head vs tail?",
+      "options": [
+        "Both print the entire file from the start",
+        "head shows the first lines; tail the last",
+        "They only work on files under a certain size",
+        "head shows the last lines; tail the first"
+      ],
+      "correct": 1,
+      "explanation": "Both default to 10 lines; -n changes the count. tail -f additionally follows a growing file.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q026",
+      "topic": "Linux",
+      "text": "wc -l counts…",
+      "options": [
+        "Only the characters, ignoring newlines",
+        "The number of words in its input",
+        "The number of lines in its input",
+        "The number of files given as arguments"
+      ],
+      "correct": 2,
+      "explanation": "wc counts lines (-l), words (-w) or bytes/characters (-c) of its input.",
+      "difficulty": "medium"
+    }
+  ]
+}

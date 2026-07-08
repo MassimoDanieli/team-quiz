@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Team Quiz — How to run it</title>
+    <style>
+      :root {
+        --canvas: #0d1117;
+        --card: #161b22;
+        --line: #30363d;
+        --line-muted: #21262d;
+        --ink: #e6edf3;
+        --muted: #8b949e;
+        --faint: #6e7681;
+        --accent: #58a6ff;
+        --green: #3fb950;
+        --gold: #d29922;
+        --teamA: #58a6ff;
+        --teamB: #f0883e;
+        --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+        color: var(--ink);
+        background: var(--canvas);
+        min-height: 100vh;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 780px; margin: 0 auto; padding: 32px 18px 72px; }
+      header { margin-bottom: 8px; }
+      h1 { font-size: 1.6rem; font-weight: 600; letter-spacing: -0.01em; }
+      h2 { font-size: 1.05rem; font-weight: 600; margin-bottom: 14px; }
+      .lead { color: var(--muted); margin: 10px 0 26px; }
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 22px;
+        margin-bottom: 18px;
+      }
+      .tag {
+        display: inline-block;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+      .tag.host { color: var(--teamB); border-color: rgba(240, 136, 62, 0.4); }
+      .tag.play { color: var(--teamA); border-color: rgba(88, 166, 255, 0.4); }
+      ol.steps { list-style: none; counter-reset: s; }
+      ol.steps > li {
+        counter-increment: s;
+        position: relative;
+        padding: 8px 0 8px 42px;
+        border-bottom: 1px solid var(--line-muted);
+      }
+      ol.steps > li:last-child { border-bottom: 0; }
+      ol.steps > li::before {
+        content: counter(s);
+        position: absolute;
+        left: 0;
+        top: 8px;
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        background: var(--canvas);
+        border: 1px solid var(--line);
+        color: var(--accent);
+        font-family: var(--mono);
+        font-size: 0.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      code {
+        font-family: var(--mono);
+        font-size: 0.86em;
+        background: var(--canvas);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 1px 6px;
+      }
+      strong { color: var(--ink); font-weight: 600; }
+      .note {
+        color: var(--muted);
+        font-size: 0.92rem;
+        border-left: 3px solid var(--line);
+        padding-left: 12px;
+        margin-top: 8px;
+      }
+      .callout {
+        background: var(--gold-subtle, rgba(210, 153, 34, 0.12));
+        border: 1px solid rgba(210, 153, 34, 0.35);
+        border-radius: 10px;
+        padding: 14px 16px;
+        color: var(--ink);
+      }
+      .callout b { color: var(--gold); }
+      .foot { color: var(--faint); font-size: 0.85rem; margin-top: 26px; text-align: center; }
+      ul.plain { list-style: none; }
+      ul.plain li { padding: 5px 0 5px 20px; position: relative; }
+      ul.plain li::before { content: '—'; position: absolute; left: 0; color: var(--faint); }
+    
+/* --- shared site nav --- */
+.sitenav {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+.sitenav-inner {
+  max-width: 900px; margin: 0 auto;
+  padding: 12px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.sitenav-brand {
+  color: var(--ink); font-weight: 600; text-decoration: none;
+  font-size: 0.95rem; letter-spacing: -0.01em;
+  display: flex; align-items: center; gap: 8px;
+}
+.sitenav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+.sitenav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: 0.85rem; font-weight: 500;
+  padding: 6px 10px; border-radius: 6px;
+  border: 1px solid transparent;
+}
+.sitenav-links a:hover { color: var(--ink); background: var(--line-muted); }
+.sitenav-links a.active {
+  color: var(--ink); background: var(--accent-subtle, rgba(56,139,253,0.15));
+  border-color: var(--line);
+}
+    
+      .footnav {
+        margin-top: 18px; padding-top: 18px;
+        border-top: 1px solid var(--line-muted);
+        display: flex; gap: 16px; flex-wrap: wrap;
+      }
+      .footnav a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+      .footnav a:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+  <nav class="sitenav">
+    <div class="sitenav-inner">
+      <a class="sitenav-brand" href="/index.html">🎯 Team Quiz</a>
+      <div class="sitenav-links">
+        <a href="/index.html">Play</a>
+        <a href="/host.html">Host</a>
+        <a href="/guide.html" class="active">How to run it</a>
+        <a href="/tech.html">Technical overview</a>
+      </div>
+    </div>
+  </nav>
+    <div class="wrap">
+      <header>
+        <h1>Team Quiz — How to run it</h1>
+        <p class="lead">
+          A live quiz for onboarding sessions. Everyone joins on their phone or laptop, gets
+          split into two random teams, and answers questions together — with the correct answer
+          and a short explanation revealed after every round.
+        </p>
+      </header>
+
+      <div class="panel">
+        <span class="tag host">FOR THE HOST</span>
+        <h2>Running a session</h2>
+        <ol class="steps">
+          <li>
+            Open the host panel at <code>/host.html</code> and sign in with the host password.
+            <div class="note">Keep this tab to yourself — it shows the correct answers.</div>
+          </li>
+          <li>
+            Pick a <strong>question set</strong> from the dropdown (e.g. Java &amp; DevOps, AWS,
+            Git). The counter shows how many questions in that set are still unused.
+            <div class="note">Since v1.1.0 you can switch set at any time — mid-game it applies from the next question.</div>
+          </li>
+          <li>Share the main site link with the room and wait for players to appear in the lobby.</li>
+          <li>Press <strong>Draw teams</strong> to split everyone randomly into two teams. Use <strong>Redraw</strong> if you want a reshuffle.</li>
+          <li>Press <strong>Start game</strong>. The first question appears — read it aloud for the room.</li>
+          <li>
+            When both teams have voted the answer reveals automatically. If a team is slow, you
+            can force it with <strong>Reveal</strong>. Read out the explanation.
+          </li>
+          <li>Press <strong>Next question</strong> to continue. First team to 3 points (and ahead) wins.</li>
+          <li>
+            <strong>New match</strong> returns to the lobby keeping the players; <strong>Reset question
+            history</strong> lets already-used questions in the current set appear again.
+          </li>
+        </ol>
+      </div>
+
+      <div class="panel">
+        <span class="tag play">FOR PLAYERS</span>
+        <h2>Playing</h2>
+        <ol class="steps">
+          <li>Open the site link the host shares and enter your name.</li>
+          <li>Wait in the lobby — the host will draw everyone into two teams.</li>
+          <li>Read the question and options on your screen and talk it over with your team.</li>
+          <li>
+            One person taps your team's answer. There's <strong>one vote per team</strong>, and it
+            locks once cast — so agree first.
+          </li>
+          <li>Once both teams have voted, the correct answer and an explanation appear. Learn, then move on.</li>
+          <li>A correct answer scores a point. First team to 3 points, and ahead, wins.</li>
+        </ol>
+      </div>
+
+      <div class="panel callout">
+        <b>Good to know</b>
+        <ul class="plain" style="margin-top: 8px;">
+          <li>It's team-based: the discussion is the point, not just the score.</li>
+          <li>A tie at the winning score keeps playing until one team pulls ahead.</li>
+          <li>Each set remembers what it has already asked, so questions don't repeat until it runs out.</li>
+          <li>Joining late is fine — you'll be placed on a team at the next draw.</li>
+          <li>Each question has a timer (default 60s, host-configurable, 0 = off). When it runs out, the answer is revealed — a team that hasn't voted scores nothing.</li>
+          <li>Questions have a difficulty tier (medium / hard / pro — shown next to the topic). The host can filter tiers at any time, e.g. medium+hard for newer groups.</li>
+          <li>The host password can be changed from the host panel itself (current + new, stored server-side as a salted hash).</li>
+          <li>The host can end the match at any time: the leading team wins, or a tie is declared. Either way you get the full recap.</li>
+          <li>When a match ends, everyone sees a recap: every question, the correct answer in green, wrong picks in red, and the explanation.</li>
+        </ul>
+      </div>
+
+      <div class="footnav">
+        <a href="/index.html">← Back to Play</a>
+        <a href="/tech.html">Technical overview →</a>
+      </div>
+
+      <p class="foot">Team Quiz · onboarding edition</p>
+    </div>
+  </body>
+</html>

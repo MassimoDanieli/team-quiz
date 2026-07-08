@@ -1,0 +1,428 @@
+{
+  "id": "networking",
+  "name": "Networking",
+  "description": "Concepts, not vendors: addressing, protocols, routing and the plumbing of the internet. 30-question seed set, growing to 300.",
+  "order": 12,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "An IP address identifies…",
+      "options": [
+        "The manufacturer of a network card",
+        "A user account on the internet in practice",
+        "The physical location of a computer",
+        "A device's network interface on a network"
+      ],
+      "correct": 3,
+      "explanation": "It's a logical address for reaching an interface — not tied to geography, hardware vendor, or a person."
+    },
+    {
+      "id": "q002",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "DNS exists to…",
+      "options": [
+        "Translate human-friendly names into IP addresses in practice",
+        "Block access to known malicious websites",
+        "Encrypt traffic between browsers and websites",
+        "Assign IP addresses automatically to new devices"
+      ],
+      "correct": 0,
+      "explanation": "The internet's phone book: you type a name, DNS answers with the address packets actually need."
+    },
+    {
+      "id": "q003",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "The difference between a switch and a router is that a router…",
+      "options": [
+        "Is simply a faster version of a switch",
+        "Connects devices within one local network",
+        "Connects different networks together",
+        "Only works with wireless connections"
+      ],
+      "correct": 2,
+      "explanation": "Switches forward frames inside a network; routers move packets between networks — including toward the internet."
+    },
+    {
+      "id": "q004",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "Compared with TCP, UDP…",
+      "options": [
+        "Retransmits anything that gets lost en route",
+        "Guarantees packets arrive in the right order",
+        "Is faster but offers no delivery guarantees in practice",
+        "Establishes a connection before sending data"
+      ],
+      "correct": 2,
+      "explanation": "No handshake, no retransmission, no ordering — which is exactly why voice, video and games love it."
+    },
+    {
+      "id": "q005",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "A port number identifies…",
+      "options": [
+        "The priority of a packet inside the router",
+        "Which physical socket the cable is plugged into",
+        "How many devices share the same connection",
+        "Which service or application traffic is for"
+      ],
+      "correct": 3,
+      "explanation": "One IP address, many conversations: ports let the same machine run a web server on 443 and SSH on 22."
+    },
+    {
+      "id": "q006",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "A LAN and a WAN differ mainly in…",
+      "options": [
+        "How many devices they can address",
+        "Whether they use cables or radio",
+        "The brand of equipment involved",
+        "The geographic scale they cover"
+      ],
+      "correct": 3,
+      "explanation": "Local (an office, a home) versus wide (cities, countries) — the technologies follow from the distance."
+    },
+    {
+      "id": "q007",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "A MAC address is…",
+      "options": [
+        "Only used by Apple hardware on a network as a rule",
+        "The address websites see when you browse",
+        "Assigned by the router every time you connect",
+        "A hardware identifier burned into the interface"
+      ],
+      "correct": 3,
+      "explanation": "Layer-2 identity for the local segment. It normally never leaves your network — websites see your IP instead."
+    },
+    {
+      "id": "q008",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "The ping command tells you…",
+      "options": [
+        "Whether a host is reachable and how fast",
+        "How much bandwidth a connection offers",
+        "Which ports are open on a remote host",
+        "The full route packets take to a host in practice"
+      ],
+      "correct": 0,
+      "explanation": "An ICMP echo and its reply: reachability plus round-trip time, nothing more — and some hosts ignore it."
+    },
+    {
+      "id": "q009",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "Standard ports for HTTP and HTTPS are…",
+      "options": [
+        "25 and 110 respectively",
+        "80 and 443 respectively",
+        "21 and 22 respectively",
+        "53 and 8080 respectively"
+      ],
+      "correct": 1,
+      "explanation": "80 for plain HTTP, 443 for TLS — the pair worth memorising; 21/22 are FTP/SSH, 25/110 mail, 53 DNS."
+    },
+    {
+      "id": "q010",
+      "topic": "Networking",
+      "difficulty": "medium",
+      "text": "Compared with Wi-Fi, a wired Ethernet connection generally offers…",
+      "options": [
+        "Encryption applied to every single frame",
+        "Lower and more consistent latency",
+        "Automatic failover between access points",
+        "More mobility but much higher latency"
+      ],
+      "correct": 1,
+      "explanation": "No radio contention, interference or roaming: the wire wins on stability, which matters more than raw speed."
+    },
+    {
+      "id": "q011",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "The /24 in 192.168.1.0/24 tells you…",
+      "options": [
+        "The subnet is the 24th in that address block",
+        "The first 24 bits identify the network part in practice",
+        "Packets may take at most 24 router hops",
+        "The network can hold exactly 24 devices"
+      ],
+      "correct": 1,
+      "explanation": "CIDR notation: 24 network bits leave 8 for hosts — 254 usable addresses in this case."
+    },
+    {
+      "id": "q012",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "DHCP's job on a network is to…",
+      "options": [
+        "Hand out IP configuration to devices automatically",
+        "Resolve names into addresses for clients in practice",
+        "Encrypt traffic between clients and gateway",
+        "Block rogue devices from joining the LAN"
+      ],
+      "correct": 0,
+      "explanation": "Discover, offer, request, acknowledge: address, mask, gateway and DNS servers, leased without human effort."
+    },
+    {
+      "id": "q013",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "ARP answers the question…",
+      "options": [
+        "Which DNS server is authoritative for this zone?",
+        "Which route leads to this remote network?",
+        "Which port is this application listening on?",
+        "Which MAC address owns this IP on my segment?"
+      ],
+      "correct": 3,
+      "explanation": "IP gets you to the right network; ARP finds the actual hardware address for the final local hop."
+    },
+    {
+      "id": "q014",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "NAT allows a home network to…",
+      "options": [
+        "Share one public IP among many private devices in practice",
+        "Encrypt all outbound traffic automatically",
+        "Assign public addresses to every device inside",
+        "Prioritise gaming traffic over downloads"
+      ],
+      "correct": 0,
+      "explanation": "The router rewrites addresses and tracks connections — one public IP, a whole houseful of devices behind it."
+    },
+    {
+      "id": "q015",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "The TCP three-way handshake sequence is…",
+      "options": [
+        "HELLO, then KEY, then DATA",
+        "REQUEST, then GRANT, then BEGIN",
+        "SYN, then SYN-ACK, then ACK in practice",
+        "ACK, then SYN, then SYN-ACK"
+      ],
+      "correct": 2,
+      "explanation": "Synchronise sequence numbers in both directions before any data flows — the price of reliability."
+    },
+    {
+      "id": "q016",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "In the OSI model, IP addressing and routing live at…",
+      "options": [
+        "Layer 7, the application layer",
+        "Layer 4, the transport layer",
+        "Layer 3, the network layer",
+        "Layer 2, the data link layer"
+      ],
+      "correct": 2,
+      "explanation": "L2 = frames and MACs, L3 = packets and IPs, L4 = TCP/UDP and ports, L7 = the application itself."
+    },
+    {
+      "id": "q017",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "traceroute works by…",
+      "options": [
+        "Sending packets with increasing TTLs and reading who complains",
+        "Asking each router along the path to identify itself",
+        "Querying the routing table of the destination host in practice",
+        "Flooding all paths and timing which reply comes first"
+      ],
+      "correct": 0,
+      "explanation": "TTL=1 dies at the first hop, TTL=2 at the second… each expiry message reveals one router on the path."
+    },
+    {
+      "id": "q018",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "VLANs let a network team…",
+      "options": [
+        "Encrypt traffic between switches automatically",
+        "Bond several links into one faster connection",
+        "Split one physical switch into isolated segments",
+        "Increase the wireless range of access points in practice"
+      ],
+      "correct": 2,
+      "explanation": "Logical separation on shared hardware: finance and guests on the same switch, unable to see each other."
+    },
+    {
+      "id": "q019",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "An A record and a CNAME record differ in that a CNAME…",
+      "options": [
+        "Holds arbitrary text such as verification tokens",
+        "Lists the mail servers for the domain",
+        "Maps a name to an IPv6 address instead of IPv4",
+        "Points a name at another name, not an address in practice"
+      ],
+      "correct": 3,
+      "explanation": "A = name to IP; CNAME = alias to canonical name. (AAAA is IPv6, MX is mail, TXT is the text one.)"
+    },
+    {
+      "id": "q020",
+      "topic": "Networking",
+      "difficulty": "hard",
+      "text": "A DNS record's TTL controls…",
+      "options": [
+        "How many resolvers may cache the record at once",
+        "How long resolvers may cache the answer in practice",
+        "The maximum hops a query may travel",
+        "How often the zone file must be re-signed"
+      ],
+      "correct": 1,
+      "explanation": "Long TTLs mean fewer queries but slow changes; before a migration you drop the TTL, then flip the record."
+    },
+    {
+      "id": "q021",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "BGP is best described as…",
+      "options": [
+        "The mechanism DNS uses to find authoritative servers",
+        "The path-vector protocol gluing autonomous systems together",
+        "A secure replacement for OSPF in enterprise cores",
+        "The protocol that load-balances traffic inside data centres"
+      ],
+      "correct": 1,
+      "explanation": "Networks (ASes) advertise reachable prefixes and pick paths by policy, not just distance — the internet's routing fabric."
+    },
+    {
+      "id": "q022",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "Anycast means…",
+      "options": [
+        "A host randomly selects one of several addresses in practice as a rule",
+        "One address is announced from many locations; routing picks the nearest",
+        "A packet is duplicated to every host in a group in practice as a rule",
+        "Traffic alternates between two redundant paths in practice as a rule in practice"
+      ],
+      "correct": 1,
+      "explanation": "The same prefix from many sites: users reach the topologically closest instance. How 8.8.8.8 and CDNs feel fast everywhere."
+    },
+    {
+      "id": "q023",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "Path MTU discovery breaks silently when…",
+      "options": [
+        "Firewalls drop the ICMP 'fragmentation needed' messages",
+        "Both endpoints support jumbo frames end to end in practice",
+        "The sender's interface MTU is set below 1500 bytes",
+        "The route changes while a transfer is in progress"
+      ],
+      "correct": 0,
+      "explanation": "Without those ICMP signals, big packets vanish into a black hole: small transfers work, large ones hang. Classic."
+    },
+    {
+      "id": "q024",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "TCP congestion control exists to…",
+      "options": [
+        "Encrypt the sliding window against tampering",
+        "Guarantee equal bandwidth to every connection",
+        "Stop senders from overwhelming the network path",
+        "Reserve bandwidth ahead of large transfers in practice"
+      ],
+      "correct": 2,
+      "explanation": "Probe, back off on loss, ramp up again: cooperative restraint is what keeps shared links usable at all."
+    },
+    {
+      "id": "q025",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "QUIC improves on TCP+TLS mainly by…",
+      "options": [
+        "Cutting handshake round trips and avoiding head-of-line blocking",
+        "Removing the need for any encryption handshake in practice in practice",
+        "Running over raw IP instead of a transport protocol in practice",
+        "Compressing every packet with a shared dictionary in practice"
+      ],
+      "correct": 0,
+      "explanation": "Built on UDP with TLS integrated: faster setup, independent streams, and connection migration across networks."
+    },
+    {
+      "id": "q026",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "ECMP (equal-cost multi-path) routing…",
+      "options": [
+        "Falls back to the second path only on failure",
+        "Duplicates every packet across two paths for safety",
+        "Spreads flows across several equally good paths",
+        "Requires all links to come from the same vendor"
+      ],
+      "correct": 2,
+      "explanation": "Hashing per flow keeps packets of one connection on one path (no reordering) while using all the capacity."
+    },
+    {
+      "id": "q027",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "A recursive DNS resolver differs from an authoritative server because it…",
+      "options": [
+        "Only answers queries arriving over encrypted transports",
+        "Chases the full lookup on behalf of clients and caches results",
+        "Holds the master copy of the zone's records in practice as a rule",
+        "Is operated exclusively by domain registrars in practice"
+      ],
+      "correct": 1,
+      "explanation": "Root, TLD, authoritative — the resolver walks the chain so your laptop doesn't have to, then caches per TTL."
+    },
+    {
+      "id": "q028",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "IPv6 SLAAC lets a host…",
+      "options": [
+        "Configure its own address from router advertisements",
+        "Request an address lease from a DHCPv6 server as a rule",
+        "Negotiate a shorter prefix with the local router",
+        "Translate its IPv6 address for IPv4-only peers"
+      ],
+      "correct": 0,
+      "explanation": "Router advertises the prefix; the host derives its own interface identifier. Addressing without a DHCP server at all."
+    },
+    {
+      "id": "q029",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "VXLAN is used in data centres to…",
+      "options": [
+        "Encrypt tenant traffic with per-VLAN keys",
+        "Compress east-west traffic between racks as a rule",
+        "Replace spanning tree inside a single switch",
+        "Stretch layer-2 segments across a layer-3 fabric"
+      ],
+      "correct": 3,
+      "explanation": "Encapsulating frames in UDP gives ~16M virtual networks over a routed underlay — VM mobility without giant broadcast domains."
+    },
+    {
+      "id": "q030",
+      "topic": "Networking",
+      "difficulty": "pro",
+      "text": "ARP spoofing lets an attacker on the LAN…",
+      "options": [
+        "Exhaust the DHCP pool so no one gets an address",
+        "Answer for the gateway's IP and intercept traffic in practice",
+        "Force the switch to broadcast all unicast frames",
+        "Overwrite the DNS cache of every local client in practice"
+      ],
+      "correct": 1,
+      "explanation": "Gratuitous ARP replies poison neighbours' tables: traffic for the gateway flows through the attacker first. Dynamic ARP inspection is the switch-side counter."
+    }
+  ]
+}

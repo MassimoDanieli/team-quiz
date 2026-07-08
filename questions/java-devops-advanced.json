@@ -1,0 +1,470 @@
+{
+  "id": "java-devops-advanced",
+  "name": "Java & DevOps · Advanced",
+  "description": "Harder Java & DevOps for experienced hires — concurrency, JVM internals, Kubernetes, IaC.",
+  "order": 2,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Java",
+      "text": "A mutable object is used as a HashMap key, then one of its fields changes after insertion. What happens?",
+      "options": [
+        "The map quietly re-sorts all of its entries",
+        "It throws an exception the moment you change it",
+        "Nothing changes, because keys are copied on insert",
+        "You may no longer be able to retrieve the entry"
+      ],
+      "correct": 3,
+      "explanation": "The key's hashCode changes, so it lands in a different bucket than where it was stored — the entry becomes effectively unreachable. Keys must be effectively immutable.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q002",
+      "topic": "Java",
+      "text": "Under high contention, why does ConcurrentHashMap usually outperform Collections.synchronizedMap?",
+      "options": [
+        "It caches the whole map in the CPU registers",
+        "It locks finer-grained, so buckets stay concurrent",
+        "It is fully single-threaded and serialises every call",
+        "It skips locking entirely and never blocks"
+      ],
+      "correct": 1,
+      "explanation": "synchronizedMap serialises every operation on one lock; ConcurrentHashMap locks per-bucket/segment, so unrelated updates proceed in parallel.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q003",
+      "topic": "Java",
+      "text": "For a double-checked-locking singleton to be correct, the instance field must be…",
+      "options": [
+        "Declared volatile, so the instance is safely published",
+        "Declared static, and nothing more than that",
+        "Declared transient, so it is not serialised",
+        "Declared final, which fully fixes the visibility issue"
+      ],
+      "correct": 0,
+      "explanation": "Without volatile another thread can observe a non-null but partially-constructed instance due to reordering.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q004",
+      "topic": "Java",
+      "text": "Two threads increment a shared 'volatile int' with i++. Is it safe?",
+      "options": [
+        "Yes, since all int operations are atomic anyway",
+        "Only on 64-bit JVMs, never on 32-bit ones",
+        "No — volatile gives visibility, not atomicity",
+        "Yes, because volatile makes i++ fully atomic"
+      ],
+      "correct": 2,
+      "explanation": "i++ is read-modify-write, three steps. volatile ensures visibility of the latest value but doesn't make the compound operation atomic.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q005",
+      "topic": "Java",
+      "text": "A fixed thread pool backed by an unbounded queue is hammered with tasks faster than it can process. Risk?",
+      "options": [
+        "The queue grows until the JVM runs out of memory",
+        "Nothing; an unbounded queue is always safe",
+        "Tasks beyond capacity are silently dropped",
+        "Extra worker threads are spawned automatically as needed"
+      ],
+      "correct": 0,
+      "explanation": "An unbounded queue accepts work indefinitely; without backpressure or a bounded queue, memory is exhausted.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q006",
+      "topic": "Java",
+      "text": "Integer a=127,b=127 gives a==b true, but a=128,b=128 gives a==b false. Why?",
+      "options": [
+        "The value 128 overflows and wraps around",
+        "Values -128..127 are cached, so == compares one object",
+        "It is simply a long-standing bug in the JVM",
+        "Autoboxing simply picks the result at random each time"
+      ],
+      "correct": 1,
+      "explanation": "The Integer cache reuses instances for -128..127. Always compare boxed values with equals, not ==.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q007",
+      "topic": "Java",
+      "text": "A static collection keeps accumulating entries that are never removed. This is a classic…",
+      "options": [
+        "A deadlock between two competing threads",
+        "A useful performance optimisation for lookups",
+        "A memory leak — entries stay reachable forever",
+        "A race condition on the shared collection"
+      ],
+      "correct": 2,
+      "explanation": "Static references live for the app's lifetime, so anything they hold can never be garbage-collected.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q008",
+      "topic": "Java",
+      "text": "In try-with-resources, if the body throws and close() also throws, what happens to the close() exception?",
+      "options": [
+        "The close() error is suppressed onto the primary one",
+        "The two exceptions are simply thrown separately in turn",
+        "Both exceptions are lost and nothing propagates",
+        "The close() error silently replaces the original"
+      ],
+      "correct": 0,
+      "explanation": "The primary exception propagates; the close() exception is added to its suppressed list so nothing is lost.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q009",
+      "topic": "Java",
+      "text": "Which set of properties makes a class properly immutable?",
+      "options": [
+        "Final fields, no setters, and defensive copies of mutables",
+        "Simply marking every field private is enough",
+        "Only making the class itself final is required",
+        "Wrapping every getter method inside a synchronized block"
+      ],
+      "correct": 0,
+      "explanation": "Immutability needs all of these; a leaked reference to an internal mutable field breaks it even if fields are final.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q010",
+      "topic": "Java",
+      "text": "A parallel stream appends results into a shared ArrayList. What's wrong?",
+      "options": [
+        "It simply refuses to compile with a shared collection",
+        "ArrayList isn't thread-safe; concurrent adds corrupt it",
+        "Parallel streams are simply always slower here",
+        "Nothing; parallel streams handle this safely"
+      ],
+      "correct": 1,
+      "explanation": "Side-effecting shared mutable state from parallel streams causes races; use collect() with a concurrent-safe collector or a reduction.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q011",
+      "topic": "Java",
+      "text": "Calling Optional.get() without checking presence is discouraged because…",
+      "options": [
+        "It has been deprecated in every recent Java version",
+        "It is noticeably slower than calling orElse",
+        "It quietly returns null instead of a value",
+        "It throws when empty, defeating Optional's purpose"
+      ],
+      "correct": 3,
+      "explanation": "The point of Optional is to force handling the empty case; blind get() reintroduces the null-style crash. Prefer orElse/ifPresent/map.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q012",
+      "topic": "Java",
+      "text": "You override equals() but not hashCode(), then store the object in a HashSet and look it up. Result?",
+      "options": [
+        "It is always found regardless of what the hash code is",
+        "May not be found — equal objects can hash differently",
+        "The code fails to compile without both methods",
+        "The set silently becomes sorted by hash code"
+      ],
+      "correct": 1,
+      "explanation": "Hash-based collections locate objects by hashCode first; violating the equals/hashCode contract breaks lookups.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q013",
+      "topic": "Java",
+      "text": "A Comparator inconsistent with equals is used in a TreeSet. Consequence?",
+      "options": [
+        "Elements it deems equal are dropped or merged",
+        "The TreeSet throws as soon as you add an item",
+        "Sorting simply runs faster with fewer checks",
+        "Nothing changes; equals is used for identity"
+      ],
+      "correct": 0,
+      "explanation": "Sorted sets/maps use the comparator (not equals) for identity, so 'compare == 0' elements collapse together.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q014",
+      "topic": "Java",
+      "text": "A ThreadLocal is set but never removed on a pooled thread. Risk?",
+      "options": [
+        "Nothing, since thread pools clear ThreadLocals for you",
+        "A deadlock the next time the thread is reused",
+        "Leaked state carried into later tasks on that thread",
+        "The thread pool quietly shrinks by one thread"
+      ],
+      "correct": 2,
+      "explanation": "Pool threads are reused, so a lingering ThreadLocal leaks data across tasks and can retain memory. Always remove() in a finally.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q015",
+      "topic": "Java",
+      "text": "Throwing a checked exception from inside a standard Stream map() lambda…",
+      "options": [
+        "Is automatically converted to an unchecked one",
+        "Compiles fine and propagates it up the stream",
+        "Is silently swallowed and the element skipped",
+        "Won't compile — you must catch or wrap it there"
+      ],
+      "correct": 3,
+      "explanation": "The built-in functional interfaces don't declare checked exceptions, so you must handle or wrap them inside the lambda.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q016",
+      "topic": "Java",
+      "text": "thenApply vs thenCompose on CompletableFuture — when do you need thenCompose?",
+      "options": [
+        "thenCompose is only ever used for logging output",
+        "They are identical and interchangeable always",
+        "thenApply flattens nested futures automatically",
+        "thenCompose flattens a function returning a future"
+      ],
+      "correct": 3,
+      "explanation": "thenCompose flattens a future-returning function (like flatMap); thenApply would give you a CompletableFuture<CompletableFuture<...>>.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q017",
+      "topic": "DevOps",
+      "text": "A pod sets cpu and memory requests equal to its limits. Its QoS class is…",
+      "options": [
+        "Burstable, sitting between the other two classes",
+        "Guaranteed, so it is evicted last under pressure",
+        "Preemptible, meaning it can be stopped anytime",
+        "BestEffort, since it declares no resource needs"
+      ],
+      "correct": 1,
+      "explanation": "requests == limits for all resources gives Guaranteed QoS, which is evicted last under pressure.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q018",
+      "topic": "DevOps",
+      "text": "Under node memory pressure, which pods does the kubelet evict first?",
+      "options": [
+        "Guaranteed pods are always evicted first of all",
+        "The most recently started pods are evicted first",
+        "Pods are evicted in a completely random order",
+        "BestEffort first, then Burstable, then Guaranteed"
+      ],
+      "correct": 3,
+      "explanation": "Eviction follows QoS: BestEffort first, Guaranteed last, so critical guaranteed workloads survive longest.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q019",
+      "topic": "DevOps",
+      "text": "What does a PodDisruptionBudget protect against?",
+      "options": [
+        "Images that fail to pull from the registry",
+        "Nodes failing unexpectedly from hardware faults",
+        "Too many pods going down at once during drains",
+        "Invalid YAML being applied to the cluster"
+      ],
+      "correct": 2,
+      "explanation": "A PDB caps how many replicas can be voluntarily taken down simultaneously, preserving availability during maintenance.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q020",
+      "topic": "DevOps",
+      "text": "maxUnavailable and maxSurge in a Deployment control…",
+      "options": [
+        "The CPU and memory limits set on each pod",
+        "How frequently the health probes are executed",
+        "How many pods may be down or added during a rollout",
+        "The total number of replicas the app should run overall"
+      ],
+      "correct": 2,
+      "explanation": "They tune rollout speed vs availability: surge adds temporary extra pods, unavailable allows some to be down.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q021",
+      "topic": "DevOps",
+      "text": "When is a StatefulSet the right choice over a Deployment?",
+      "options": [
+        "When you need stable identities and per-pod storage",
+        "Only for batch jobs that run once and then finish",
+        "For any ordinary, stateless web application",
+        "Whenever you simply want to use less memory"
+      ],
+      "correct": 0,
+      "explanation": "StatefulSets give ordered, stable pod identities and sticky volumes — needed by databases and clustered stores.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q022",
+      "topic": "DevOps",
+      "text": "A headless Service (clusterIP: None) provides…",
+      "options": [
+        "Per-pod DNS records addressing pods individually",
+        "Automatic TLS termination for incoming traffic",
+        "A single virtual IP load-balancing the pods",
+        "External load balancing across the whole cluster"
+      ],
+      "correct": 0,
+      "explanation": "Without a cluster IP, DNS returns each pod's address, which is how StatefulSet members find each other.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q023",
+      "topic": "DevOps",
+      "text": "Why does Terraform use state locking (e.g. via DynamoDB)?",
+      "options": [
+        "Stores your secrets safely inside the state",
+        "Makes each plan run noticeably faster",
+        "Stops concurrent applies from corrupting the state",
+        "Encrypts the state file automatically while it is at rest"
+      ],
+      "correct": 2,
+      "explanation": "A lock ensures only one apply mutates state at a time; concurrent writes could leave state inconsistent with reality.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q024",
+      "topic": "DevOps",
+      "text": "Why prefer for_each over count for a set of named resources in Terraform?",
+      "options": [
+        "Stable keys, so removing one doesn't recreate others",
+        "count cannot create more than one resource",
+        "It runs plans and applies much faster than count does",
+        "It is simply the newer of the two features"
+      ],
+      "correct": 0,
+      "explanation": "count addresses by position, so deleting the middle item shifts indices and forces recreation; for_each keys are stable.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q025",
+      "topic": "DevOps",
+      "text": "Why COPY package.json and install deps before COPY of the source in a Dockerfile?",
+      "options": [
+        "It makes the base image considerably smaller",
+        "Docker requires dependencies to appear before any source",
+        "It is purely a matter of personal style",
+        "Layer caching — deps aren't reinstalled on code change"
+      ],
+      "correct": 3,
+      "explanation": "Ordering stable steps first lets Docker reuse the cached dependency layer across builds where only code changed.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q026",
+      "topic": "DevOps",
+      "text": "A key advantage of a canary release over blue-green?",
+      "options": [
+        "It removes the need for any monitoring at all",
+        "Gradual exposure limits blast radius, enables metrics",
+        "It switches all of the traffic across instantly at once",
+        "It needs no extra infrastructure to run at all"
+      ],
+      "correct": 1,
+      "explanation": "Canary shifts a slice of traffic first so you can watch metrics and abort before everyone is affected.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q027",
+      "topic": "DevOps",
+      "text": "With at-least-once message delivery, consumers must be…",
+      "options": [
+        "Idempotent, so duplicate deliveries do no harm",
+        "Strictly single-threaded to avoid any races",
+        "Completely stateless with no stored data",
+        "Always faster than the producers sending them"
+      ],
+      "correct": 0,
+      "explanation": "At-least-once can redeliver, so processing the same message twice must not double-apply effects.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q028",
+      "topic": "DevOps",
+      "text": "A Horizontal Pod Autoscaler scales replicas based on…",
+      "options": [
+        "The size on disk of the container image",
+        "The current time of day and day of week",
+        "The number of worker nodes present in the cluster",
+        "Observed metrics compared against a set target"
+      ],
+      "correct": 3,
+      "explanation": "The HPA adjusts replica count to keep the measured metric near the target you set.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q029",
+      "topic": "DevOps",
+      "text": "TLS is terminated at the load balancer. Traffic from the LB to the backend is then…",
+      "options": [
+        "Always encrypted end-to-end without extra work",
+        "Cached at the balancer for later reuse",
+        "Unencrypted onward unless you re-encrypt the hop",
+        "Automatically compressed before reaching backends"
+      ],
+      "correct": 2,
+      "explanation": "Termination decrypts at the edge; the hop to the backend is plaintext unless you explicitly re-encrypt it.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q030",
+      "topic": "DevOps",
+      "text": "During a planned failover, a very high DNS TTL causes…",
+      "options": [
+        "The cutover happens instantly for everyone",
+        "Clients keep the old IP until their caches expire",
+        "Nothing at all; TTL has no bearing whatsoever on failover",
+        "DNS resolution stops working altogether"
+      ],
+      "correct": 1,
+      "explanation": "Caches honour the TTL, so a long TTL delays the switch. Reduce TTL ahead of a planned change.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q031",
+      "topic": "DevOps",
+      "text": "A pod's readiness probe fails but liveness passes. What happens?",
+      "options": [
+        "Nothing changes; it keeps receiving traffic",
+        "It is deleted and rescheduled onto another node",
+        "It stays up but is pulled from Service endpoints",
+        "It is immediately restarted by the kubelet"
+      ],
+      "correct": 2,
+      "explanation": "Readiness gates traffic without restarting; the pod stays up but is taken out of the load-balancing rotation.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q032",
+      "topic": "DevOps",
+      "text": "In immutable infrastructure, how do you 'fix' a misbehaving server?",
+      "options": [
+        "Edit its configuration files directly in place and reload",
+        "Reboot it repeatedly until the fault clears",
+        "SSH in and patch the running server in place",
+        "Replace it with a fresh instance from a known image"
+      ],
+      "correct": 3,
+      "explanation": "Immutable infra replaces rather than mutates, so servers stay reproducible and free of configuration drift.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q033",
+      "topic": "DevOps",
+      "text": "A non-idempotent deploy step is retried by CI after a timeout. Risk?",
+      "options": [
+        "Nothing; the second attempt simply overwrites",
+        "Duplicate or partial side effects; make it idempotent",
+        "A faster deploy overall, since the retry runs in parallel",
+        "It rolls itself back to the previous version"
+      ],
+      "correct": 1,
+      "explanation": "If the first attempt partly succeeded, a blind retry can double-apply; idempotency makes retries harmless.",
+      "difficulty": "hard"
+    }
+  ]
+}

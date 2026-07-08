@@ -1,0 +1,288 @@
+{
+  "id": "zen-expert",
+  "name": "Zen · Expert",
+  "description": "Deep cybersecurity, cryptography and cloud/network security. For Guido. Not easy.",
+  "order": 8,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Security",
+      "text": "Why is AES-GCM generally preferred over AES-CBC for new designs?",
+      "options": [
+        "It runs faster but offers no integrity checking at all",
+        "It uses a much shorter key than CBC does",
+        "It authenticates as well as encrypts, in one step",
+        "It needs no initialisation vector at all"
+      ],
+      "correct": 2,
+      "explanation": "GCM is an AEAD mode: it detects tampering via an auth tag, whereas CBC gives no integrity and is prone to padding-oracle attacks.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q002",
+      "topic": "Security",
+      "text": "A nonce in AES-GCM must never be reused with the same key because…",
+      "options": [
+        "It makes each encryption noticeably slower",
+        "It can expose plaintext and let the tag be forged",
+        "It gradually corrupts the underlying key",
+        "GCM does not use a nonce in the first place, so nothing happens"
+      ],
+      "correct": 1,
+      "explanation": "Catastrophic for GCM: repeating (key, nonce) allows forgery of the authentication tag and recovery of plaintext relationships.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q003",
+      "topic": "Security",
+      "text": "In TLS 1.3, forward secrecy is guaranteed because…",
+      "options": [
+        "Static RSA key exchange is now mandatory",
+        "Ephemeral (EC)DHE keys protect past sessions",
+        "Sessions are never written to any log",
+        "Certificates are rotated automatically hourly"
+      ],
+      "correct": 1,
+      "explanation": "TLS 1.3 removed static RSA key transport; ephemeral Diffie-Hellman means compromising the server key later can't decrypt captured past traffic.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q004",
+      "topic": "Security",
+      "text": "What does mutual TLS (mTLS) add over standard TLS?",
+      "options": [
+        "It uses far larger keys than standard TLS",
+        "It makes the TLS handshake noticeably faster",
+        "The server verifies the client's certificate too",
+        "It removes the need for a certificate authority"
+      ],
+      "correct": 2,
+      "explanation": "mTLS authenticates the client to the server as well, common for service-to-service auth in zero-trust architectures.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q005",
+      "topic": "Security",
+      "text": "Why store passwords with bcrypt/scrypt/Argon2 rather than SHA-256?",
+      "options": [
+        "They are simply newer than SHA-256",
+        "They are reversible, so passwords can be recovered",
+        "They are deliberately slow and salted per user",
+        "They need no salt, being secure already"
+      ],
+      "correct": 2,
+      "explanation": "Fast hashes like SHA-256 are trivially brute-forced; adaptive password hashes add work factor and per-user salt to slow attackers.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q006",
+      "topic": "Security",
+      "text": "In OAuth 2.0 / OIDC, why must a public client (SPA/mobile) use PKCE?",
+      "options": [
+        "It makes the login flow noticeably faster",
+        "It binds the code to the client, blocking interception",
+        "It lets the client avoid using HTTPS",
+        "It bypasses the token endpoint entirely during the exchange"
+      ],
+      "correct": 1,
+      "explanation": "PKCE's code_verifier/challenge prevents a stolen authorization code from being redeemed by an attacker, essential without a client secret.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q007",
+      "topic": "Security",
+      "text": "A JWT signed with 'alg: none' is dangerous because…",
+      "options": [
+        "The token expires the instant it is issued",
+        "The token becomes far too large to transmit over the wire",
+        "If accepted, tokens can be forged with no signature",
+        "The token can no longer carry any claims"
+      ],
+      "correct": 2,
+      "explanation": "The classic JWT vuln: verifiers must pin expected algorithms and reject 'none' (and not confuse HS256/RS256 key handling).",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q008",
+      "topic": "Security",
+      "text": "The core purpose of threat modeling (e.g. STRIDE) is to…",
+      "options": [
+        "Patch known vulnerabilities more quickly after release",
+        "Replace penetration testing entirely",
+        "Encrypt data at rest and in transit",
+        "Identify and prioritise threats before building"
+      ],
+      "correct": 3,
+      "explanation": "STRIDE (Spoofing, Tampering, Repudiation, Info disclosure, DoS, Elevation) structures reasoning about what can go wrong per component.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q009",
+      "topic": "Security",
+      "text": "In a zero-trust model, network location…",
+      "options": [
+        "Grants automatic trust inside the perimeter",
+        "Fully replaces the need for a user identity",
+        "Grants no implicit trust; every request is verified",
+        "Has no bearing on the access policy at all"
+      ],
+      "correct": 2,
+      "explanation": "Zero trust drops the 'trusted internal network' assumption; identity, device posture and policy gate every access.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q010",
+      "topic": "Security",
+      "text": "Why is a strict Content-Security-Policy an effective XSS mitigation?",
+      "options": [
+        "It signs the session cookies against tampering",
+        "It encrypts the whole page before sending it",
+        "It hides the DOM from any injected script",
+        "It restricts which script sources may execute"
+      ],
+      "correct": 3,
+      "explanation": "A well-scoped CSP (no unsafe-inline, allow-listed origins) stops most injected scripts from running even if injection occurs.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q011",
+      "topic": "Security",
+      "text": "SSRF is especially dangerous in cloud because an attacker can…",
+      "options": [
+        "It can hit the metadata service to steal credentials",
+        "It can overwrite the instance's CPU microcode",
+        "It can delete the whole account's DNS records",
+        "It can silently bypass TLS on every request"
+      ],
+      "correct": 0,
+      "explanation": "Server-side request forgery can hit link-local metadata endpoints; IMDSv2's session tokens exist precisely to mitigate this.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q012",
+      "topic": "Security",
+      "text": "The principle of defence in depth means…",
+      "options": [
+        "Trusting anything already inside the perimeter",
+        "One very strong firewall is entirely sufficient",
+        "Encrypting the same data two separate times",
+        "Layered controls so no single failure is fatal"
+      ],
+      "correct": 3,
+      "explanation": "Multiple overlapping controls (network, host, app, identity, data) ensure a single bypass doesn't hand over everything.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q013",
+      "topic": "Security",
+      "text": "Certificate pinning protects against…",
+      "options": [
+        "Certificates that have simply expired",
+        "A rogue or mis-issued CA presenting a valid cert",
+        "Users choosing weak or reused passwords",
+        "A flood of malicious traffic overwhelming the server"
+      ],
+      "correct": 1,
+      "explanation": "Pinning ties a client to specific keys/certs so a rogue but technically-valid certificate is still rejected — at the cost of rotation complexity.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q014",
+      "topic": "Security",
+      "text": "Why segment an OT/ICS network from IT (as in a Purdue model)?",
+      "options": [
+        "Purely to lower the overall network cost",
+        "To make the industrial controllers run noticeably faster",
+        "To reduce the amount of cabling required",
+        "To isolate safety-critical control systems from IT"
+      ],
+      "correct": 3,
+      "explanation": "Segmentation limits lateral movement so an IT breach can't directly reach industrial controllers — critical in manufacturing.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q015",
+      "topic": "Security",
+      "text": "In envelope encryption (e.g. with a KMS), the data key is…",
+      "options": [
+        "Per-object, itself wrapped by a master key in the KMS",
+        "Stored in plaintext directly next to the encrypted data",
+        "Identical to the master key for every object",
+        "Sent to the client unencrypted on each request"
+      ],
+      "correct": 0,
+      "explanation": "You encrypt data with a local data key, then store that data key wrapped by the KMS master key — enabling scale and key rotation.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q016",
+      "topic": "Security",
+      "text": "A padding oracle attack exploits…",
+      "options": [
+        "Users selecting weak, easily guessed passwords",
+        "Reuse of the same nonce across GCM messages",
+        "Certificates that have passed their expiry date",
+        "A system revealing whether decrypted padding is valid"
+      ],
+      "correct": 3,
+      "explanation": "Distinguishable padding-error responses on CBC let an attacker decrypt/forge without the key — mitigated by authenticated encryption.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q017",
+      "topic": "Security",
+      "text": "Why prefer short-lived, automatically-rotated credentials over long-lived keys?",
+      "options": [
+        "They shrink the exposure window if ever leaked",
+        "They are cheaper to store than long-lived keys",
+        "They make each API call noticeably faster",
+        "They remove the need for any access policy"
+      ],
+      "correct": 0,
+      "explanation": "Ephemeral credentials (e.g. STS/role assumption, workload identity) mean a leaked secret is useless quickly.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q018",
+      "topic": "Security",
+      "text": "A confused-deputy problem in cloud IAM occurs when…",
+      "options": [
+        "A privileged service is tricked into acting for an attacker",
+        "A single user simply forgets their own password",
+        "Two different users end up sharing one role",
+        "Multi-factor authentication has been switched off account-wide"
+      ],
+      "correct": 0,
+      "explanation": "A trusted intermediary misuses its authority for a caller; scoping conditions (like AWS ExternalId) prevent cross-account abuse.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q019",
+      "topic": "Security",
+      "text": "DNSSEC provides…",
+      "options": [
+        "Full encryption of every DNS query sent",
+        "Authentication and integrity of DNS records",
+        "Noticeably faster domain-name lookups",
+        "Blocking of advertising and tracking domains"
+      ],
+      "correct": 1,
+      "explanation": "DNSSEC signs records so resolvers can detect forged answers; note it provides integrity, not confidentiality (that's DoH/DoT).",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q020",
+      "topic": "Security",
+      "text": "In an incident, why capture volatile memory before powering off?",
+      "options": [
+        "Live memory holds keys and state lost on shutdown",
+        "It is simply faster than imaging the disk",
+        "Powering off first resets the system logs",
+        "Disk contents vanish forever the moment power is cut"
+      ],
+      "correct": 0,
+      "explanation": "Order-of-volatility: RAM, network state and caches vanish on power-off, so acquire them first to preserve evidence.",
+      "difficulty": "pro"
+    }
+  ]
+}

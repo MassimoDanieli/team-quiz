@@ -1,0 +1,372 @@
+{
+  "id": "tech-trivia",
+  "name": "General Tech Trivia",
+  "description": "Lighter round — computing history, web, hardware and general tech knowledge.",
+  "order": 7,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "History",
+      "text": "Who is often credited as the first computer programmer?",
+      "options": [
+        "Ada Lovelace",
+        "Alan Turing",
+        "Grace Hopper",
+        "Charles Babbage"
+      ],
+      "correct": 0,
+      "explanation": "Ada Lovelace wrote an algorithm for Babbage's Analytical Engine in the 1840s, earning her that title.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q002",
+      "topic": "Web",
+      "text": "What does HTTP stand for?",
+      "options": [
+        "HyperText Transfer Protocol",
+        "HyperText Transmission Protocol",
+        "High Transfer Text Protocol",
+        "Hyperlink Transfer Procedure"
+      ],
+      "correct": 0,
+      "explanation": "HTTP is the protocol browsers and servers use to exchange web pages.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q003",
+      "topic": "Hardware",
+      "text": "How many bits are in a byte?",
+      "options": [
+        "16",
+        "4",
+        "8",
+        "10"
+      ],
+      "correct": 2,
+      "explanation": "A byte is 8 bits, enough to represent 256 distinct values.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q004",
+      "topic": "Software",
+      "text": "Who created the Linux kernel?",
+      "options": [
+        "Richard Stallman",
+        "Linus Torvalds",
+        "Dennis Ritchie",
+        "Ken Thompson"
+      ],
+      "correct": 1,
+      "explanation": "Linus Torvalds released the first Linux kernel in 1991 and still oversees its development.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q005",
+      "topic": "History",
+      "text": "The term 'bug' for a computer fault is linked to a real one — what was it?",
+      "options": [
+        "A rare fault in the punch cards",
+        "An actual moth found in a relay",
+        "A virus spread on magnetic tape",
+        "A short circuit in the power supply"
+      ],
+      "correct": 1,
+      "explanation": "Grace Hopper's team famously taped a moth into a logbook in 1947 after it jammed a relay.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q006",
+      "topic": "Hardware",
+      "text": "What does CPU stand for?",
+      "options": [
+        "Central Program Utility",
+        "Central Processing Unit",
+        "Computer Processing Unit",
+        "Core Program Unit"
+      ],
+      "correct": 1,
+      "explanation": "The CPU is the main processor that executes instructions.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q007",
+      "topic": "Web",
+      "text": "An HTTP 404 means…",
+      "options": [
+        "The request was refused as unauthorised",
+        "The server ran into an internal error",
+        "The requested resource was not found",
+        "The request completed quite successfully"
+      ],
+      "correct": 2,
+      "explanation": "404 is the classic 'page not found' client error.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q008",
+      "topic": "Software",
+      "text": "The Python language is named after…",
+      "options": [
+        "Monty Python's Flying Circus",
+        "The python snake species",
+        "A researcher named Python",
+        "An ancient Greek legend"
+      ],
+      "correct": 0,
+      "explanation": "Guido van Rossum named it after the British comedy troupe, not the reptile.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q009",
+      "topic": "Web",
+      "text": "What does URL stand for?",
+      "options": [
+        "Uniform Reference Label",
+        "Universal Resource Link",
+        "Unified Retrieval Locator",
+        "Uniform Resource Locator"
+      ],
+      "correct": 3,
+      "explanation": "A URL is the address that locates a resource on the web.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q010",
+      "topic": "History",
+      "text": "Who is credited with inventing the World Wide Web?",
+      "options": [
+        "Tim Berners-Lee",
+        "Vint Cerf",
+        "Robert Kahn",
+        "Bill Gates"
+      ],
+      "correct": 0,
+      "explanation": "Tim Berners-Lee proposed and built the Web at CERN around 1989-1991.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q011",
+      "topic": "Hardware",
+      "text": "What does RAM stand for?",
+      "options": [
+        "Rapid Access Memory",
+        "Random Access Memory",
+        "Read Access Module",
+        "Runtime Active Memory"
+      ],
+      "correct": 1,
+      "explanation": "RAM is fast, volatile working memory the CPU uses while programs run.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q012",
+      "topic": "Software",
+      "text": "What does SQL stand for?",
+      "options": [
+        "Standard Question Language",
+        "Sequential Query Language",
+        "Structured Query Language",
+        "Simple Query Logic"
+      ],
+      "correct": 2,
+      "explanation": "SQL is the standard language for querying and managing relational databases.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q013",
+      "topic": "General",
+      "text": "Which base does the binary number system use?",
+      "options": [
+        "Base 8",
+        "Base 2",
+        "Base 10",
+        "Base 16"
+      ],
+      "correct": 1,
+      "explanation": "Binary uses base 2 — just 0 and 1 — which maps directly to on/off in circuits.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q014",
+      "topic": "General",
+      "text": "Hexadecimal is which base?",
+      "options": [
+        "Base 32",
+        "Base 8",
+        "Base 2",
+        "Base 16"
+      ],
+      "correct": 3,
+      "explanation": "Hex is base 16 (0-9 then A-F), a compact way to write binary — one hex digit is 4 bits.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q015",
+      "topic": "Company",
+      "text": "Which company develops the Android operating system?",
+      "options": [
+        "Samsung",
+        "Apple",
+        "Microsoft",
+        "Google"
+      ],
+      "correct": 3,
+      "explanation": "Google leads Android development; phone makers build on it.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q016",
+      "topic": "Company",
+      "text": "Apple was co-founded by Steve Jobs and…",
+      "options": [
+        "Paul Allen",
+        "Steve Wozniak",
+        "Jeff Bezos",
+        "Bill Gates"
+      ],
+      "correct": 1,
+      "explanation": "Steve Wozniak co-founded Apple with Jobs (and Ronald Wayne) in 1976.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q017",
+      "topic": "General",
+      "text": "Moore's Law observes that…",
+      "options": [
+        "Chip prices reliably halve every single year",
+        "Software roughly doubles in size every two years",
+        "Transistors per chip roughly double every two years",
+        "Processor clock speed triples each decade"
+      ],
+      "correct": 2,
+      "explanation": "Gordon Moore noted the transistor-count doubling trend that drove decades of hardware progress.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q018",
+      "topic": "Web",
+      "text": "The default port for HTTPS is…",
+      "options": [
+        "80",
+        "443",
+        "22",
+        "8443"
+      ],
+      "correct": 1,
+      "explanation": "HTTPS uses port 443 by default; plain HTTP uses 80.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q019",
+      "topic": "Hardware",
+      "text": "What does GPU stand for?",
+      "options": [
+        "Graphics Processing Unit",
+        "General Processing Unit",
+        "Graphical Program Utility",
+        "Grid Processing Unit"
+      ],
+      "correct": 0,
+      "explanation": "GPUs excel at parallel work like graphics and, these days, machine learning.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q020",
+      "topic": "Web",
+      "text": "In an email address, the '@' separates…",
+      "options": [
+        "The protocol from the host name",
+        "The domain from the country code",
+        "The first name from the surname",
+        "The username from the domain"
+      ],
+      "correct": 3,
+      "explanation": "Everything before @ is the local/user part; after it is the domain.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q021",
+      "topic": "General",
+      "text": "What does 'open source' software mean?",
+      "options": [
+        "It can only ever run on the Linux system",
+        "It is always completely free of any charge",
+        "It carries no software licence whatsoever",
+        "Its source code is public to view and modify"
+      ],
+      "correct": 3,
+      "explanation": "Open-source code is published under a licence that permits inspection and modification, e.g. MIT or GPL.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q022",
+      "topic": "General",
+      "text": "What does AI stand for?",
+      "options": [
+        "Applied Informatics",
+        "Automated Interaction",
+        "Artificial Intelligence",
+        "Adaptive Intelligence"
+      ],
+      "correct": 2,
+      "explanation": "AI refers to systems performing tasks that normally need human intelligence.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q023",
+      "topic": "Hardware",
+      "text": "What does USB stand for?",
+      "options": [
+        "Universal Serial Bus",
+        "Universal System Bus",
+        "Unified Serial Buffer",
+        "Universal Storage Bus"
+      ],
+      "correct": 0,
+      "explanation": "USB is the ubiquitous standard for connecting peripherals and transferring data/power.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q024",
+      "topic": "Software",
+      "text": "Who created the Git version-control system?",
+      "options": [
+        "Brendan Eich",
+        "Guido van Rossum",
+        "Linus Torvalds",
+        "Bjarne Stroustrup"
+      ],
+      "correct": 2,
+      "explanation": "Linus Torvalds created Git in 2005 to manage Linux kernel development.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q025",
+      "topic": "Web",
+      "text": "What does IP stand for in 'IP address'?",
+      "options": [
+        "Internet Protocol",
+        "Internal Protocol",
+        "Instruction Pointer",
+        "Internet Provider"
+      ],
+      "correct": 0,
+      "explanation": "The Internet Protocol handles addressing and routing of packets across networks.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q026",
+      "topic": "General",
+      "text": "'Debugging' means…",
+      "options": [
+        "Deploying software into production",
+        "Writing brand-new program features",
+        "Removing unused files from a project",
+        "Finding and fixing errors in code"
+      ],
+      "correct": 3,
+      "explanation": "Debugging is the process of locating and correcting defects.",
+      "difficulty": "medium"
+    }
+  ]
+}
