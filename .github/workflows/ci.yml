@@ -30,3 +30,26 @@ jobs:
 
       - name: Validate question sets
         run: npm run validate
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t team-quiz:ci .
+
+      - name: Smoke test (starts, /data writable, healthz OK)
+        run: |
+          docker run -d --name tq-ci \
+            -e SUPER_ADMIN_PASSWORD=ci-test-pass \
+            -p 3000:3000 team-quiz:ci
+          ok=0
+          for i in $(seq 1 15); do
+            if curl -fsS http://127.0.0.1:3000/healthz >/dev/null 2>&1; then ok=1; break; fi
+            sleep 1
+          done
+          echo "--- container logs ---"; docker logs tq-ci || true
+          echo "--- /data contents (proves node can write the volume) ---"; docker exec tq-ci ls -l /data || true
+          docker rm -f tq-ci >/dev/null 2>&1 || true
+          if [ "$ok" != "1" ]; then echo "healthz never came up — image is broken"; exit 1; fi

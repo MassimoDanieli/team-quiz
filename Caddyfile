@@ -1,0 +1,26 @@
+# Caddy reverse proxy for Team Quiz.
+# Obtains and renews a Let's Encrypt certificate for {$QUIZ_DOMAIN} automatically,
+# and proxies both HTTP and WebSocket (Socket.IO) traffic to the app container.
+# Socket.IO upgrade handling is transparent — Caddy forwards Upgrade/Connection by default.
+
+{
+	email {$TLS_EMAIL}
+}
+
+{$QUIZ_DOMAIN} {
+	encode zstd gzip
+
+	reverse_proxy app:3000 {
+		header_up Host {host}
+		header_up X-Real-IP {remote_host}
+		header_up X-Forwarded-For {remote_host}
+		header_up X-Forwarded-Proto {scheme}
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+}

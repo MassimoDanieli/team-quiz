@@ -67,8 +67,14 @@ variable "shared_password" {
   sensitive   = true
 }
 
-variable "host_password" {
-  description = "Password to control the host panel. Strongly recommended for a public deployment. Stored in Terraform state."
+variable "super_admin_user" {
+  description = "Super-admin username for the /admin.html panel."
+  type        = string
+  default     = "superadmin"
+}
+
+variable "super_admin_password" {
+  description = "Super-admin password. REQUIRED to enable /admin.html — if empty, the super panel is locked and no admin accounts can be created. Stored in Terraform state."
   type        = string
   default     = ""
   sensitive   = true

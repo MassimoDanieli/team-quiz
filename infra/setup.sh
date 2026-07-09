@@ -34,8 +34,10 @@ cat > /etc/team-quiz.env <<EOF
 PORT=3000
 WIN_SCORE=${WIN_SCORE}
 SHARED_PASSWORD=${SHARED_PASSWORD}
-HOST_PASSWORD=${HOST_PASSWORD}
+SUPER_ADMIN_USER=${SUPER_ADMIN_USER}
+SUPER_ADMIN_PASSWORD=${SUPER_ADMIN_PASSWORD}
 DATA_FILE=/var/lib/team-quiz/state.json
+ADMINS_FILE=/var/lib/team-quiz/admins.json
 EOF
 chmod 600 /etc/team-quiz.env
 

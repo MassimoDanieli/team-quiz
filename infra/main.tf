@@ -129,7 +129,16 @@ resource "null_resource" "deploy" {
   triggers = {
     instance_id = aws_instance.quiz.id
     setup_hash  = filemd5("${path.module}/setup.sh")
-    app_hash    = filemd5("${path.module}/../server.js")
+    # Hash the full deployed app so a change to any of server.js, store.js,
+    # package*.json, src/, questions/ or public/ triggers a redeploy — not just
+    # server.js. (fileset globs don't support brace {a,b} alternation, so we
+    # concatenate one fileset per directory.)
+    app_hash = sha1(join("", concat(
+      [for f in ["server.js", "store.js", "package.json", "package-lock.json"] : filemd5("${path.module}/../${f}")],
+      [for f in fileset("${path.module}/..", "src/**") : filemd5("${path.module}/../${f}")],
+      [for f in fileset("${path.module}/..", "questions/**") : filemd5("${path.module}/../${f}")],
+      [for f in fileset("${path.module}/..", "public/**") : filemd5("${path.module}/../${f}")]
+    )))
   }
 
   # Build a clean tarball of just the app (no node_modules / infra / data)
@@ -155,7 +164,8 @@ resource "null_resource" "deploy" {
       LE_EMAIL='${var.letsencrypt_email}'
       WIN_SCORE='${var.win_score}'
       SHARED_PASSWORD='${var.shared_password}'
-      HOST_PASSWORD='${var.host_password}'
+      SUPER_ADMIN_USER='${var.super_admin_user}'
+      SUPER_ADMIN_PASSWORD='${var.super_admin_password}'
       RUN_CERTBOT='${var.route53_zone_id == "" ? "no" : "yes"}'
     EOT
     destination = "/tmp/team-quiz.env"
