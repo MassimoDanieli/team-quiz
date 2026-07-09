@@ -53,7 +53,7 @@ resource "aws_security_group" "quiz" {
     cidr_blocks = [var.ssh_ingress_cidr]
   }
   ingress {
-    description = "HTTP (Let's Encrypt + redirect)"
+    description = "HTTP Lets Encrypt and redirect"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
