@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: {{ include "team-quiz.fullname" . }}
-  labels:
-    {{- include "team-quiz.labels" . | nindent 4 }}
-data:
-  WIN_SCORE: {{ .Values.app.winScore | quote }}
-  DATA_FILE: {{ printf "%s/state.json" .Values.persistence.mountPath | quote }}

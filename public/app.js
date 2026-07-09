@@ -13,6 +13,10 @@ if (!playerId) {
   localStorage.setItem('quizPlayerId', playerId);
 }
 let myName = localStorage.getItem('quizPlayerName') || '';
+let myCode = localStorage.getItem('quizRoomCode') || '';
+// a room code in the URL (?room=1234) wins and prefills the field
+const urlCode = new URLSearchParams(location.search).get('room');
+if (urlCode && /^\d{4}$/.test(urlCode)) myCode = urlCode;
 
 let joined = false;
 let myVote = null;
@@ -27,17 +31,25 @@ fetch('/config')
   .catch(() => {});
 
 document.getElementById('nameInput').value = myName;
+document.getElementById('codeInput').value = myCode;
 
 function doJoin() {
   const name = document.getElementById('nameInput').value.trim();
   const password = document.getElementById('pwInput').value;
+  const code = document.getElementById('codeInput').value.trim();
+  if (!/^\d{4}$/.test(code)) {
+    showLoginError('Enter the 4-digit game code from your host.');
+    return;
+  }
   if (!name) {
     showLoginError('Please enter a name.');
     return;
   }
   myName = name;
+  myCode = code;
   localStorage.setItem('quizPlayerName', name);
-  socket.emit('player:join', { playerId, name, password });
+  localStorage.setItem('quizRoomCode', code);
+  socket.emit('player:join', { playerId, name, password, code });
 }
 function showLoginError(msg) {
   document.getElementById('loginError').textContent = msg;
@@ -50,22 +62,34 @@ document.getElementById('nameInput').addEventListener('keydown', (e) => {
 document.getElementById('pwInput').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') doJoin();
 });
+document.getElementById('codeInput').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') doJoin();
+});
 
 socket.on('connect', () => {
   // auto-rejoin only if no password is required and we already have a name
   fetch('/config')
     .then((r) => r.json())
     .then((c) => {
-      if (myName && !c.requiresPassword) {
-        socket.emit('player:join', { playerId, name: myName });
+      if (myName && myCode && !c.requiresPassword) {
+        socket.emit('player:join', { playerId, name: myName, code: myCode });
       }
     })
     .catch(() => {});
 });
 
-socket.on('joinError', ({ reason }) => {
+socket.on('joinError', ({ reason, badCode }) => {
   joined = false;
+  if (badCode) localStorage.removeItem('quizRoomCode');
   showLoginError(reason || 'Could not join.');
+});
+
+socket.on('roomClosed', () => {
+  joined = false;
+  localStorage.removeItem('quizRoomCode');
+  document.getElementById('gameScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'block';
+  showLoginError('The host closed this game.');
 });
 
 socket.on('joined', () => {

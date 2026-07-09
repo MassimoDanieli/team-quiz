@@ -9,12 +9,12 @@ const config = require('./src/config');
 const logger = require('./src/logger');
 const store = require('./store');
 const { loadSets } = require('./src/questions');
-const { GameEngine } = require('./src/game');
+const { RoomManager } = require('./src/rooms');
 const { registerSocketHandlers } = require('./src/socketHandlers');
 
-// ---- Load content + build the engine ----
+// ---- Load content + build the room manager ----
 const { sets, order } = loadSets(config.QUESTIONS_DIR);
-const engine = new GameEngine({
+const manager = new RoomManager({
   sets,
   order,
   store,
@@ -67,8 +67,8 @@ app.get('/healthz', (req, res) =>
     status: 'ok',
     uptime: Math.round(process.uptime()),
     sets: order.length,
-    phase: engine.phase,
-    players: engine.playerCount()
+    rooms: manager.count(),
+    players: manager.list().reduce((n, r) => n + r.players, 0)
   })
 );
 
@@ -77,7 +77,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   maxHttpBufferSize: 1e4 // 10 KB — cap frame size so a client can't send huge payloads
 });
-registerSocketHandlers(io, engine);
+registerSocketHandlers(io, manager);
 
 // ---- Start ----
 server.listen(config.PORT, () => {
@@ -122,4 +122,4 @@ function shutdown(signal) {
 process.on('SIGTERM', () => shutdown('SIGTERM'));
 process.on('SIGINT', () => shutdown('SIGINT'));
 
-module.exports = { app, engine };
+module.exports = { app, manager };

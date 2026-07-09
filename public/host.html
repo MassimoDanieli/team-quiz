@@ -38,6 +38,23 @@
       <span class="badge" id="countdown" style="display:none;">⏱</span>
     </div>
 
+    <div class="panel" id="roomPanel">
+      <div class="row" style="align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div>
+          <div class="small muted">Game code — players enter this to join</div>
+          <div id="roomCode" style="font-size:2rem;font-weight:700;letter-spacing:0.12em;">····</div>
+        </div>
+        <div style="flex:1;min-width:220px;">
+          <div class="small muted">Share link</div>
+          <div class="row" style="gap:6px;">
+            <input class="text" id="roomLink" readonly style="flex:1;" />
+            <button class="btn secondary" id="copyLinkBtn">Copy</button>
+          </div>
+        </div>
+        <button class="btn ghost" id="closeRoomBtn">Close game</button>
+      </div>
+    </div>
+
     <div class="panel">
       <div class="score">
         <div class="team A">

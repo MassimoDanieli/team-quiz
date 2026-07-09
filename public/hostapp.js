@@ -5,9 +5,14 @@ const KEYS = ['A', 'B', 'C', 'D'];
 let hostPw = sessionStorage.getItem('quizHostPw') || '';
 let requiresHostPw = false;
 let authed = false;
+let roomCode = sessionStorage.getItem('quizHostRoom') || '';
 
 function attemptJoin() {
-  socket.emit('host:join', hostPw ? { password: hostPw } : {});
+  if (roomCode) {
+    socket.emit('host:resume', { password: hostPw, code: roomCode });
+  } else {
+    socket.emit('host:join', hostPw ? { password: hostPw } : {});
+  }
 }
 
 fetch('/config')
@@ -26,10 +31,24 @@ socket.on('connect', () => {
   if (authed || !requiresHostPw || hostPw) attemptJoin();
 });
 
-socket.on('hostAuthOk', () => {
+socket.on('hostAuthOk', ({ code } = {}) => {
   authed = true;
+  if (code) {
+    roomCode = code;
+    sessionStorage.setItem('quizHostRoom', code);
+    document.getElementById('roomCode').textContent = code;
+    const link = location.origin + '/?room=' + code;
+    document.getElementById('roomLink').value = link;
+  }
   document.getElementById('hostLogin').style.display = 'none';
   document.getElementById('hostApp').style.display = 'block';
+});
+
+// If the room vanished (server restart, idle sweep, or we closed it), reset cleanly.
+socket.on('roomClosed', () => {
+  sessionStorage.removeItem('quizHostRoom');
+  roomCode = '';
+  location.reload();
 });
 socket.on('hostAuthError', ({ reason }) => {
   authed = false;
@@ -39,6 +58,22 @@ socket.on('hostAuthError', ({ reason }) => {
   document.getElementById('hostLogin').style.display = 'block';
   document.getElementById('hostLoginError').textContent = reason || 'Sign-in failed';
 });
+
+document.getElementById('copyLinkBtn').onclick = () => {
+  const el = document.getElementById('roomLink');
+  el.select();
+  navigator.clipboard && navigator.clipboard.writeText(el.value);
+  document.getElementById('copyLinkBtn').textContent = 'Copied';
+  setTimeout(() => (document.getElementById('copyLinkBtn').textContent = 'Copy'), 1500);
+};
+document.getElementById('closeRoomBtn').onclick = () => {
+  if (confirm('Close this game for everyone? Players will be disconnected.')) {
+    socket.emit('host:closeRoom');
+    sessionStorage.removeItem('quizHostRoom');
+    roomCode = '';
+    location.reload();
+  }
+};
 
 function doHostLogin() {
   const v = document.getElementById('hostPw').value;

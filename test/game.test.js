@@ -54,11 +54,23 @@ async function startServer(env = {}) {
 
 function connect(url) {
   const sock = io(url, { forceNew: true, transports: ['websocket'] });
-  const st = { cur: null };
+  const st = { cur: null, code: null };
   sock.on('state', (s) => {
     st.cur = s;
   });
+  sock.on('hostAuthOk', (payload) => {
+    if (payload && payload.code) st.code = payload.code;
+  });
   return { sock, st };
+}
+
+async function waitCode(st, timeoutMs = 3000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    if (st.code) return st.code;
+    await sleep(15);
+  }
+  throw new Error('waitCode: no room code received');
 }
 
 async function waitFor(st, pred, timeoutMs = 3000) {
@@ -74,12 +86,13 @@ async function waitFor(st, pred, timeoutMs = 3000) {
 async function setupMatch(url, stackId) {
   const host = connect(url);
   host.sock.emit('host:join', {});
+  const code = await waitCode(host.st);
   const a = connect(url);
   const b = connect(url);
-  a.sock.emit('player:join', { playerId: 'A-' + Math.random(), name: 'Alice' });
-  b.sock.emit('player:join', { playerId: 'B-' + Math.random(), name: 'Bob' });
+  a.sock.emit('player:join', { playerId: 'A-' + Math.random(), name: 'Alice', code });
+  b.sock.emit('player:join', { playerId: 'B-' + Math.random(), name: 'Bob', code });
   await waitFor(host.st, (s) => s.players.length >= 2);
-  // Ensure a clean slate on a shared server (previous test may have left a match running)
+  // fresh room each time now, but keep the reset for safety
   host.sock.emit('host:reset');
   await waitFor(host.st, (s) => s.phase === 'login');
   if (stackId) {
@@ -90,7 +103,7 @@ async function setupMatch(url, stackId) {
   await waitFor(host.st, (s) => s.phase === 'ready');
   host.sock.emit('host:start');
   await waitFor(host.st, (s) => s.phase === 'question');
-  return { host, a, b };
+  return { host, a, b, code };
 }
 
 describe('game logic', () => {
@@ -247,10 +260,10 @@ describe('game logic', () => {
   test('player names are sanitized and length-capped', async () => {
     const host = connect(server.url);
     host.sock.emit('host:join', {});
-    await sleep(60);
+    const code = await waitCode(host.st);
     const p = connect(server.url);
     const dirty = 'Bad\u0000Name\n\t' + 'x'.repeat(50);
-    p.sock.emit('player:join', { playerId: 'clean-' + Math.random(), name: dirty });
+    p.sock.emit('player:join', { playerId: 'clean-' + Math.random(), name: dirty, code });
     await waitFor(host.st, (s) => s.players.some((pl) => pl.name.startsWith('BadName')));
     const pl = host.st.cur.players.find((x) => x.name.startsWith('BadName'));
     assert.ok(pl.name.length <= 24, 'name capped to 24 chars');
