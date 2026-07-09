@@ -67,6 +67,22 @@ class RoomManager {
     return this.rooms.size;
   }
 
+  // The room owned by a given admin (one at a time), or null.
+  findByAdmin(username) {
+    for (const [code, r] of this.rooms) {
+      if (r.hostAdmin === username) return { code, room: r };
+    }
+    return null;
+  }
+
+  // Remove an admin's room (used when the super-admin deletes them). Returns the code or null.
+  removeByAdmin(username) {
+    const found = this.findByAdmin(username);
+    if (!found) return null;
+    this.rooms.delete(found.code);
+    return found.code;
+  }
+
   // Discard rooms idle for longer than idleMs. Returns removed codes.
   sweep(now = Date.now()) {
     const removed = [];

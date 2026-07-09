@@ -9,7 +9,8 @@ module.exports = {
   PORT: process.env.PORT || 3000,
   WIN_SCORE: parseInt(process.env.WIN_SCORE || '3', 10),
   SHARED_PASSWORD: process.env.SHARED_PASSWORD || '', // empty => no player password
-  HOST_PASSWORD: process.env.HOST_PASSWORD || '', // empty => host panel UNPROTECTED
+  SUPER_ADMIN_USER: process.env.SUPER_ADMIN_USER || 'superadmin',
+  SUPER_ADMIN_PASSWORD: process.env.SUPER_ADMIN_PASSWORD || '', // empty => super panel LOCKED
   MAX_PLAYERS: parseInt(process.env.MAX_PLAYERS || '200', 10),
   TIMER_SECONDS: parseInt(process.env.TIMER_SECONDS || '60', 10), // per-question timer; 0 disables
   NAME_MAX: 24, // max chars for player/team names

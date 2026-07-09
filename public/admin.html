@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin · Team Quiz</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav class="sitenav">
+    <div class="sitenav-inner">
+      <a class="sitenav-brand" href="/index.html">🎯 Team Quiz</a>
+      <div class="sitenav-links">
+        <a href="/index.html">Play</a>
+        <a href="/host.html">Host</a>
+        <a href="/guide.html">How to run it</a>
+        <a href="/tech.html">Technical overview</a>
+      </div>
+    </div>
+  </nav>
+  <div class="wrap">
+    <div id="superLogin" style="display:none;">
+      <div class="center"><h1>Super-admin</h1></div>
+      <div class="panel">
+        <h2>Sign in</h2>
+        <label class="small muted">Username</label>
+        <input class="text" id="suUser" autocomplete="username" placeholder="super-admin username" />
+        <div class="spacer"></div>
+        <label class="small muted">Password</label>
+        <input class="text" id="suPw" type="password" autocomplete="current-password" placeholder="super-admin password" />
+        <div class="spacer"></div>
+        <button class="btn" id="suLoginBtn" style="width:100%;">Enter</button>
+        <div id="suLoginError" class="small" style="color:var(--red);margin-top:10px;"></div>
+        <p class="small muted" style="margin-top:10px;">Set <code>SUPER_ADMIN_PASSWORD</code> in the server environment to enable this panel.</p>
+      </div>
+    </div>
+
+    <div id="superApp" style="display:none;">
+      <div class="topbar">
+        <h1>Super-admin</h1>
+        <span class="badge" id="statBadge"></span>
+      </div>
+
+      <div class="panel">
+        <h2>Create an admin</h2>
+        <div class="row" style="align-items:flex-end;gap:10px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:160px;">
+            <label class="small muted">Username</label>
+            <input class="text" id="newUser" placeholder="e.g. pippo" />
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <label class="small muted">Temporary password (min 8)</label>
+            <input class="text" id="newPw" type="text" placeholder="they can change it later" />
+          </div>
+          <button class="btn secondary" id="createBtn">Create admin</button>
+        </div>
+        <div id="createMsg" class="small" style="margin-top:8px;"></div>
+      </div>
+
+      <div class="panel">
+        <h2>Admins</h2>
+        <div id="adminList" class="small muted">Loading…</div>
+      </div>
+
+      <div class="panel">
+        <h2>Active games</h2>
+        <div id="roomList" class="small muted">None right now.</div>
+      </div>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/adminapp.js"></script>
+</body>
+</html>

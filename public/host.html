@@ -23,11 +23,15 @@
       <div class="center"><h1>Host control</h1></div>
       <div class="panel">
         <h2>Host sign-in</h2>
-        <label class="small muted">Host password</label>
-        <input class="text" id="hostPw" type="password" placeholder="host password" />
+        <label class="small muted">Username</label>
+        <input class="text" id="hostUser" autocomplete="username" placeholder="your admin username" />
+        <div class="spacer"></div>
+        <label class="small muted">Password</label>
+        <input class="text" id="hostPw" type="password" autocomplete="current-password" placeholder="your password" />
         <div class="spacer"></div>
         <button class="btn" id="hostLoginBtn" style="width:100%;">Enter</button>
         <div id="hostLoginError" class="small" style="color:var(--red);margin-top:10px;"></div>
+        <p class="small muted" style="margin-top:10px;">No account? Ask the super-admin to create one for you.</p>
       </div>
     </div>
 

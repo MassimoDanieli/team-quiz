@@ -10,6 +10,7 @@ const logger = require('./src/logger');
 const store = require('./store');
 const { loadSets } = require('./src/questions');
 const { RoomManager } = require('./src/rooms');
+const admins = require('./src/admins');
 const { registerSocketHandlers } = require('./src/socketHandlers');
 
 // ---- Load content + build the room manager ----
@@ -57,7 +58,7 @@ app.use(express.static(config.PUBLIC_DIR));
 app.get('/config', (req, res) =>
   res.json({
     requiresPassword: !!config.SHARED_PASSWORD,
-    requiresHostPassword: !!config.HOST_PASSWORD
+    superEnabled: !!config.SUPER_ADMIN_PASSWORD
   })
 );
 
@@ -68,6 +69,7 @@ app.get('/healthz', (req, res) =>
     uptime: Math.round(process.uptime()),
     sets: order.length,
     rooms: manager.count(),
+    admins: admins.list().length,
     players: manager.list().reduce((n, r) => n + r.players, 0)
   })
 );
@@ -87,7 +89,8 @@ server.listen(config.PORT, () => {
       winScore: config.WIN_SCORE,
       sets: order.length,
       playerPassword: !!config.SHARED_PASSWORD,
-      hostPassword: !!config.HOST_PASSWORD,
+      superEnabled: !!config.SUPER_ADMIN_PASSWORD,
+      admins: admins.list().length,
       store: store.filePath()
     },
     `Quiz server listening on :${config.PORT}`
@@ -95,9 +98,13 @@ server.listen(config.PORT, () => {
   order.forEach((id) =>
     logger.info(`  set: ${id} (${sets[id].questions.length}) ${sets[id].name}`)
   );
-  if (!config.HOST_PASSWORD) {
+  if (!config.SUPER_ADMIN_PASSWORD) {
     logger.warn(
-      'HOST_PASSWORD is not set — the host panel is UNPROTECTED. Set it for a public deployment.'
+      'SUPER_ADMIN_PASSWORD is not set — the super-admin panel is LOCKED. Set it to create admin accounts.'
+    );
+  } else if (admins.list().length === 0) {
+    logger.warn(
+      'No admin accounts yet — sign in at /admin.html as the super-admin and create one before anyone can host.'
     );
   }
 });

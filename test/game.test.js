@@ -32,19 +32,45 @@ function waitPort(port, timeoutMs = 8000) {
 async function startServer(env = {}) {
   const port = 3000 + Math.floor(Math.random() * 5000);
   const dataFile = path.join(os.tmpdir(), `tq-test-${port}-${Date.now()}.json`);
+  const adminsFile = path.join(os.tmpdir(), `tq-admins-${port}-${Date.now()}.json`);
+  // Seed one admin so hosting works: username "host", password "hostpass1".
+  // (scrypt hash computed here to avoid importing the module into the child env)
+  const crypto = require('node:crypto');
+  const salt = crypto.randomBytes(16).toString('hex');
+  const hash = crypto.scryptSync('hostpass1', salt, 64).toString('hex');
+  fs.writeFileSync(
+    adminsFile,
+    JSON.stringify([
+      { username: 'host', salt, hash, createdAt: new Date().toISOString(), createdBy: 'test' }
+    ])
+  );
   const proc = spawn('node', ['server.js'], {
     cwd: ROOT,
-    env: { ...process.env, PORT: String(port), DATA_FILE: dataFile, ...env },
+    env: {
+      ...process.env,
+      PORT: String(port),
+      DATA_FILE: dataFile,
+      ADMINS_FILE: adminsFile,
+      SUPER_ADMIN_USER: 'root',
+      SUPER_ADMIN_PASSWORD: 'rootpass1',
+      ...env
+    },
     stdio: 'ignore'
   });
   await waitPort(port);
   return {
     port,
     url: `http://localhost:${port}`,
+    adminsFile,
     stop() {
       proc.kill('SIGKILL');
       try {
         fs.unlinkSync(dataFile);
+      } catch {
+        /* ignore */
+      }
+      try {
+        fs.unlinkSync(adminsFile);
       } catch {
         /* ignore */
       }
@@ -58,7 +84,7 @@ function connect(url) {
   sock.on('state', (s) => {
     st.cur = s;
   });
-  sock.on('hostAuthOk', (payload) => {
+  sock.on('adminAuthOk', (payload) => {
     if (payload && payload.code) st.code = payload.code;
   });
   return { sock, st };
@@ -85,7 +111,7 @@ async function waitFor(st, pred, timeoutMs = 3000) {
 // Draw teams, start, and return {host, hostState, a, b, teamOf}
 async function setupMatch(url, stackId) {
   const host = connect(url);
-  host.sock.emit('host:join', {});
+  host.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
   const code = await waitCode(host.st);
   const a = connect(url);
   const b = connect(url);
@@ -259,7 +285,7 @@ describe('game logic', () => {
 
   test('player names are sanitized and length-capped', async () => {
     const host = connect(server.url);
-    host.sock.emit('host:join', {});
+    host.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
     const code = await waitCode(host.st);
     const p = connect(server.url);
     const dirty = 'Bad\u0000Name\n\t' + 'x'.repeat(50);
@@ -286,14 +312,14 @@ describe('game logic', () => {
   });
 });
 
-describe('host authentication', () => {
+describe('admin & super-admin authentication', () => {
   let server;
   before(async () => {
-    server = await startServer({ HOST_PASSWORD: 'sup3r-secret' });
+    server = await startServer();
   });
   after(() => server.stop());
 
-  test('/config advertises that a host password is required', async () => {
+  test('/config advertises whether the super panel is enabled', async () => {
     const cfg = await new Promise((res) => {
       http.get(server.url + '/config', (r) => {
         let d = '';
@@ -301,39 +327,91 @@ describe('host authentication', () => {
         r.on('end', () => res(JSON.parse(d)));
       });
     });
-    assert.strictEqual(cfg.requiresHostPassword, true);
+    assert.strictEqual(cfg.superEnabled, true);
   });
 
-  test('wrong host password is rejected and grants no control', async () => {
+  test('wrong admin credentials are rejected and grant no control', async () => {
     const host = connect(server.url);
     let ok = false,
       err = null;
-    host.sock.on('hostAuthOk', () => {
+    host.sock.on('adminAuthOk', () => {
       ok = true;
     });
-    host.sock.on('hostAuthError', (e) => {
+    host.sock.on('adminAuthError', (e) => {
       err = e;
     });
-    host.sock.emit('host:join', { password: 'nope' });
+    host.sock.emit('admin:login', { username: 'host', password: 'nope' });
     await sleep(300);
     assert.strictEqual(ok, false);
-    assert.ok(err, 'should receive hostAuthError');
-    // an unauthenticated socket cannot drive the game
+    assert.ok(err, 'should receive adminAuthError');
     host.sock.emit('host:start');
     await sleep(200);
     assert.notStrictEqual(host.st.cur && host.st.cur.phase, 'question');
     host.sock.close();
   });
 
-  test('correct host password is accepted', async () => {
+  test('correct admin credentials are accepted and open a room', async () => {
     const host = connect(server.url);
-    let ok = false;
-    host.sock.on('hostAuthOk', () => {
-      ok = true;
+    let code = null;
+    host.sock.on('adminAuthOk', (p) => {
+      code = p && p.code;
     });
-    host.sock.emit('host:join', { password: 'sup3r-secret' });
+    host.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
     await sleep(300);
-    assert.strictEqual(ok, true);
+    assert.match(String(code), /^\d{4}$/);
     host.sock.close();
+  });
+
+  test('logging in twice as the same admin resumes the same room', async () => {
+    const h1 = connect(server.url);
+    let c1 = null;
+    h1.sock.on('adminAuthOk', (p) => (c1 = p && p.code));
+    h1.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
+    await sleep(300);
+    const h2 = connect(server.url);
+    let c2 = null;
+    h2.sock.on('adminAuthOk', (p) => (c2 = p && p.code));
+    h2.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
+    await sleep(300);
+    assert.strictEqual(c1, c2, 'same admin gets the same room, not a new one');
+    h1.sock.close();
+    h2.sock.close();
+  });
+
+  test('super-admin can create an admin who can then host', async () => {
+    const su = connect(server.url);
+    let state = null;
+    su.sock.on('superState', (s2) => (state = s2));
+    su.sock.emit('super:login', { username: 'root', password: 'rootpass1' });
+    await sleep(300);
+    assert.ok(state, 'super login returns state');
+    su.sock.emit('super:createAdmin', { username: 'pippo', password: 'pippopw1' });
+    await sleep(300);
+    assert.ok(
+      state.admins.some((a) => a.username === 'pippo'),
+      'pippo now exists'
+    );
+    // pippo can host
+    const p = connect(server.url);
+    let code = null;
+    p.sock.on('adminAuthOk', (x) => (code = x && x.code));
+    p.sock.emit('admin:login', { username: 'pippo', password: 'pippopw1' });
+    await sleep(300);
+    assert.match(String(code), /^\d{4}$/);
+    su.sock.close();
+    p.sock.close();
+  });
+
+  test('wrong super-admin credentials are rejected', async () => {
+    const su = connect(server.url);
+    let ok = false,
+      err = null;
+    su.sock.on('superAuthOk', () => (ok = true));
+    su.sock.on('superAuthError', (e) => (err = e));
+    su.sock.emit('super:login', { username: 'root', password: 'wrong' });
+    await sleep(300);
+    assert.strictEqual(ok, false);
+    assert.ok(err);
+    su.sock.close();
   });
 });

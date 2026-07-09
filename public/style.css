@@ -237,3 +237,10 @@ ol.rules li::before {
 .tier.hard { color: var(--teamA); border-color: var(--teamA); }
 .tier.pro { color: var(--gold); border-color: var(--gold); }
 .tiertoggle { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+
+/* --- v1.7.0: super-admin panel --- */
+.atable { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.atable th { text-align: left; color: var(--muted); font-weight: 500; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.atable td { padding: 8px; border-bottom: 1px solid var(--line-muted); vertical-align: middle; }
+.atable .arow { text-align: right; white-space: nowrap; }
+.btn.sm { padding: 4px 10px; font-size: 0.8rem; }

@@ -1,9 +1,13 @@
 # Team Quiz
 
-Real-time two-team quiz game (Java / DevOps, graduate level).
-Players log in, the host randomly draws two teams, then each team votes one answer
-per question. First to **3 points and ahead** wins. Both teams see each question at
-the same time; the answer reveals once both have voted.
+Real-time two-team quiz game for early-talent sessions (16 topic sets, 500+ questions).
+Multiple hosts can run **concurrent games**: each host opens a room with a 4-digit code,
+players join by code, and every game is isolated. Players are drawn into two teams, then
+each team votes one answer per question. First to **3 points and ahead** wins; both teams
+see each question at once and the answer reveals when both have voted.
+
+Access has three levels: a **super-admin** (you) creates **admin** accounts; each admin
+signs in and hosts their own room; **players** need no account and join by code.
 
 Stack: Node.js + Express + Socket.IO. Live game state is in memory; the **history of
 already-asked questions is persisted to disk** so questions don't repeat across
@@ -18,8 +22,13 @@ npm install
 npm start            # http://localhost:3000
 ```
 
-- Players: open `/` , enter a name, click Join.
-- Host: open `/host.html`.
+- Players: open `/`, enter the game code and a name, click Join.
+- Hosts (admins): open `/host.html`, sign in with a username + password.
+- Super-admin: open `/admin.html` to create admin accounts and watch active games.
+
+**First-run setup:** set `SUPER_ADMIN_PASSWORD` (and optionally `SUPER_ADMIN_USER`,
+default `superadmin`), start the server, sign in at `/admin.html`, and create at least
+one admin account — until then nobody can host.
 
 Environment variables:
 
@@ -27,8 +36,10 @@ Environment variables:
 |-------------------|--------------------|----------------------------------------------------|
 | `PORT`            | `3000`             | HTTP port                                          |
 | `WIN_SCORE`       | `3`                | Points needed to win (must also be ahead)          |
-| `SHARED_PASSWORD` | *(empty)*          | If set, players must enter this password to join. Empty = no password. |
-| `HOST_PASSWORD`   | *(empty)*          | If set, the host panel requires this password. **Set it for any public deployment** — otherwise anyone with the URL can control a session. |
+| `SHARED_PASSWORD` | *(empty)*          | If set, players must also enter this shared password to join. Empty = no player password. |
+| `SUPER_ADMIN_USER`| `superadmin`       | Username for the super-admin panel (`/admin.html`).|
+| `SUPER_ADMIN_PASSWORD` | *(empty)*     | Super-admin password. **Empty = the super panel is LOCKED** (no one can create admins). Set it on every deployment. |
+| `ADMINS_FILE`     | `./data/admins.json`| Where admin accounts are stored (scrypt-hashed passwords). Keep it off version control. |
 | `DATA_FILE`       | `./data/state.json`| Where the used-question history is stored          |
 | `QUESTIONS_DIR`   | `./questions`      | Directory of question-set files                    |
 | `MAX_PLAYERS`     | `200`              | Cap on distinct players held in memory             |
@@ -43,21 +54,24 @@ Environment variables:
 - **Structured logging** with pino (JSON; pipe through `pino-pretty` locally if you like).
 
 ```bash
-HOST_PASSWORD=pick-a-strong-one SHARED_PASSWORD=letmein npm start
+SUPER_ADMIN_PASSWORD=pick-a-strong-one SHARED_PASSWORD=letmein npm start
 ```
 
 ## Tests
 ```bash
 npm test
 ```
-Node's built-in runner (`node --test`) covers two layers:
-- **Unit** (`test/engine.test.js`) — the `GameEngine` in isolation with an in-memory store: scoring, the win/tie rule, no-repeat + reset, vote locking, `setStack` guards, and answer hiding. Fast, no sockets.
-- **Integration** (`test/game.test.js`) — the real server over live socket connections, plus host authentication, input sanitisation and `/healthz`.
+Node's built-in runner (`node --test`) covers four files:
+- **`test/engine.test.js`** — the `GameEngine` in isolation with an in-memory store: scoring, the win/tie rule, no-repeat + reset, vote locking, timer, difficulty tiers, and answer hiding. Fast, no sockets.
+- **`test/rooms.test.js`** — the `RoomManager`: unique codes, per-room isolation, capacity, idle sweep, and per-admin lookup.
+- **`test/admins.test.js`** — the admin store: validation, scrypt hashing (no plaintext on disk), verify/reset/change/remove, and super-admin verification.
+- **`test/game.test.js`** — the real server over live sockets: game logic end-to-end, admin + super-admin authentication, room isolation, input sanitisation and `/healthz`.
 
 ## Development
 ```bash
 npm run lint          # ESLint
 npm run format        # Prettier (write)
+npm run validate      # check every question set (schema + answer-bias guards)
 npm run format:check  # Prettier (check only)
 ```
 CI runs lint, format check and tests on every push/PR (`.github/workflows/ci.yml`).
@@ -83,13 +97,34 @@ infra/               Terraform (EC2 + nginx + HTTPS)
 
 ---
 
+## Access & accounts
+
+Three roles, by design:
+
+- **Super-admin** — one, env-based (`SUPER_ADMIN_USER` / `SUPER_ADMIN_PASSWORD`).
+  Signs in at `/admin.html`. Creates and removes admin accounts, resets their passwords,
+  and sees every active game. Holds no game of its own. If you want to host, give
+  yourself an admin account too.
+- **Admin** — a persistent account (stored in `ADMINS_FILE`, scrypt-hashed). Signs in at
+  `/host.html`, hosts **one room at a time**, and controls only their own room. Can change
+  their own password from the host panel. Logging in again resumes the same room rather
+  than opening a second one.
+- **Player** — no account. Joins a specific room with the 4-digit code and a nickname.
+
+Rooms are **ephemeral** (in memory, swept after a few idle hours or when the host closes
+them); admin accounts are **persistent**. Removing an admin also closes any game they are
+running. Admins cannot create other admins — only the super-admin can.
+
+---
+
 ## How a session works
 
-1. Players open `/`, enter a name, and land in the lobby. (Name + a random id are
-   saved in their browser, so a refresh rejoins them automatically.)
-2. Host opens `/host.html`, sees everyone in the lobby, clicks **Draw teams** — the
-   connected players are split randomly into two teams (8 players → 4 + 4; odd numbers
-   are handled, Team A gets the extra). **Redraw** reshuffles.
+1. A host (admin) opens `/host.html` and signs in. A **4-digit game code** is created
+   for their room; they share the code (or the copy link) with their players.
+2. Players open `/`, enter the code and a name, and land in that host's lobby. (Code,
+   name and a random id are saved in the browser, so a refresh rejoins the same room.)
+   The host clicks **Draw teams** — connected players split randomly into two teams
+   (8 → 4 + 4; odd numbers handled, Team A gets the extra). **Redraw** reshuffles.
 3. Host (optionally) edits or rerolls the funny team names, then clicks **Start game**.
 4. Each question appears on every screen at once. A team agrees offline, any member
    taps the answer, and the team's vote locks.
@@ -132,8 +167,11 @@ the pool starts over. The host panel shows **M / 60 used overall**.
    ExecStart=/usr/bin/node server.js
    Environment=PORT=3000
    Environment=WIN_SCORE=3
+   Environment=SUPER_ADMIN_PASSWORD=change-me
+   # Environment=SUPER_ADMIN_USER=superadmin
    # Environment=SHARED_PASSWORD=letmein
    # Environment=DATA_FILE=/var/lib/team-quiz/state.json
+   # Environment=ADMINS_FILE=/var/lib/team-quiz/admins.json
    Restart=on-failure
    User=ubuntu
 
@@ -171,9 +209,12 @@ Questions live in `questions/`, one JSON file per set. The host picks which set 
 from a dropdown in the lobby, and the "already asked" history is tracked **per set**, so
 each set exhausts its own pool independently.
 
-Shipped sets: Java & DevOps · Core (100), Java & DevOps · Advanced (33), AI Foundations ·
-Beginner (32). The host panel shows a used/total counter per set and a per-set
-"Reset question history".
+16 sets ship in `questions/` — Linux, AWS, Azure, Networking, Cisco-style, Security,
+Containers & Kubernetes, CI/CD & IaC, Databases, AI, Java/DevOps and a few for fun.
+Every question carries a difficulty tier (`medium` / `hard` / `pro`); the host can filter
+tiers live. `scripts/validate-sets.js` (run by `npm run validate` and in CI) checks each
+set for schema, answer-position balance, length bias, and duplicates. The host panel shows
+a used/total counter per set and a per-set "Reset question history".
 
 Each set file:
 ```json
