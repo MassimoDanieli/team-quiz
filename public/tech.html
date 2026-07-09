@@ -250,8 +250,9 @@
         The host chooses the active set from a dropdown in the lobby. Crucially, the
         <strong>“already asked” history is tracked per set</strong>, so every set exhausts its own
         pool independently and questions don't repeat until a set runs out. The shipped content is
-        nine sets — roughly 300 questions — covering hard and advanced Java/DevOps, Git, Linux,
-        AWS, AI foundations, general tech trivia and two harder security rounds.
+        16 sets — 534 questions — covering Java/DevOps, Git, Linux, AWS, Azure, Networking,
+        Security, Containers &amp; Kubernetes, CI/CD &amp; IaC, Databases, AI foundations, general
+        tech trivia and a few harder rounds for fun.
       </p>
 
       <h2 id="frontend">5. Front-ends</h2>
@@ -351,9 +352,10 @@ deploy/helm/         Kubernetes chart for the EKS path</pre>
 
       <h2 id="next">12. Possible next steps</h2>
       <ul>
+        <li>Done in v1.8.0: container packaging &amp; deploy hardening. The <code>Dockerfile</code> now creates <code>/data</code> owned by the non-root <code>node</code> user and sets <code>ADMINS_FILE</code>, so a mounted volume persists both state and admin accounts; a hardened <code>docker-compose.yml</code> (read-only rootfs, dropped capabilities, optional Caddy HTTPS proxy) is included. The EC2/Terraform infra was aligned to the current admin model (<code>SUPER_ADMIN_USER</code>/<code>SUPER_ADMIN_PASSWORD</code> + <code>ADMINS_FILE</code>, dropping the unused <code>HOST_PASSWORD</code>), the redeploy trigger now hashes the whole app, and CI builds and smoke-tests the image. Includes an independent defensive security review (no critical findings). Library now 16 sets, 534 questions.</li>
         <li>Done in v1.7.0: account model. A super-admin (<code>/admin.html</code>, env-based) creates persistent admin accounts (scrypt-hashed in <code>ADMINS_FILE</code>); each admin signs in at <code>/host.html</code> and hosts one room at a time, controlling only their own. Removing an admin closes their game. The old shared host password is gone.</li>
         <li>Done in v1.6.0: multiple concurrent games. Each host opens a room with a 4-digit code; players join by code; games are fully isolated and swept when idle. RoomManager wraps one GameEngine per room; the single-game API became per-room without touching the engine.</li>
-        <li>Done in v1.5.0: five new topic seed sets — Azure, Networking, Security (60), Containers &amp; K8s, CI/CD &amp; IaC, Databases — all normalised for even answer positions and length. 16 sets, 508 questions, every one through the validator.</li>
+        <li>Done in v1.5.0: five new topic seed sets — Azure, Networking, Security (60), Containers &amp; K8s, CI/CD &amp; IaC, Databases — all normalised for even answer positions and length. 16 sets, every one through the validator.</li>
         <li>Done in v1.4.0: difficulty taxonomy renamed to medium/hard/pro; set validator wired into CI (schema, answer-position and length-bias, duplicates); new Security set (60, growing to 300). Topic roadmap: Linux, AWS, Azure, AI &amp; LLM, Networking, Cisco, Security, Containers &amp; K8s, CI/CD &amp; IaC, Databases.</li>
         <li>Done in v1.3.0: host password changeable from the panel (scrypt hash in data/, env bootstrap); pages renamed guide.html / tech.html with 301 redirects from the old names.</li>
         <li>Done in v1.2.0: inline scripts externalised, CSP tightened to script-src 'self'; difficulty tiers (medium/hard/pro) with host-side filtering across all 324 questions.</li>

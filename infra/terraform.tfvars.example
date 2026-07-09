@@ -19,4 +19,8 @@ app_ingress_cidr = "0.0.0.0/0"
 # Game settings:
 win_score       = 3
 # shared_password = "letmein"     # optional player join password (leave unset for none)
-host_password   = "change-me"     # protects the host panel — set this for a public site
+
+# Admin panel (required to create admin accounts — if the password is empty the
+# super-admin panel at /admin.html stays locked):
+super_admin_user     = "superadmin"
+super_admin_password = "change-me-now"

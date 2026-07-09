@@ -28,9 +28,10 @@ const manager = new RoomManager({
 // ---- HTTP app ----
 const app = express();
 
-// Security headers. CSP is intentionally pragmatic: the pages use inline <script>
-// blocks and inline style="" attributes, so those are allowed; everything else is
-// locked to same-origin. data: is needed for a small inline SVG in CSS.
+// Security headers. Scripts are locked to same-origin — there are no inline <script>
+// blocks; all page JS loads from external files (app.js, hostapp.js, adminapp.js).
+// Inline style="" attributes are used, so styleSrc allows 'unsafe-inline'; everything
+// else is same-origin. data: is needed for a small inline SVG in CSS.
 app.use(
   helmet({
     contentSecurityPolicy: {

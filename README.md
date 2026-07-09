@@ -204,13 +204,43 @@ the pool starts over. The host panel shows **M / 60 used overall**.
 
 ---
 
+## Run with Docker
+
+The image runs as the non-root `node` user and persists both the question history
+(`DATA_FILE`) and the admin accounts (`ADMINS_FILE`) under `/data`, which is created and
+owned by `node` at build time so a mounted volume is writable.
+
+```bash
+cp .env.example .env && chmod 600 .env   # set SUPER_ADMIN_PASSWORD at least
+docker compose up -d                     # app on 127.0.0.1:3000, state in the quiz-data volume
+```
+
+Add automatic HTTPS with a Caddy reverse proxy (obtains/renews a Let's Encrypt cert for
+`QUIZ_DOMAIN`, and forwards WebSocket/Socket.IO transparently):
+
+```bash
+docker compose --profile proxy up -d     # comment out the app `ports:` block first
+```
+
+Persistence lives on the named `quiz-data` volume. Back it up with:
+
+```bash
+docker run --rm -v team-quiz_quiz-data:/data -v "$PWD":/backup alpine \
+  tar czf /backup/quiz-data-$(date +%F).tgz -C /data .
+```
+
+Migrating from the systemd/EC2 deployment (state in `/var/lib/team-quiz/`)? Copy `state.json`
+into the volume before the first `up`. A `Dockerfile` and a Kubernetes/Helm chart (`deploy/`)
+are also included for running the same image on the EKS platform.
+
 ## Question sets
 Questions live in `questions/`, one JSON file per set. The host picks which set to play
 from a dropdown in the lobby, and the "already asked" history is tracked **per set**, so
 each set exhausts its own pool independently.
 
-16 sets ship in `questions/` — Linux, AWS, Azure, Networking, Cisco-style, Security,
-Containers & Kubernetes, CI/CD & IaC, Databases, AI, Java/DevOps and a few for fun.
+16 sets ship in `questions/` (534 questions in total) — Linux, AWS, Azure, Networking,
+Cisco-style, Security, Containers & Kubernetes, CI/CD & IaC, Databases, AI, Java/DevOps
+and a few for fun.
 Every question carries a difficulty tier (`medium` / `hard` / `pro`); the host can filter
 tiers live. `scripts/validate-sets.js` (run by `npm run validate` and in CI) checks each
 set for schema, answer-position balance, length bias, and duplicates. The host panel shows
@@ -246,5 +276,5 @@ implementation without changing `server.js`. SQLite (single file, no server) is 
 natural next step; Postgres only if you go multi-instance.
 
 ## Notes / possible next steps
-- Single live game (one room). Multiple concurrent rooms would need keying state by room id.
-- Easy extensions: per-question countdown timer, sound on reveal, a big-screen spectator view.
+- Concurrent rooms are already supported: `RoomManager` keys one `GameEngine` per room, so many hosts run isolated games at once (superseding the old single-room model).
+- Easy extensions: sound on reveal, a big-screen spectator view, server-issued session tokens in place of client-stored passwords, and per-IP login throttling (see the security review).

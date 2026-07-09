@@ -13,9 +13,16 @@ COPY src ./src
 COPY questions ./questions
 COPY public ./public
 
-# Persisted question history lives on a mounted volume
+# Persisted state lives on a mounted volume. BOTH the question history and the
+# admin accounts must sit under /data so they survive container recreation.
 ENV PORT=3000 \
-    DATA_FILE=/data/state.json
+    DATA_FILE=/data/state.json \
+    ADMINS_FILE=/data/admins.json
+
+# Create /data and hand it to the non-root "node" user BEFORE dropping privileges.
+# A freshly-created named volume inherits the ownership of this path from the image;
+# without this, /data is root-owned and the app (running as node) fails with EACCES.
+RUN mkdir -p /data && chown -R node:node /data
 
 EXPOSE 3000
 
