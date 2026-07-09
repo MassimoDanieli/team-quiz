@@ -1,0 +1,22 @@
+# Copy to terraform.tfvars and fill in.
+
+aws_region           = "eu-west-2"
+key_name             = "my-ec2-keypair"          # an existing EC2 key pair
+ssh_private_key_path = "~/.ssh/my-ec2-keypair.pem"
+
+domain_name       = "quiz.example.com"
+letsencrypt_email = "you@example.com"
+
+# Lock SSH down to your own IP (strongly recommended):
+ssh_ingress_cidr = "0.0.0.0/0"   # e.g. "203.0.113.7/32"
+
+# Restrict who can reach the game, if you want (e.g. office/VPN range):
+app_ingress_cidr = "0.0.0.0/0"
+
+# Optional: let Terraform manage DNS + auto-HTTPS via Route53.
+# route53_zone_id = "Z0123456789ABCDEFGHIJ"
+
+# Game settings:
+win_score       = 3
+# shared_password = "letmein"     # optional player join password (leave unset for none)
+host_password   = "change-me"     # protects the host panel — set this for a public site

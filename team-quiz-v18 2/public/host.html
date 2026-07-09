@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Host · Team Quiz</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav class="sitenav">
+    <div class="sitenav-inner">
+      <a class="sitenav-brand" href="/index.html">🎯 Team Quiz</a>
+      <div class="sitenav-links">
+        <a href="/index.html">Play</a>
+        <a href="/host.html" class="active">Host</a>
+        <a href="/guide.html">How to run it</a>
+        <a href="/tech.html">Technical overview</a>
+      </div>
+    </div>
+  </nav>
+  <div class="wrap">
+    <div id="hostLogin" style="display:none;">
+      <div class="center"><h1>Host control</h1></div>
+      <div class="panel">
+        <h2>Host sign-in</h2>
+        <label class="small muted">Host password</label>
+        <input class="text" id="hostPw" type="password" placeholder="host password" />
+        <div class="spacer"></div>
+        <button class="btn" id="hostLoginBtn" style="width:100%;">Enter</button>
+        <div id="hostLoginError" class="small" style="color:var(--red);margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <div id="hostApp" style="display:none;">
+    <div class="topbar">
+      <h1>Host control</h1>
+      <span class="badge" id="phaseBadge">connecting…</span>
+      <span class="badge" id="countdown" style="display:none;">⏱</span>
+    </div>
+
+    <div class="panel" id="roomPanel">
+      <div class="row" style="align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <div>
+          <div class="small muted">Game code — players enter this to join</div>
+          <div id="roomCode" style="font-size:2rem;font-weight:700;letter-spacing:0.12em;">····</div>
+        </div>
+        <div style="flex:1;min-width:220px;">
+          <div class="small muted">Share link</div>
+          <div class="row" style="gap:6px;">
+            <input class="text" id="roomLink" readonly style="flex:1;" />
+            <button class="btn secondary" id="copyLinkBtn">Copy</button>
+          </div>
+        </div>
+        <button class="btn ghost" id="closeRoomBtn">Close game</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="score">
+        <div class="team A">
+          <div class="name" id="nameA">Team A</div>
+          <div class="pts" id="ptsA">0</div>
+          <div class="small muted">voted <span class="dot" id="dotA"></span></div>
+        </div>
+        <div class="vs">vs</div>
+        <div class="team B">
+          <div class="name" id="nameB">Team B</div>
+          <div class="pts" id="ptsB">0</div>
+          <div class="small muted">voted <span class="dot" id="dotB"></span></div>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <p class="small muted center">
+        Question #<span id="qnum">0</span> this match ·
+        first to <span id="winscore">3</span> (and ahead) wins ·
+        <span id="used">0</span>/<span id="total">60</span> used in this set
+      </p>
+    </div>
+
+    <!-- Question set -->
+    <div class="panel" id="stackPanel">
+      <h2>Question set</h2>
+      <div class="row" style="align-items:center;">
+        <select class="text" id="stackSelect" style="max-width:340px;"></select>
+        <span class="small muted" id="stackCount"></span>
+        <span class="small" id="stackNote" style="color:var(--gold);"></span>
+      </div>
+      <div class="row" style="margin-top:10px;align-items:center;gap:14px;">
+        <span class="small muted">Difficulty:</span>
+        <label class="small tiertoggle"><input type="checkbox" id="tierMedium" checked /> medium <span class="muted" id="cntMedium"></span></label>
+        <label class="small tiertoggle"><input type="checkbox" id="tierHard" checked /> hard <span class="muted" id="cntHard"></span></label>
+        <label class="small tiertoggle"><input type="checkbox" id="tierPro" checked /> pro <span class="muted" id="cntPro"></span></label>
+        <span class="small" id="tierNote" style="color:var(--gold);"></span>
+      </div>
+      <p class="small muted" id="stackDesc" style="margin-top:8px;"></p>
+    </div>
+
+    <!-- Players / lobby -->
+    <div class="panel">
+      <h2>Players (<span id="pcount">0</span>)</h2>
+      <div id="roster" class="small"></div>
+      <div class="spacer"></div>
+      <div class="row">
+        <button class="btn" id="drawBtn">🎲 Draw teams</button>
+        <button class="btn secondary" id="redrawBtn">Redraw</button>
+      </div>
+      <div id="hostError" class="small" style="color:var(--red);margin-top:8px;"></div>
+    </div>
+
+    <!-- Question -->
+    <div class="panel" id="qpanel" style="display:none;">
+      <div class="qmeta"><span class="topic" id="qtopic"></span></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="options" id="qoptions"></div>
+      <div id="revealBanner"></div>
+    </div>
+
+    <!-- Match recap (gameover) -->
+    <div class="panel" id="recapPanel" style="display:none;"></div>
+
+    <!-- Host password -->
+    <div class="panel" id="pwPanel">
+      <h2>Host password</h2>
+      <div class="row" style="align-items:flex-end;">
+        <div style="flex:1;min-width:170px;">
+          <label class="small muted">Current password</label>
+          <input class="text" id="pwCurrent" type="password" autocomplete="current-password" />
+        </div>
+        <div style="flex:1;min-width:170px;">
+          <label class="small muted">New password (min 8 chars)</label>
+          <input class="text" id="pwNext" type="password" autocomplete="new-password" />
+        </div>
+        <button class="btn secondary" id="pwChangeBtn">Change password</button>
+      </div>
+      <div id="pwMsg" class="small" style="margin-top:8px;"></div>
+      <p class="small muted">Stored as a salted hash on the server. Applies to new host logins; this session stays signed in.</p>
+    </div>
+
+    <!-- Team names -->
+    <div class="panel" id="namesPanel">
+      <h2>Team names</h2>
+      <div class="row" style="align-items:flex-end;">
+        <div style="flex:1;min-width:200px;">
+          <label class="small muted">Team A</label>
+          <input class="text" id="inA" />
+        </div>
+        <div style="flex:1;min-width:200px;">
+          <label class="small muted">Team B</label>
+          <input class="text" id="inB" />
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="row">
+        <button class="btn secondary" id="saveNames">Save names</button>
+        <button class="btn ghost" id="reroll">🎲 Reroll funny names</button>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="panel">
+      <div class="row">
+        <button class="btn" id="startBtn" disabled>Start game</button>
+        <button class="btn secondary" id="revealBtn" disabled>Reveal answer</button>
+        <button class="btn secondary" id="nextBtn" disabled>Next question</button>
+        <button class="btn ghost" id="resetBtn">New match</button>
+        <button class="btn danger" id="endBtn" disabled>⏹ End match</button>
+      </div>
+      <div class="spacer"></div>
+      <div class="row" style="align-items:flex-end;">
+        <div>
+          <label class="small muted">Timer per question (seconds, 0 = off)</label>
+          <input class="text" id="timerInput" type="number" min="0" max="600" step="5" style="max-width:120px;" />
+        </div>
+        <button class="btn secondary" id="timerBtn">Set timer</button>
+        <span class="small muted" id="timerNote"></span>
+      </div>
+      <div class="spacer"></div>
+      <div class="row">
+        <button class="btn ghost" id="histBtn">Reset question history (M/60)</button>
+      </div>
+      <p class="small muted">Answer reveals automatically once both teams vote. “New match” keeps players and the question history; “Reset question history” lets used questions appear again.</p>
+    </div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/recap.js"></script>
+  <script src="/hostapp.js"></script>
+</body>
+</html>

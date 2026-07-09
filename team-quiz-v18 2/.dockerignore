@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+data
+infra
+deploy
+gen_questions.py
+*.md
+.git
+.gitignore
+.terraform
+app.tar.gz

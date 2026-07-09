@@ -1,0 +1,428 @@
+{
+  "id": "databases",
+  "name": "Databases",
+  "description": "Relational and NoSQL: modelling, SQL, transactions, indexing and distributed data. 30-question seed set, growing to 300.",
+  "order": 16,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "A primary key in a relational table…",
+      "options": [
+        "Links to an external file",
+        "Encrypts the row's contents",
+        "Uniquely identifies each row",
+        "Sorts the table alphabetically"
+      ],
+      "correct": 2,
+      "explanation": "One value (or set) that is unique and not null — the row's identity."
+    },
+    {
+      "id": "q002",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "SQL stands for…",
+      "options": [
+        "System Query Layer",
+        "Sequential Query Logic",
+        "Structured Query Language",
+        "Simple Quick Lookup in practice"
+      ],
+      "correct": 2,
+      "explanation": "The standard language for querying and manipulating relational databases."
+    },
+    {
+      "id": "q003",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "A foreign key is used to…",
+      "options": [
+        "Encrypt data across tables",
+        "Speed up every query automatically",
+        "Link a row to a row in another table",
+        "Store the table's backup location"
+      ],
+      "correct": 2,
+      "explanation": "It references another table's primary key, enforcing relationships between tables."
+    },
+    {
+      "id": "q004",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "The SQL command to retrieve rows is…",
+      "options": [
+        "SELECT",
+        "READ",
+        "GET",
+        "FETCH in practice"
+      ],
+      "correct": 0,
+      "explanation": "SELECT ... FROM ... WHERE is the workhorse of reading data."
+    },
+    {
+      "id": "q005",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "An index on a column mainly…",
+      "options": [
+        "Speeds up lookups on that column",
+        "Prevents duplicate rows in practice",
+        "Compresses the whole table",
+        "Encrypts the column values"
+      ],
+      "correct": 0,
+      "explanation": "Like a book index: faster reads, at the cost of extra storage and slower writes."
+    },
+    {
+      "id": "q006",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "The difference between SQL and NoSQL databases is that NoSQL…",
+      "options": [
+        "Cannot store any structured data",
+        "Is always faster for every workload",
+        "Does not persist data to disk",
+        "Uses flexible, non-tabular data models"
+      ],
+      "correct": 3,
+      "explanation": "Documents, key-value, graph, wide-column — models that trade rigid schemas for flexibility and scale."
+    },
+    {
+      "id": "q007",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "A NULL value in SQL represents…",
+      "options": [
+        "The number zero",
+        "The absence of a value",
+        "A boolean false",
+        "An empty text string"
+      ],
+      "correct": 1,
+      "explanation": "Unknown or missing — and it behaves specially: NULL = NULL is not true."
+    },
+    {
+      "id": "q008",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "A JOIN in SQL is used to…",
+      "options": [
+        "Merge two databases into one",
+        "Add a new column to a table",
+        "Delete rows matching a condition in practice",
+        "Combine rows from two or more tables"
+      ],
+      "correct": 3,
+      "explanation": "Relate tables on a matching column — inner, left, right and full variants differ in what they keep."
+    },
+    {
+      "id": "q009",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "A database transaction is…",
+      "options": [
+        "A single row in a payments table",
+        "A backup taken every night",
+        "A connection from an application",
+        "A unit of work that succeeds or fails as a whole"
+      ],
+      "correct": 3,
+      "explanation": "All-or-nothing: commit applies every change, rollback undoes them together."
+    },
+    {
+      "id": "q010",
+      "topic": "Databases",
+      "difficulty": "medium",
+      "text": "A schema in a relational database defines…",
+      "options": [
+        "The physical disk layout",
+        "The structure: tables, columns and types",
+        "The query cache size",
+        "The user passwords in practice as a rule in practice"
+      ],
+      "correct": 1,
+      "explanation": "The blueprint of how data is organised and constrained."
+    },
+    {
+      "id": "q011",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "The ACID property 'atomicity' guarantees that a transaction…",
+      "options": [
+        "Runs faster than other transactions",
+        "Fully completes or has no effect at all",
+        "Survives a server crash once committed",
+        "Is isolated from all other transactions"
+      ],
+      "correct": 1,
+      "explanation": "All steps or none — no half-applied transfers. (Durability is the crash-survival one.)"
+    },
+    {
+      "id": "q012",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "A LEFT JOIN returns…",
+      "options": [
+        "All rows from the left table, matched or not",
+        "Only rows matching in both tables",
+        "Rows from the right table only in practice as a rule",
+        "Only rows unique to the left table"
+      ],
+      "correct": 0,
+      "explanation": "Every left row; right columns are NULL where there's no match."
+    },
+    {
+      "id": "q013",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "Normalisation aims to…",
+      "options": [
+        "Increase the number of tables for fun in practice",
+        "Encrypt sensitive columns",
+        "Reduce redundancy and update anomalies",
+        "Speed up every read query"
+      ],
+      "correct": 2,
+      "explanation": "Organise data so each fact lives once — fewer anomalies, at the cost of more joins."
+    },
+    {
+      "id": "q014",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "Denormalisation is sometimes used to…",
+      "options": [
+        "Enforce stricter referential integrity",
+        "Guarantee ACID compliance",
+        "Reduce total storage used",
+        "Improve read performance by duplicating data"
+      ],
+      "correct": 3,
+      "explanation": "Trade some redundancy for fewer joins when reads dominate and speed matters."
+    },
+    {
+      "id": "q015",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "A deadlock between two transactions happens when…",
+      "options": [
+        "Each waits for a lock the other holds",
+        "The database runs out of connections",
+        "One transaction runs far too long in practice",
+        "Both finish at exactly the same time"
+      ],
+      "correct": 0,
+      "explanation": "A cycle of waits; the database picks a victim to abort so the other can proceed."
+    },
+    {
+      "id": "q016",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "An B-tree index is well suited to…",
+      "options": [
+        "Counting distinct values only",
+        "Range and equality lookups on ordered data",
+        "Full-text search across documents in practice",
+        "Storing binary large objects"
+      ],
+      "correct": 1,
+      "explanation": "Balanced and ordered, it handles = and BETWEEN efficiently — the default index type."
+    },
+    {
+      "id": "q017",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "The N+1 query problem is…",
+      "options": [
+        "Querying a table with N+1 columns in practice",
+        "Running N queries in parallel for speed",
+        "One query per row instead of a single join",
+        "A query that returns one extra row"
+      ],
+      "correct": 2,
+      "explanation": "Fetch a list, then a query per item — death by round trips. Fix with a join or eager loading."
+    },
+    {
+      "id": "q018",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "A database view is…",
+      "options": [
+        "An index on multiple columns",
+        "A physical copy of a table",
+        "A backup of the schema in practice as a rule",
+        "A saved query presented as a virtual table"
+      ],
+      "correct": 3,
+      "explanation": "A named query you can select from like a table; it reflects live data unless materialised."
+    },
+    {
+      "id": "q019",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "Referential integrity ensures that…",
+      "options": [
+        "Indexes stay perfectly balanced",
+        "A foreign key points to an existing row",
+        "All queries run inside a transaction",
+        "Every column has a default value"
+      ],
+      "correct": 1,
+      "explanation": "You can't reference a customer that doesn't exist; the constraint blocks orphaned rows."
+    },
+    {
+      "id": "q020",
+      "topic": "Databases",
+      "difficulty": "hard",
+      "text": "A prepared statement helps performance and security by…",
+      "options": [
+        "Encrypting the connection",
+        "Separating SQL structure from parameter values",
+        "Compressing the query text in practice as a rule",
+        "Caching the entire result set"
+      ],
+      "correct": 1,
+      "explanation": "The plan is reused and, crucially, parameters can't become SQL — killing injection."
+    },
+    {
+      "id": "q021",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "In the CAP theorem, a distributed store under a network partition must trade off…",
+      "options": [
+        "Storage against compute in practice",
+        "Security against speed",
+        "Consistency against availability",
+        "Cost against performance"
+      ],
+      "correct": 2,
+      "explanation": "When partitioned, you either refuse some reads/writes (C) or serve possibly-stale ones (A) — you can't have both."
+    },
+    {
+      "id": "q022",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "A database isolation level of READ COMMITTED still permits…",
+      "options": [
+        "Non-repeatable reads within a transaction",
+        "Lost updates only on primary keys in practice",
+        "Nothing; it is fully serialisable",
+        "Dirty reads of uncommitted data"
+      ],
+      "correct": 0,
+      "explanation": "It blocks dirty reads but a row can change between two reads in the same transaction."
+    },
+    {
+      "id": "q023",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "MVCC (multi-version concurrency control) lets readers…",
+      "options": [
+        "Always read the very latest write",
+        "Block all writers until they finish",
+        "Skip the transaction log entirely",
+        "See a consistent snapshot without blocking writers"
+      ],
+      "correct": 3,
+      "explanation": "Readers see a snapshot, writers create new versions — high concurrency without read locks."
+    },
+    {
+      "id": "q024",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "Sharding a database means…",
+      "options": [
+        "Partitioning data across multiple servers by key",
+        "Keeping full copies on every node in practice as a rule",
+        "Encrypting each table separately",
+        "Compressing old rows automatically"
+      ],
+      "correct": 0,
+      "explanation": "Horizontal scale: each shard holds a slice keyed by, say, customer ID — but cross-shard joins get hard."
+    },
+    {
+      "id": "q025",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "A write-ahead log (WAL) provides durability by…",
+      "options": [
+        "Writing changes to the log before applying them",
+        "Compressing data before storage",
+        "Replicating writes to every replica first in practice",
+        "Caching writes in memory indefinitely"
+      ],
+      "correct": 0,
+      "explanation": "Record intent first; after a crash the log replays committed changes. The D in ACID, mechanically."
+    },
+    {
+      "id": "q026",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "Eventual consistency means that…",
+      "options": [
+        "Consistency is checked once per day",
+        "Replicas converge given enough time without new writes",
+        "Data is never actually consistent",
+        "Every read always sees the latest write in practice as a rule"
+      ],
+      "correct": 1,
+      "explanation": "Accept temporary divergence for availability; absent new writes, replicas agree in the end."
+    },
+    {
+      "id": "q027",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "A covering index is one that…",
+      "options": [
+        "Contains all columns a query needs",
+        "Is automatically created on primary keys",
+        "Spans multiple tables at once",
+        "Covers every column in the table"
+      ],
+      "correct": 0,
+      "explanation": "The query is answered from the index alone — no trip to the table (an 'index-only scan')."
+    },
+    {
+      "id": "q028",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "Optimistic locking detects conflicts by…",
+      "options": [
+        "Locking rows before anyone reads them",
+        "Serialising every write globally",
+        "Blocking all concurrent transactions",
+        "Checking a version/timestamp at write time"
+      ],
+      "correct": 3,
+      "explanation": "Assume no clash; on commit, if the version changed underneath you, reject and retry."
+    },
+    {
+      "id": "q029",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "A materialised view differs from a normal view because it…",
+      "options": [
+        "Exists only in memory",
+        "Stores the query result and must be refreshed",
+        "Always reflects live data instantly in practice",
+        "Cannot be queried like a table"
+      ],
+      "correct": 1,
+      "explanation": "Precomputed and persisted for speed — at the cost of staleness until you refresh it."
+    },
+    {
+      "id": "q030",
+      "topic": "Databases",
+      "difficulty": "pro",
+      "text": "Connection pooling improves throughput by…",
+      "options": [
+        "Encrypting every database connection",
+        "Sharding data across pools in practice as a rule in practice",
+        "Reusing established connections instead of reopening",
+        "Caching query results in the client"
+      ],
+      "correct": 2,
+      "explanation": "Opening a connection is expensive; a pool hands out and recycles a fixed set, smoothing load spikes."
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+# -- Keep at 1. State (players, teams, votes, question history) lives in a single
+# process. Multiple replicas would need a Socket.IO Redis adapter + sticky sessions
+# and externalised state, which is unnecessary for a single-room game.
+replicaCount: 1
+
+image:
+  # Your Artifactory Docker registry path
+  repository: your-artifactory.example.com/docker-local/team-quiz
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+
+# Secret used to pull the image from Artifactory (docker-registry type).
+# Create it once in the namespace, then reference it here.
+imagePullSecrets:
+  - name: artifactory-cred
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  name: ""
+
+app:
+  winScore: 3
+  # Optional shared join password. Empty = no password.
+  # For anything real, provide it via an existing Secret (see app.existingSecret)
+  # or --set app.sharedPassword=... rather than committing it here.
+  sharedPassword: ""
+  # If set, SHARED_PASSWORD is read from this existing secret's key instead of app.sharedPassword.
+  existingSecret: ""
+  existingSecretKey: "shared-password"
+
+persistence:
+  enabled: true
+  storageClass: gp3          # EBS gp3 (requires the EBS CSI driver)
+  accessMode: ReadWriteOnce
+  size: 1Gi
+  mountPath: /data
+
+service:
+  type: ClusterIP
+  port: 80                   # -> container 3000
+
+ingress:
+  enabled: true
+  className: alb
+  host: quiz.massimodanieli.com
+  # ACM certificate ARN for the host above, in the ALB's region (e.g. eu-west-2)
+  certificateArn: ""
+  scheme: internet-facing    # or internal
+  targetType: ip
+  # WebSockets: raise the ALB idle timeout well above the default 60s
+  idleTimeoutSeconds: 3600
+  # Optional: share one ALB across ingresses
+  groupName: ""
+  extraAnnotations: {}
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
+
+# The container runs as the non-root "node" user (uid 1000); fsGroup lets it write
+# to the mounted EBS volume.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

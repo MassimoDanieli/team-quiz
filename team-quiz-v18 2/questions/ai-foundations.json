@@ -1,0 +1,456 @@
+{
+  "id": "ai-foundations",
+  "name": "AI Foundations · Beginner",
+  "description": "AI & machine-learning basics for beginners — no experience needed.",
+  "order": 3,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "AI",
+      "text": "How does machine learning differ from traditional programming?",
+      "options": [
+        "It runs the same fixed rules much faster",
+        "It writes documentation for existing computer programs",
+        "It needs no computer to run its logic",
+        "It learns patterns from data instead of coded rules"
+      ],
+      "correct": 3,
+      "explanation": "In ML you provide examples and the model infers the rules, rather than a developer coding every rule explicitly.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q002",
+      "topic": "AI",
+      "text": "Supervised learning is trained on…",
+      "options": [
+        "Only images, never text or numbers",
+        "Random noise generated during training",
+        "Labelled examples pairing inputs with known outputs",
+        "Unlabelled data with no correct answers given at all"
+      ],
+      "correct": 2,
+      "explanation": "The model learns to map inputs to outputs from examples where the answer is already known.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q003",
+      "topic": "AI",
+      "text": "Unsupervised learning works on…",
+      "options": [
+        "Only small, perfectly clean datasets",
+        "Unlabelled data, finding structure on its own",
+        "Labelled data with a known target per row",
+        "Human feedback given after every prediction"
+      ],
+      "correct": 1,
+      "explanation": "With no labels, it discovers patterns such as clusters or associations in the data.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q004",
+      "topic": "AI",
+      "text": "'Training' a model means…",
+      "options": [
+        "Running the finished model in production",
+        "Deleting old data the model no longer needs",
+        "Adjusting the model on data to improve a task",
+        "Writing the documentation for the model"
+      ],
+      "correct": 2,
+      "explanation": "Training tunes the model's internal parameters to reduce its error on the training data.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q005",
+      "topic": "AI",
+      "text": "'Inference' refers to…",
+      "options": [
+        "Using a trained model to predict on new input",
+        "Cleaning and formatting the raw dataset",
+        "Gathering and labelling the training data",
+        "Adjusting the model's weights during training"
+      ],
+      "correct": 0,
+      "explanation": "Inference is the model doing its job on fresh, unseen inputs after training is done.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q006",
+      "topic": "AI",
+      "text": "Overfitting is when a model…",
+      "options": [
+        "Fits the training data too closely, generalises poorly",
+        "Has far too few parameters to be useful",
+        "Runs out of GPU memory partway through the training run",
+        "Trains for too few steps to learn anything"
+      ],
+      "correct": 0,
+      "explanation": "An overfit model has essentially memorised the training set, so it performs badly on data it hasn't seen.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q007",
+      "topic": "AI",
+      "text": "Why split data into training and test sets?",
+      "options": [
+        "To let the model train on twice as much data",
+        "To gauge performance honestly on unseen data",
+        "To save disk space while storing the dataset",
+        "It is optional and rarely makes any difference"
+      ],
+      "correct": 1,
+      "explanation": "Evaluating on held-out data prevents you from being fooled by performance on examples the model already learned.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q008",
+      "topic": "AI",
+      "text": "Classification vs regression?",
+      "options": [
+        "Classification predicts categories; regression numbers",
+        "Both predict a continuous numeric value",
+        "Regression predicts categories; classification numbers",
+        "Both are only ever used on image data"
+      ],
+      "correct": 0,
+      "explanation": "Predicting 'spam/not spam' is classification; predicting a house price is regression.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q009",
+      "topic": "AI",
+      "text": "A 'feature' is…",
+      "options": [
+        "An input variable the model uses to predict",
+        "The final prediction the model produces",
+        "The loop that repeatedly updates the weights",
+        "A defect or bug in the training pipeline"
+      ],
+      "correct": 0,
+      "explanation": "Features are the measurable inputs (e.g. age, pixels, words) the model bases its output on.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q010",
+      "topic": "AI",
+      "text": "At its core, a large language model…",
+      "options": [
+        "Performs only arithmetic and no language tasks",
+        "Understands language exactly as a human does",
+        "Predicts the likely next tokens of text",
+        "Looks each answer up in a fixed database"
+      ],
+      "correct": 2,
+      "explanation": "An LLM is trained to continue text by predicting the most probable next token given what came before.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q011",
+      "topic": "AI",
+      "text": "A 'token' is…",
+      "options": [
+        "A password used to access the model's hosted API",
+        "The dataset the model was trained upon",
+        "A chunk of text, a word or subword, it processes",
+        "The graphics card the model runs on"
+      ],
+      "correct": 2,
+      "explanation": "Models break text into tokens; both input length and output are measured in tokens.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q012",
+      "topic": "AI",
+      "text": "An LLM 'hallucination' is…",
+      "options": [
+        "A particular type of graphics processing unit or chip",
+        "A crash that stops the model responding",
+        "A response that arrives unusually slowly",
+        "Confident output that is factually wrong or made up"
+      ],
+      "correct": 3,
+      "explanation": "Models can produce fluent, plausible-sounding text that isn't true — always verify important facts.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q013",
+      "topic": "AI",
+      "text": "Why can biased training data be a problem?",
+      "options": [
+        "It reduces how much memory training needs",
+        "It has no measurable effect on the outputs",
+        "It makes the model train noticeably faster",
+        "The model learns and can amplify that bias"
+      ],
+      "correct": 3,
+      "explanation": "A model reflects its data; skewed or unfair data leads to skewed or unfair predictions.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q014",
+      "topic": "AI",
+      "text": "'Garbage in, garbage out' in ML means…",
+      "options": [
+        "Poor-quality data leads to a poor model",
+        "The output is always meaningless regardless",
+        "The quality of the data does not matter",
+        "The model automatically deletes any bad data"
+      ],
+      "correct": 0,
+      "explanation": "Model quality is bounded by data quality; noisy or wrong data produces an unreliable model.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q015",
+      "topic": "AI",
+      "text": "Fine-tuning a model means…",
+      "options": [
+        "Building a brand-new model entirely from scratch",
+        "Deleting parameters to shrink a large model",
+        "Running a finished model to make predictions",
+        "Further training a pretrained model on new data"
+      ],
+      "correct": 3,
+      "explanation": "Fine-tuning adapts an existing general model to a narrower task or domain with additional training.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q016",
+      "topic": "AI",
+      "text": "A model's 'parameters' are…",
+      "options": [
+        "The prompts a user types at inference",
+        "The learned weights adjusted during training",
+        "The hardware the model happens to run on",
+        "The input files fed into the model"
+      ],
+      "correct": 1,
+      "explanation": "Parameters are the numbers the model learns; large models have billions of them.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q017",
+      "topic": "AI",
+      "text": "Why are GPUs commonly used for ML?",
+      "options": [
+        "They can store far more data than a CPU",
+        "They are legally required for training models",
+        "They do the parallel matrix maths far faster",
+        "They are considerably cheaper than any CPU"
+      ],
+      "correct": 2,
+      "explanation": "Training and inference are mostly large matrix operations, which GPUs execute massively in parallel.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q018",
+      "topic": "AI",
+      "text": "An 'embedding' represents data as…",
+      "options": [
+        "A password protecting access to the data",
+        "A vector that captures meaning and similarity",
+        "An image generated from the input text",
+        "A single number summarising the whole input"
+      ],
+      "correct": 1,
+      "explanation": "Embeddings map items into a vector space where similar things sit close together, enabling search and comparison.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q019",
+      "topic": "AI",
+      "text": "Why is accuracy alone misleading on imbalanced data?",
+      "options": [
+        "It always needs a GPU to be measured at all",
+        "Imbalanced data makes every model fully accurate",
+        "A model can score high by always guessing the majority",
+        "Accuracy simply cannot be computed on imbalanced data"
+      ],
+      "correct": 2,
+      "explanation": "If 99% of cases are negative, always predicting 'negative' scores 99% while catching nothing useful.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q020",
+      "topic": "AI",
+      "text": "'Human in the loop' means…",
+      "options": [
+        "The model develops genuine human emotions",
+        "The model is left to act with no oversight",
+        "People review or approve the model's outputs",
+        "Training data is entered entirely by hand"
+      ],
+      "correct": 2,
+      "explanation": "Keeping a human checkpoint helps catch errors and handle high-stakes or ambiguous decisions.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q021",
+      "topic": "AI",
+      "text": "An LLM's 'context window' is…",
+      "options": [
+        "How accurate the model's answers tend to be",
+        "How much text the model can consider at once",
+        "How much the model costs to run per request",
+        "The size of the graphics card it runs on"
+      ],
+      "correct": 1,
+      "explanation": "The context window limits how much prompt and conversation the model can take into account in one go.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q022",
+      "topic": "AI",
+      "text": "Increasing the 'temperature' when generating text tends to…",
+      "options": [
+        "Makes the generated output more random and varied",
+        "Makes the model respond noticeably faster",
+        "Reliably improves the factual accuracy",
+        "Lowers the compute cost of each generated response"
+      ],
+      "correct": 0,
+      "explanation": "Higher temperature increases randomness; lower temperature makes output more focused and deterministic.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q023",
+      "topic": "AI",
+      "text": "Why validate AI-generated code before running it?",
+      "options": [
+        "Running it first is the only way to read it",
+        "It can be subtly wrong or insecure despite looking right",
+        "Generated code is always flawless and perfectly safe to run",
+        "It only ever fails to compile, never at runtime"
+      ],
+      "correct": 1,
+      "explanation": "Generated code may contain bugs or vulnerabilities that read plausibly — review and test it like any code.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q024",
+      "topic": "AI",
+      "text": "Why is pasting secrets or customer data into an external AI tool risky?",
+      "options": [
+        "The data leaves your control and may be retained",
+        "It merely makes the request run a little slower",
+        "It trains a private model just for your team",
+        "It slightly increases the cost of the request"
+      ],
+      "correct": 0,
+      "explanation": "Sensitive data sent to a third party may be retained or leaked; follow your org's data-handling rules.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q025",
+      "topic": "AI",
+      "text": "Bigger models usually trade off…",
+      "options": [
+        "Nothing; they are strictly better everywhere",
+        "More data needed but far cheaper hardware",
+        "Lower quality in exchange for much faster replies",
+        "Higher cost and latency for potentially better quality"
+      ],
+      "correct": 3,
+      "explanation": "Larger models can be more capable but cost more and respond slower; pick the right size for the job.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q026",
+      "topic": "AI",
+      "text": "LLM outputs are…",
+      "options": [
+        "Written and stored in advance by a human",
+        "Pure random noise with no useful structure",
+        "Identical every single time for a given prompt",
+        "Probabilistic — the same prompt can vary"
+      ],
+      "correct": 3,
+      "explanation": "Generation samples from probabilities, so responses can vary run to run unless settings force determinism.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q027",
+      "topic": "AI",
+      "text": "A 'prompt' is…",
+      "options": [
+        "The answer the model returns to you",
+        "The dataset originally used to train the model",
+        "The input or instructions you give the model",
+        "The graphics card the model runs on"
+      ],
+      "correct": 2,
+      "explanation": "The prompt is what you send in; clear, specific prompts generally get better results.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q028",
+      "topic": "AI",
+      "text": "Retrieval-augmented generation (RAG) helps by…",
+      "options": [
+        "Making the underlying model much larger",
+        "Supplying relevant documents to ground the answer",
+        "Removing the prompt from the request entirely",
+        "Retraining the model from scratch each time"
+      ],
+      "correct": 1,
+      "explanation": "RAG fetches relevant text and feeds it to the model so answers can cite up-to-date, specific sources.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q029",
+      "topic": "AI",
+      "text": "Reinforcement learning trains an agent using…",
+      "options": [
+        "No data or feedback of any kind at all",
+        "Only human-written text as its sole input",
+        "Labelled images paired with their correct answers",
+        "Rewards and penalties shaped by the agent's actions"
+      ],
+      "correct": 3,
+      "explanation": "The agent learns a strategy by trying actions and being rewarded for good outcomes.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q030",
+      "topic": "AI",
+      "text": "Saying a model is 'not sentient' means it…",
+      "options": [
+        "Produces learned patterns, without understanding or intent",
+        "Means the model is currently broken, offline or unreachable",
+        "Means it has genuine beliefs and awareness",
+        "Means it cannot run without a human present"
+      ],
+      "correct": 0,
+      "explanation": "However fluent, the model has no beliefs or awareness; it's statistical pattern completion.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q031",
+      "topic": "AI",
+      "text": "When are simple hand-written rules often better than ML?",
+      "options": [
+        "Never; machine learning is always the better choice",
+        "When the logic is well-defined and stable",
+        "Always, regardless of the problem at hand",
+        "Only when working exclusively with image data"
+      ],
+      "correct": 1,
+      "explanation": "If you can state the rules exactly, code them — ML shines when patterns are complex or hard to specify.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q032",
+      "topic": "AI",
+      "text": "Why is transparency/explainability valued in AI decisions?",
+      "options": [
+        "Because it lets you skip testing the model before release",
+        "Because it reduces the cost of running it",
+        "Because it makes the model respond faster",
+        "So outcomes can be understood, trusted and challenged"
+      ],
+      "correct": 3,
+      "explanation": "Especially for decisions affecting people, being able to explain why a model decided something supports trust and accountability.",
+      "difficulty": "hard"
+    }
+  ]
+}

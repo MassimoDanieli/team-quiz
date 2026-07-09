@@ -1,0 +1,428 @@
+{
+  "id": "azure",
+  "name": "Azure",
+  "description": "Microsoft Azure fundamentals through to architecture. 30-question seed set, growing to 300.",
+  "order": 13,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "In Azure, a Resource Group is…",
+      "options": [
+        "A logical container for related resources",
+        "A billing account for one subscription",
+        "A physical rack in a data centre",
+        "A group of users with shared access"
+      ],
+      "correct": 0,
+      "explanation": "Resources that share a lifecycle live together; deleting the group deletes them all."
+    },
+    {
+      "id": "q002",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "An Azure Region is…",
+      "options": [
+        "A tier of technical support",
+        "A virtual network boundary",
+        "A set of data centres in one geography",
+        "A single physical server building in practice"
+      ],
+      "correct": 2,
+      "explanation": "A region is one or more data centres near each other; pick the closest for latency and compliance."
+    },
+    {
+      "id": "q003",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "Azure Blob Storage is designed for…",
+      "options": [
+        "Running virtual machines in practice as a rule",
+        "Storing large amounts of unstructured data",
+        "Hosting relational databases",
+        "Managing user identities"
+      ],
+      "correct": 1,
+      "explanation": "Objects — images, backups, logs — at massive scale. Not a filesystem, not a database."
+    },
+    {
+      "id": "q004",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "Azure Active Directory (Entra ID) mainly provides…",
+      "options": [
+        "Content delivery caching",
+        "Message queuing",
+        "Virtual machine hosting",
+        "Identity and access management"
+      ],
+      "correct": 3,
+      "explanation": "It's the identity backbone: users, groups, sign-in and access to apps and Azure itself."
+    },
+    {
+      "id": "q005",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "An Azure subscription is…",
+      "options": [
+        "A single virtual machine size in practice as a rule",
+        "A support plan you pay monthly",
+        "A type of storage account",
+        "A billing and management boundary for resources"
+      ],
+      "correct": 3,
+      "explanation": "Resources belong to a subscription; it's where cost, quota and access are drawn."
+    },
+    {
+      "id": "q006",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "Azure Virtual Machines give you…",
+      "options": [
+        "Infrastructure you manage yourself",
+        "Serverless functions billed per call",
+        "A container orchestration platform",
+        "A fully managed database service"
+      ],
+      "correct": 0,
+      "explanation": "IaaS: you pick the OS and own patching, scaling and config — maximum control, maximum responsibility."
+    },
+    {
+      "id": "q007",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "Azure availability zones protect against…",
+      "options": [
+        "Region-wide legal restrictions",
+        "Distributed denial-of-service attacks",
+        "The failure of a single data centre",
+        "Accidental deletion of resources"
+      ],
+      "correct": 2,
+      "explanation": "Physically separate zones within a region; spread instances across them to survive one going dark."
+    },
+    {
+      "id": "q008",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "Azure Functions are an example of…",
+      "options": [
+        "Serverless compute",
+        "A relational database",
+        "Block storage",
+        "A managed Kubernetes service"
+      ],
+      "correct": 0,
+      "explanation": "Event-driven code that scales to zero: you pay per execution, not for idle servers."
+    },
+    {
+      "id": "q009",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "A Network Security Group (NSG) in Azure…",
+      "options": [
+        "Assigns public IPs automatically",
+        "Filters inbound and outbound traffic by rules",
+        "Balances load across virtual machines in practice",
+        "Encrypts traffic between regions"
+      ],
+      "correct": 1,
+      "explanation": "Allow/deny rules on subnets or interfaces — Azure's basic packet filter."
+    },
+    {
+      "id": "q010",
+      "topic": "Azure",
+      "difficulty": "medium",
+      "text": "Azure Storage account redundancy option LRS means…",
+      "options": [
+        "Copies kept across multiple regions",
+        "Copies in every availability zone",
+        "No redundancy at all",
+        "Copies replicated within one data centre"
+      ],
+      "correct": 3,
+      "explanation": "Locally redundant storage: three copies in one facility — cheapest, least resilient."
+    },
+    {
+      "id": "q011",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "A managed identity in Azure lets a resource…",
+      "options": [
+        "Authenticate to services without stored credentials",
+        "Share one login across all resources",
+        "Bypass role-based access control",
+        "Store secrets in its own local disk in practice as a rule"
+      ],
+      "correct": 0,
+      "explanation": "Azure manages the credential lifecycle; the VM or app gets a token, no secret in code."
+    },
+    {
+      "id": "q012",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "Azure RBAC assigns permissions through…",
+      "options": [
+        "Network security group rules",
+        "Storage account access keys",
+        "Subscription billing tiers",
+        "Role definitions scoped to a resource"
+      ],
+      "correct": 3,
+      "explanation": "Who (principal) can do what (role) where (scope) — the core access model across Azure."
+    },
+    {
+      "id": "q013",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "Azure Blob access tiers (hot/cool/archive) trade off…",
+      "options": [
+        "Public against private access",
+        "Storage cost against access cost and latency",
+        "Region against availability zone",
+        "Encryption strength against speed"
+      ],
+      "correct": 1,
+      "explanation": "Archive is cheap to store, slow and costly to read; hot is the reverse. Match the tier to access frequency."
+    },
+    {
+      "id": "q014",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "A Virtual Network (VNet) peering connects…",
+      "options": [
+        "A VNet to the public internet",
+        "On-premises hardware to Azure AD",
+        "Two VNets so resources communicate privately",
+        "Two subnets inside one VNet in practice as a rule"
+      ],
+      "correct": 2,
+      "explanation": "Peered VNets route to each other over Microsoft's backbone, no public exposure."
+    },
+    {
+      "id": "q015",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "Azure Key Vault is used to…",
+      "options": [
+        "Run scheduled background jobs",
+        "Cache frequently accessed web content in practice",
+        "Host container images privately",
+        "Store and control access to secrets and keys"
+      ],
+      "correct": 3,
+      "explanation": "Secrets, certificates and keys with access policies and audit — keep them out of code and config."
+    },
+    {
+      "id": "q016",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "An Azure Availability Set differs from Availability Zones by protecting against…",
+      "options": [
+        "Rack and host failures within one data centre",
+        "DDoS attacks rather than hardware faults",
+        "Region failures rather than rack failures",
+        "Software bugs rather than hardware in practice"
+      ],
+      "correct": 0,
+      "explanation": "Sets spread VMs across fault and update domains inside a data centre; zones span data centres."
+    },
+    {
+      "id": "q017",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "Azure App Service is best described as…",
+      "options": [
+        "A managed message broker",
+        "A raw virtual machine you fully control",
+        "A platform for hosting web apps without managing servers",
+        "A block storage service for databases in practice as a rule"
+      ],
+      "correct": 2,
+      "explanation": "PaaS for web apps and APIs: deploy code, Azure handles the OS, patching and scaling."
+    },
+    {
+      "id": "q018",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "Azure Load Balancer operates at layer 4, meaning it distributes traffic by…",
+      "options": [
+        "Cookie values in the request",
+        "URL path and host header",
+        "IP address and port",
+        "Geographic location of the client"
+      ],
+      "correct": 2,
+      "explanation": "L4 sees TCP/UDP, not HTTP; for path-based routing you need Application Gateway (L7)."
+    },
+    {
+      "id": "q019",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "Azure Private Endpoint gives a PaaS service…",
+      "options": [
+        "A dedicated availability zone",
+        "Automatic geo-replication",
+        "A public IP with a firewall",
+        "A private IP inside your VNet"
+      ],
+      "correct": 3,
+      "explanation": "Traffic to the service stays on the private network instead of traversing the public internet."
+    },
+    {
+      "id": "q020",
+      "topic": "Azure",
+      "difficulty": "hard",
+      "text": "Azure Cosmos DB is designed for…",
+      "options": [
+        "Strictly relational workloads only in practice",
+        "Globally distributed, low-latency NoSQL",
+        "Running virtual desktops",
+        "Long-term cold archival storage"
+      ],
+      "correct": 1,
+      "explanation": "Multi-region, multi-model, single-digit-millisecond reads — with tunable consistency levels."
+    },
+    {
+      "id": "q021",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "Azure Cosmos DB's five consistency levels range from…",
+      "options": [
+        "Read-only to write-only",
+        "Encrypted to plaintext",
+        "Strong to eventual, with bounded-staleness between",
+        "Single-region to multi-region in practice as a rule"
+      ],
+      "correct": 2,
+      "explanation": "Strong, bounded staleness, session, consistent prefix, eventual — trading latency and availability for freshness."
+    },
+    {
+      "id": "q022",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "A user-assigned managed identity differs from system-assigned because it…",
+      "options": [
+        "Cannot access Key Vault at all",
+        "Lives independently and can be shared across resources",
+        "Is tied to the lifecycle of one resource",
+        "Requires a stored client secret in practice as a rule in practice"
+      ],
+      "correct": 1,
+      "explanation": "System-assigned dies with its resource; user-assigned is a standalone principal reusable by many."
+    },
+    {
+      "id": "q023",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "Azure Availability Zones guarantee latency between zones of roughly…",
+      "options": [
+        "Around 50 milliseconds",
+        "Under 2 milliseconds round trip",
+        "No guarantee is given",
+        "Under 100 microseconds"
+      ],
+      "correct": 1,
+      "explanation": "Zones are close enough for synchronous replication — that low round-trip is what makes zone-redundant writes viable."
+    },
+    {
+      "id": "q024",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "In Azure networking, a User Defined Route (UDR) is used to…",
+      "options": [
+        "Encrypt traffic between subnets in practice as a rule",
+        "Force traffic through a network virtual appliance",
+        "Peer two virtual networks",
+        "Assign public IP addresses to VMs"
+      ],
+      "correct": 1,
+      "explanation": "Override default system routes to send traffic via a firewall or NVA — the basis of hub-and-spoke egress control."
+    },
+    {
+      "id": "q025",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "Azure Policy differs from RBAC in that it governs…",
+      "options": [
+        "What configurations resources may have",
+        "Who can access resources in practice as a rule",
+        "Which region resources run in",
+        "How much resources cost"
+      ],
+      "correct": 0,
+      "explanation": "RBAC controls access; Policy controls compliance — e.g. 'no public IPs' or 'only these VM sizes'."
+    },
+    {
+      "id": "q026",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "Azure Front Door provides…",
+      "options": [
+        "Layer-4 load balancing within a region",
+        "Block storage replication in practice as a rule in practice",
+        "Private connectivity to PaaS services",
+        "Global HTTP load balancing with edge acceleration"
+      ],
+      "correct": 3,
+      "explanation": "Anycast edge entry, WAF, and path-based routing across regions — global L7 in front of your apps."
+    },
+    {
+      "id": "q027",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "Azure Storage 'immutable blob' (WORM) policies exist to…",
+      "options": [
+        "Speed up read access to hot data",
+        "Replicate data to another region",
+        "Prevent data being modified or deleted for a retention period",
+        "Compress archived objects"
+      ],
+      "correct": 2,
+      "explanation": "Write once, read many: regulatory retention where even an admin cannot alter or delete within the window."
+    },
+    {
+      "id": "q028",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "Azure Resource Manager (ARM) templates are…",
+      "options": [
+        "Declarative definitions of desired infrastructure",
+        "Container images for App Service in practice as a rule",
+        "Backup snapshots of resource groups",
+        "Imperative scripts run step by step"
+      ],
+      "correct": 0,
+      "explanation": "You declare the end state; ARM (or Bicep on top) reconciles it. Idempotent, repeatable deployments."
+    },
+    {
+      "id": "q029",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "Azure Bicep relates to ARM templates as…",
+      "options": [
+        "A cleaner language that compiles to ARM JSON",
+        "A runtime that replaces ARM entirely",
+        "A monitoring tool for deployed templates in practice",
+        "A visual designer with no code output"
+      ],
+      "correct": 0,
+      "explanation": "Bicep is the human-friendly DSL; it transpiles to the same ARM JSON the platform executes."
+    },
+    {
+      "id": "q030",
+      "topic": "Azure",
+      "difficulty": "pro",
+      "text": "Azure VNet service endpoints differ from private endpoints because service endpoints…",
+      "options": [
+        "Only work for storage accounts",
+        "Extend your VNet identity to the service over the backbone",
+        "Require a public IP on every VM",
+        "Give the service a private IP in your VNet"
+      ],
+      "correct": 1,
+      "explanation": "Service endpoints keep traffic on the backbone and let the service trust your subnet; private endpoints actually place a NIC with a private IP in your VNet."
+    }
+  ]
+}

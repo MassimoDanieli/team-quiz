@@ -1,0 +1,400 @@
+{
+  "id": "aws-fundamentals",
+  "name": "AWS Fundamentals",
+  "description": "Core AWS: IAM, VPC, EC2/S3, regions/AZs and the shared responsibility model.",
+  "order": 6,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "AWS",
+      "text": "Region vs Availability Zone?",
+      "options": [
+        "An Availability Zone contains several Regions",
+        "A Region holds several isolated Availability Zones",
+        "Availability Zones span many separate Regions worldwide",
+        "Both terms describe the same global boundary"
+      ],
+      "correct": 1,
+      "explanation": "You pick a Region (e.g. eu-west-2 London); within it, AZs are separate facilities you spread across for resilience.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q002",
+      "topic": "AWS",
+      "text": "What is IAM for?",
+      "options": [
+        "Connecting private networks across regions",
+        "Managing identities and their permissions",
+        "Storing files and other large objects",
+        "Collecting metrics, logs and alarms"
+      ],
+      "correct": 1,
+      "explanation": "IAM controls who (users/roles) can do what on which AWS resources.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q003",
+      "topic": "AWS",
+      "text": "IAM role vs IAM user?",
+      "options": [
+        "A role is always tied to one human person",
+        "They are two names for the same thing",
+        "A role gives temporary, assumed credentials",
+        "A user cannot have any policies attached"
+      ],
+      "correct": 2,
+      "explanation": "Roles avoid long-lived keys — services and users assume them to get temporary credentials, which is safer.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q004",
+      "topic": "AWS",
+      "text": "S3 is best described as…",
+      "options": [
+        "A load balancer spreading incoming traffic",
+        "A managed relational database service",
+        "Object storage for files and other blobs",
+        "A fleet of resizable virtual servers"
+      ],
+      "correct": 2,
+      "explanation": "S3 stores objects (files) in buckets, with high durability — not a filesystem or database.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q005",
+      "topic": "AWS",
+      "text": "A security group acts as…",
+      "options": [
+        "A group of users sharing one password",
+        "A storage volume attached directly to a server",
+        "A stateful firewall at the instance level",
+        "A subnet carved out of the wider VPC"
+      ],
+      "correct": 2,
+      "explanation": "Security groups control inbound/outbound traffic per instance and are stateful (return traffic is allowed automatically).",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q006",
+      "topic": "AWS",
+      "text": "Security group vs network ACL?",
+      "options": [
+        "Both operate statelessly at the subnet edge",
+        "Security groups are stateless by default",
+        "SG is stateful per-instance; NACL stateless per-subnet",
+        "SG filters per-subnet only; NACL filters per-instance only"
+      ],
+      "correct": 2,
+      "explanation": "NACLs evaluate each direction independently at the subnet boundary; SGs track connections at the instance.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q007",
+      "topic": "AWS",
+      "text": "The shared responsibility model says…",
+      "options": [
+        "Security is optional for internal workloads",
+        "AWS is responsible for securing everything",
+        "The customer must secure the physical hardware",
+        "AWS secures the cloud; you secure your part"
+      ],
+      "correct": 3,
+      "explanation": "AWS handles the underlying infrastructure; configuration, data and access control are your responsibility.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q008",
+      "topic": "AWS",
+      "text": "Why avoid using the root account for daily work?",
+      "options": [
+        "It costs more per hour than a normal user",
+        "The root account simply cannot be used at all",
+        "It has unrestricted access; a breach is total",
+        "It runs noticeably slower than an IAM user"
+      ],
+      "correct": 2,
+      "explanation": "Lock the root account away (with MFA) and operate through scoped IAM identities instead.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q009",
+      "topic": "AWS",
+      "text": "What makes a subnet 'public'?",
+      "options": [
+        "Having a large range of addresses",
+        "A route to an internet gateway",
+        "Containing at least one EC2 instance",
+        "Being given a memorable, friendly name"
+      ],
+      "correct": 1,
+      "explanation": "A subnet is public if its route table sends internet-bound traffic to an internet gateway; otherwise it's private.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q010",
+      "topic": "AWS",
+      "text": "EC2 is…",
+      "options": [
+        "Rentable virtual servers in the cloud",
+        "A managed relational database service",
+        "A service that resolves domain names",
+        "Storage for files and other objects"
+      ],
+      "correct": 0,
+      "explanation": "EC2 provides resizable virtual machines in the cloud.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q011",
+      "topic": "AWS",
+      "text": "A VPC is…",
+      "options": [
+        "A permission attached to an IAM user",
+        "Your own isolated virtual network in AWS",
+        "A bucket that stores files and blobs",
+        "A single virtual machine you rent"
+      ],
+      "correct": 1,
+      "explanation": "The VPC is the private network boundary where your resources live, with your own subnets and routing.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q012",
+      "topic": "AWS",
+      "text": "An Elastic IP gives you…",
+      "options": [
+        "A firewall protecting your instances",
+        "A friendly DNS name automatically given to your service",
+        "A static public address you keep and remap",
+        "Extra block storage for an instance"
+      ],
+      "correct": 2,
+      "explanation": "Unlike an instance's default public IP, an EIP stays the same and can be remapped between instances.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q013",
+      "topic": "AWS",
+      "text": "Access keys committed to a repo should be…",
+      "options": [
+        "Rotated and revoked without delay",
+        "Kept, since Git encrypts them at rest",
+        "Left in place if the repo is private",
+        "Emailed around so the team can use them"
+      ],
+      "correct": 0,
+      "explanation": "Treat leaked keys as compromised: revoke and reissue, and never store keys in code.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q014",
+      "topic": "AWS",
+      "text": "RDS provides…",
+      "options": [
+        "Managed relational databases",
+        "Functions that run without servers",
+        "Storage for files and objects",
+        "A network for content delivery"
+      ],
+      "correct": 0,
+      "explanation": "RDS runs managed engines like PostgreSQL/MySQL, handling patching, backups and failover for you.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q015",
+      "topic": "AWS",
+      "text": "Lambda is…",
+      "options": [
+        "A long-running virtual machine you administer",
+        "A load balancer that distributes traffic",
+        "A managed relational database engine",
+        "On-demand functions with no servers to manage"
+      ],
+      "correct": 3,
+      "explanation": "You upload code; Lambda runs it in response to events and you pay per execution, with no servers to manage.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q016",
+      "topic": "AWS",
+      "text": "EBS volumes are…",
+      "options": [
+        "A serverless function triggered by events",
+        "Block storage for an instance, tied to one AZ",
+        "Object storage replicated across all regions",
+        "A managed database with automatic backups"
+      ],
+      "correct": 1,
+      "explanation": "EBS is like a virtual disk for an instance; it lives in a single AZ, which affects where the instance can run.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q017",
+      "topic": "AWS",
+      "text": "What does an Elastic Load Balancer do?",
+      "options": [
+        "Stores files and serves them to users",
+        "Runs functions in response to events",
+        "Manages users, roles, groups and their permissions",
+        "Spreads incoming traffic across many targets"
+      ],
+      "correct": 3,
+      "explanation": "An ELB spreads requests over healthy instances/pods for scale and availability.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q018",
+      "topic": "AWS",
+      "text": "CloudWatch is mainly for…",
+      "options": [
+        "Storing large amounts of object data",
+        "Connecting and routing private networks",
+        "Metrics, logs and alarms (observability)",
+        "Managing identities and their access"
+      ],
+      "correct": 2,
+      "explanation": "CloudWatch collects metrics and logs and can alarm/notify when thresholds are crossed.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q019",
+      "topic": "AWS",
+      "text": "An IAM policy is…",
+      "options": [
+        "A JSON document defining allowed actions",
+        "A subnet carved out of a wider network",
+        "A firewall rule attached to a subnet",
+        "A virtual server running your workload"
+      ],
+      "correct": 0,
+      "explanation": "Policies attach to users/roles/resources and specify permitted actions, resources and conditions.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q020",
+      "topic": "AWS",
+      "text": "Deploying across multiple AZs gives you…",
+      "options": [
+        "A lower monthly bill for the same setup",
+        "Higher availability if one zone fails",
+        "Noticeably faster individual processors",
+        "More storage capacity for your data"
+      ],
+      "correct": 1,
+      "explanation": "Spreading resources across AZs means a single data-centre failure doesn't take your app down.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q021",
+      "topic": "AWS",
+      "text": "ECR is…",
+      "options": [
+        "A load balancer for incoming requests",
+        "A service that resolves domain names",
+        "A relational database you administer",
+        "A managed registry for container images"
+      ],
+      "correct": 3,
+      "explanation": "ECR stores and serves Docker/OCI images, integrating with ECS/EKS and IAM.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q022",
+      "topic": "AWS",
+      "text": "EKS is…",
+      "options": [
+        "Functions that run without servers",
+        "Storage for files and large objects",
+        "A firewall guarding your instances",
+        "Managed Kubernetes run for you"
+      ],
+      "correct": 3,
+      "explanation": "EKS runs the Kubernetes control plane for you so you deploy workloads without managing masters.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q023",
+      "topic": "AWS",
+      "text": "Route 53 provides…",
+      "options": [
+        "DNS, with health checks and routing",
+        "Management of users and their access",
+        "Storage for files and other objects",
+        "Compute capacity for your workloads"
+      ],
+      "correct": 0,
+      "explanation": "Route 53 resolves domain names and can route traffic based on health, latency or geography.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q024",
+      "topic": "AWS",
+      "text": "If you STOP (not terminate) an EC2 instance, its EBS root volume…",
+      "options": [
+        "Persists, so your data survives the restart",
+        "Is wiped clean but the volume remains",
+        "Is moved into S3 until you start again",
+        "Is deleted immediately along with everything on it"
+      ],
+      "correct": 0,
+      "explanation": "Stopping keeps the EBS volume (you still pay for storage); terminating by default deletes the root volume.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q025",
+      "topic": "AWS",
+      "text": "MFA adds…",
+      "options": [
+        "Faster networking between your services",
+        "An automatic backup of your data",
+        "Extra block storage for your instances",
+        "A second sign-in factor beyond the password"
+      ],
+      "correct": 3,
+      "explanation": "Multi-factor auth means a stolen password alone isn't enough to sign in — enable it especially on privileged accounts.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q026",
+      "topic": "AWS",
+      "text": "A NAT gateway lets…",
+      "options": [
+        "You store and retrieve files at scale",
+        "Private instances reach the internet outbound only",
+        "You run containers without managing servers",
+        "The internet opens connections to private hosts"
+      ],
+      "correct": 1,
+      "explanation": "It provides outbound-only internet (e.g. for updates) to private subnets while keeping them inaccessible from outside.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q027",
+      "topic": "AWS",
+      "text": "Tagging resources helps mainly with…",
+      "options": [
+        "Routing network traffic between subnets",
+        "Encrypting all of the data stored on the resource",
+        "Making your instances run measurably faster",
+        "Organising, controlling access and tracking cost"
+      ],
+      "correct": 3,
+      "explanation": "Consistent tags let you group, filter, control and attribute cost across many resources.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q028",
+      "topic": "AWS",
+      "text": "KMS is used for…",
+      "options": [
+        "Managing encryption keys",
+        "Balancing incoming traffic",
+        "Running serverless functions",
+        "Resolving domain names"
+      ],
+      "correct": 0,
+      "explanation": "KMS creates and controls encryption keys used to protect data across AWS services.",
+      "difficulty": "hard"
+    }
+  ]
+}

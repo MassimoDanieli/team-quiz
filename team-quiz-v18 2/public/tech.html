@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Team Quiz — Technical Overview</title>
+    <style>
+      :root {
+        --canvas: #0d1117;
+        --card: #161b22;
+        --line: #30363d;
+        --line-muted: #21262d;
+        --ink: #e6edf3;
+        --muted: #8b949e;
+        --faint: #6e7681;
+        --accent: #58a6ff;
+        --green: #3fb950;
+        --gold: #d29922;
+        --teamA: #58a6ff;
+        --teamB: #f0883e;
+        --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+      }
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+        color: var(--ink);
+        background: var(--canvas);
+        min-height: 100vh;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 820px; margin: 0 auto; padding: 34px 18px 80px; }
+      h1 { font-size: 1.7rem; font-weight: 600; letter-spacing: -0.01em; }
+      h2 {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin: 34px 0 12px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--line);
+      }
+      h3 { font-size: 0.98rem; font-weight: 600; margin: 18px 0 6px; color: var(--ink); }
+      p { margin: 10px 0; }
+      .lead { color: var(--muted); margin: 12px 0 6px; font-size: 1.02rem; }
+      .meta { color: var(--faint); font-size: 0.86rem; margin-top: 10px; }
+      a { color: var(--accent); text-decoration: none; }
+      a:hover { text-decoration: underline; }
+      code {
+        font-family: var(--mono);
+        font-size: 0.86em;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        padding: 1px 6px;
+      }
+      pre {
+        font-family: var(--mono);
+        font-size: 0.82rem;
+        line-height: 1.5;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 16px 18px;
+        overflow-x: auto;
+        color: var(--ink);
+        margin: 12px 0;
+      }
+      ul { margin: 8px 0 8px 2px; list-style: none; }
+      ul li { padding: 4px 0 4px 20px; position: relative; }
+      ul li::before { content: '—'; position: absolute; left: 0; color: var(--faint); }
+      strong { color: var(--ink); font-weight: 600; }
+      .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 4px; }
+      .badge {
+        font-family: var(--mono);
+        font-size: 0.74rem;
+        padding: 3px 9px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: var(--card);
+      }
+      .toc {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 16px 20px;
+        margin: 22px 0;
+        columns: 2;
+        column-gap: 28px;
+      }
+      .toc a { display: block; padding: 3px 0; font-size: 0.9rem; }
+      dl { margin: 8px 0; }
+      dt { font-weight: 600; margin-top: 12px; }
+      dd { color: var(--muted); margin: 2px 0 0 0; }
+      .foot { color: var(--faint); font-size: 0.85rem; margin-top: 40px; text-align: center; }
+      @media (max-width: 560px) { .toc { columns: 1; } }
+    
+/* --- shared site nav --- */
+.sitenav {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+.sitenav-inner {
+  max-width: 900px; margin: 0 auto;
+  padding: 12px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; flex-wrap: wrap;
+}
+.sitenav-brand {
+  color: var(--ink); font-weight: 600; text-decoration: none;
+  font-size: 0.95rem; letter-spacing: -0.01em;
+  display: flex; align-items: center; gap: 8px;
+}
+.sitenav-links { display: flex; gap: 4px; flex-wrap: wrap; }
+.sitenav-links a {
+  color: var(--muted); text-decoration: none;
+  font-size: 0.85rem; font-weight: 500;
+  padding: 6px 10px; border-radius: 6px;
+  border: 1px solid transparent;
+}
+.sitenav-links a:hover { color: var(--ink); background: var(--line-muted); }
+.sitenav-links a.active {
+  color: var(--ink); background: var(--accent-subtle, rgba(56,139,253,0.15));
+  border-color: var(--line);
+}
+    
+      .footnav {
+        margin-top: 18px; padding-top: 18px;
+        border-top: 1px solid var(--line-muted);
+        display: flex; gap: 16px; flex-wrap: wrap;
+      }
+      .footnav a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+      .footnav a:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+  <nav class="sitenav">
+    <div class="sitenav-inner">
+      <a class="sitenav-brand" href="/index.html">🎯 Team Quiz</a>
+      <div class="sitenav-links">
+        <a href="/index.html">Play</a>
+        <a href="/host.html">Host</a>
+        <a href="/guide.html">How to run it</a>
+        <a href="/tech.html" class="active">Technical overview</a>
+      </div>
+    </div>
+  </nav>
+    <div class="wrap">
+      <h1>Team Quiz — Technical Overview</h1>
+      <p class="lead">
+        A real-time, two-team quiz application built for early-talent onboarding sessions, and
+        hardened from working prototype to a professional, maintainable tool.
+      </p>
+      <div class="badges">
+        <span class="badge">Node.js</span>
+        <span class="badge">Express</span>
+        <span class="badge">Socket.IO</span>
+        <span class="badge">Helmet</span>
+        <span class="badge">pino</span>
+        <span class="badge">Terraform</span>
+        <span class="badge">AWS EC2</span>
+        <span class="badge">nginx + HTTPS</span>
+        <span class="badge">GitHub Actions</span>
+      </div>
+      <p class="meta">Author: Max Danieli · Onboarding programme tooling</p>
+
+      <div class="toc">
+        <a href="#what">1. What it is</a>
+        <a href="#flow">2. How the game works</a>
+        <a href="#arch">3. Architecture</a>
+        <a href="#sets">4. Question sets</a>
+        <a href="#frontend">5. Front-ends</a>
+        <a href="#security">6. Security &amp; hardening</a>
+        <a href="#testing">7. Testing</a>
+        <a href="#ci">8. Code quality &amp; CI</a>
+        <a href="#deploy">9. Deployment &amp; operations</a>
+        <a href="#structure">10. Project structure</a>
+        <a href="#decisions">11. Design decisions</a>
+        <a href="#next">12. Possible next steps</a>
+      </div>
+
+      <h2 id="what">1. What it is</h2>
+      <p>
+        Team Quiz is a live, browser-based quiz for onboarding groups of new hires. Players join
+        from any device, are split into two random teams, and answer technical questions together.
+        After every round the correct answer and a short explanation are shown, so the game works
+        as a learning moment rather than a pure competition. A separate host panel drives the
+        session and chooses from several question sets spanning Java/DevOps, Git, Linux, AWS, AI and
+        security.
+      </p>
+      <p>
+        The random-teams-plus-discussion format is deliberate: it gets graduates talking, reasoning
+        aloud and meeting each other, which is the real goal of an onboarding activity.
+      </p>
+
+      <h2 id="flow">2. How the game works</h2>
+      <p>
+        The server holds a single game as a small state machine with five phases:
+        <code>login → ready → question → reveal → gameover</code>.
+      </p>
+      <ul>
+        <li>Players enter a name and land in a lobby.</li>
+        <li>The host draws two random teams and starts the match.</li>
+        <li>Each round shows one question with four options; each team casts <strong>one</strong> vote, which locks once submitted.</li>
+        <li>When both teams have voted, the answer and explanation are revealed and correct votes score a point.</li>
+        <li>The first team to reach the winning score (default 3) <strong>and</strong> be strictly ahead wins; a tie at the threshold keeps the game going.</li>
+      </ul>
+      <p>
+        Throughout, the host sees the correct answer (to read aloud); players never receive the
+        answer or explanation until the reveal — this is enforced server-side, not just hidden in
+        the UI.
+      </p>
+
+      <h2 id="arch">3. Architecture</h2>
+      <p>
+        It is a single Node.js process. Real-time state is pushed to every connected client over a
+        WebSocket (Socket.IO); the only persistence is a small JSON file recording which questions
+        each set has already asked. TLS is terminated by nginx in front of the app.
+      </p>
+      <pre>
+ Players' phones / laptops          Host laptop
+        (index.html)                (host.html)
+             │                          │
+             │        WebSocket (Socket.IO) over HTTPS
+             └─────────────┬────────────┘
+                           ▼
+                    nginx (TLS, reverse proxy)
+                           ▼
+                 Node.js  ── Express (static + /config + /healthz)
+                          ── Socket.IO handlers
+                          ── GameEngine (in-memory state machine)
+                          ── store.js (atomic JSON file: used-question history)
+                           ▼
+                   AWS EC2 (Ubuntu, systemd service)</pre>
+      <p>
+        The application code is split into small modules with single responsibilities. The game
+        rules live in a transport-agnostic <code>GameEngine</code>, so the logic can be tested
+        without any network, and the socket layer is a thin adapter that calls engine methods and
+        broadcasts the resulting state.
+      </p>
+
+      <h2 id="sets">4. Question sets</h2>
+      <p>
+        Questions live as one JSON file per set in a <code>questions/</code> directory. The server
+        auto-discovers them at startup, so adding a new set is just dropping in a file — no code
+        change. Each set carries an id, display name, description, ordering and its list of
+        questions (each with four options, the correct index and an explanation).
+      </p>
+      <p>
+        The host chooses the active set from a dropdown in the lobby. Crucially, the
+        <strong>“already asked” history is tracked per set</strong>, so every set exhausts its own
+        pool independently and questions don't repeat until a set runs out. The shipped content is
+        nine sets — roughly 300 questions — covering hard and advanced Java/DevOps, Git, Linux,
+        AWS, AI foundations, general tech trivia and two harder security rounds.
+      </p>
+
+      <h2 id="frontend">5. Front-ends</h2>
+      <p>
+        Two plain HTML/CSS/JS pages share one dark, GitHub-inspired theme:
+      </p>
+      <ul>
+        <li><strong>Player</strong> (<code>index.html</code>) — login, lobby with the chosen set and rules, then the live question and voting.</li>
+        <li><strong>Host</strong> (<code>host.html</code>) — a password-gated control panel: set selector, draw/redraw teams, start/reveal/next, new match, reset history and team-name editing.</li>
+      </ul>
+      <p>
+        There is no front-end framework or build step; the pages talk to the server purely over
+        Socket.IO and a tiny <code>/config</code> endpoint.
+      </p>
+
+      <h2 id="security">6. Security &amp; hardening</h2>
+      <p>
+        The site is publicly reachable, so it is treated as internet-exposed rather than a trusted
+        internal tool. The hardening applied:
+      </p>
+      <ul>
+        <li><strong>Host authentication</strong> — the control panel requires a host password; the server rejects every host action from an unauthenticated socket, not just hiding the UI.</li>
+        <li><strong>Rate limiting</strong> — a per-socket limiter drops excess events and disconnects sockets that flood, protecting the process from abuse.</li>
+        <li><strong>Input validation</strong> — player ids, names (sanitised of control characters and length-capped) and answers are validated server-side; the Socket.IO frame size is capped and the number of in-memory players is bounded.</li>
+        <li><strong>Security headers</strong> via Helmet — Content-Security-Policy, HSTS, X-Frame-Options, nosniff, and no <code>X-Powered-By</code>.</li>
+        <li><strong>Health check</strong> — <code>GET /healthz</code> returns a small JSON status for monitoring or load-balancer probes.</li>
+        <li><strong>Graceful shutdown</strong> — on SIGTERM/SIGINT the server drains connections and exits cleanly, so restarts are tidy.</li>
+        <li><strong>Structured logging</strong> — pino emits JSON logs suitable for parsing and aggregation.</li>
+      </ul>
+
+      <h2 id="testing">7. Testing</h2>
+      <p>
+        Tests use Node's built-in runner (<code>node --test</code>) with no external framework, on
+        two levels:
+      </p>
+      <ul>
+        <li><strong>Unit</strong> — the <code>GameEngine</code> in isolation with an in-memory store: scoring, the win-and-ahead rule (including ties that continue), no-repeat then reset, per-team vote locking, set-switching guards and answer hiding.</li>
+        <li><strong>Integration</strong> — the real server over live socket connections, exercising the full flow plus host authentication, input sanitisation and the health endpoint.</li>
+      </ul>
+      <p>
+        Together this is a fast, meaningful safety net — the refactor into modules was validated
+        entirely by these tests staying green.
+      </p>
+
+      <h2 id="ci">8. Code quality &amp; CI</h2>
+      <p>
+        ESLint and Prettier enforce a consistent style, and a GitHub Actions workflow runs lint,
+        format check and the full test suite on every push and pull request. The project is no
+        longer a one-person black box: another engineer can clone it, run <code>npm ci</code>, and
+        get immediate feedback.
+      </p>
+
+      <h2 id="deploy">9. Deployment &amp; operations</h2>
+      <p>
+        Infrastructure is described in Terraform: an EC2 instance with a static IP and security
+        group, provisioned with nginx as a TLS-terminating reverse proxy and a Let's Encrypt
+        certificate. DNS points a subdomain at the instance. The app runs as a systemd service, with
+        configuration (win score, passwords, data-file path) supplied through an environment file.
+      </p>
+      <p>
+        Day-to-day content and code updates are pushed to the instance directly and the service
+        restarted; the persistent question-history file lives outside the app directory so it
+        survives redeploys. A Dockerfile and a Kubernetes/Helm chart are also included, giving a
+        clear path to run the same image on the EKS platform later if desired.
+      </p>
+
+      <h2 id="structure">10. Project structure</h2>
+      <pre>
+server.js            entry point: express app, helmet, Socket.IO, listen, shutdown
+store.js             per-set "already asked" history (atomic JSON writes)
+src/
+  config.js          environment + paths
+  logger.js          pino logger
+  questions.js       loads question sets from a directory
+  game.js            GameEngine — the game state machine (no transport concerns)
+  socketHandlers.js  wires Socket.IO events to the engine
+  validation.js      name / answer input helpers
+  teamNames.js       team-name pool
+  util.js            shuffle
+questions/           one JSON file per question set
+public/              player + host front-ends, styles, these docs
+test/                unit + integration tests
+infra/               Terraform (EC2 + nginx + HTTPS)
+deploy/helm/         Kubernetes chart for the EKS path</pre>
+
+      <h2 id="decisions">11. Design decisions &amp; trade-offs</h2>
+      <dl>
+        <dt>File-based persistence, not a database</dt>
+        <dd>The only durable state is a short list of used question ids per set. A database would be over-engineering; the store is a small module with a clean interface, so it can be swapped for SQLite or Redis later without touching game logic.</dd>
+        <dt>Single process, in-memory game state</dt>
+        <dd>A live session is one room with a handful of teams. Keeping state in memory keeps the code simple and fast; the deliberate cost is that a restart ends an in-progress match (the question history survives).</dd>
+        <dt>Transport-agnostic engine</dt>
+        <dd>Putting all rules in a plain class — separate from sockets — is what makes the logic unit-testable and the socket layer trivially thin.</dd>
+        <dt>Pragmatic Content-Security-Policy</dt>
+        <dd>The pages use inline scripts and styles, so the CSP allows those while locking everything else to same-origin. Tightening it further would mean externalising those scripts — a worthwhile but non-urgent follow-up.</dd>
+      </dl>
+
+      <h2 id="next">12. Possible next steps</h2>
+      <ul>
+        <li>Done in v1.6.0: multiple concurrent games. Each host opens a room with a 4-digit code; players join by code; games are fully isolated and swept when idle. RoomManager wraps one GameEngine per room; the single-game API became per-room without touching the engine.</li>
+        <li>Done in v1.5.0: five new topic seed sets — Azure, Networking, Security (60), Containers &amp; K8s, CI/CD &amp; IaC, Databases — all normalised for even answer positions and length. 16 sets, 508 questions, every one through the validator.</li>
+        <li>Done in v1.4.0: difficulty taxonomy renamed to medium/hard/pro; set validator wired into CI (schema, answer-position and length-bias, duplicates); new Security set (60, growing to 300). Topic roadmap: Linux, AWS, Azure, AI &amp; LLM, Networking, Cisco, Security, Containers &amp; K8s, CI/CD &amp; IaC, Databases.</li>
+        <li>Done in v1.3.0: host password changeable from the panel (scrypt hash in data/, env bootstrap); pages renamed guide.html / tech.html with 301 redirects from the old names.</li>
+        <li>Done in v1.2.0: inline scripts externalised, CSP tightened to script-src 'self'; difficulty tiers (medium/hard/pro) with host-side filtering across all 324 questions.</li>
+        <li>Run multi-replica by moving game state behind a Redis adapter with sticky sessions (only needed for far larger or concurrent sessions).</li>
+        <li>Deploy on the EKS platform using the included Helm chart.</li>
+        <li>Keep growing the question library and add difficulty tiers as the programme runs.</li>
+        <li>Done in v1.1.0: per-question timer, host end-match with tie handling, mid-game set switching, and a full end-of-match recap with explanations.</li>
+      </ul>
+
+      <div class="footnav">
+        <a href="/index.html">← Back to Play</a>
+        <a href="/guide.html">How to run it →</a>
+      </div>
+
+      <p class="foot">Team Quiz · technical overview</p>
+    </div>
+  </body>
+</html>

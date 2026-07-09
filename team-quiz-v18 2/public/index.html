@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Quiz</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <nav class="sitenav">
+    <div class="sitenav-inner">
+      <a class="sitenav-brand" href="/index.html">🎯 Team Quiz</a>
+      <div class="sitenav-links">
+        <a href="/index.html" class="active">Play</a>
+        <a href="/host.html">Host</a>
+        <a href="/guide.html">How to run it</a>
+        <a href="/tech.html">Technical overview</a>
+      </div>
+    </div>
+  </nav>
+  <div class="wrap">
+    <!-- LOGIN -->
+    <div id="loginScreen">
+      <div class="center">
+        <h1>Team Quiz</h1>
+        <p class="muted">Java &amp; DevOps · log in, get drawn into a team, play</p>
+      </div>
+      <div class="panel">
+        <h2>Join the game</h2>
+        <label class="small muted">Game code</label>
+        <input class="text" id="codeInput" inputmode="numeric" maxlength="4" placeholder="4-digit code from your host" />
+        <div class="spacer"></div>
+        <label class="small muted">Your name</label>
+        <input class="text" id="nameInput" maxlength="24" placeholder="e.g. Max" />
+        <div class="spacer"></div>
+        <div id="pwWrap" style="display:none;">
+          <label class="small muted">Password</label>
+          <input class="text" id="pwInput" type="password" placeholder="shared password" />
+          <div class="spacer"></div>
+        </div>
+        <button class="btn" id="joinBtn" style="width:100%;">Join</button>
+        <div id="loginError" class="small" style="color:var(--red);margin-top:10px;"></div>
+      </div>
+      <div class="panel center small">
+        <a class="plain" href="/host.html">Running the game? Open the host panel</a>
+      </div>
+    </div>
+
+    <!-- GAME -->
+    <div id="gameScreen" style="display:none;">
+      <div class="topbar">
+        <h1 id="teamHeading">Lobby</h1>
+        <span class="badge" id="phaseBadge">…</span>
+        <span class="badge" id="countdown" style="display:none;">⏱</span>
+      </div>
+
+      <div class="panel">
+        <div class="score">
+          <div class="team A">
+            <div class="name" id="nameA">A</div>
+            <div class="pts" id="ptsA">0</div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="team B">
+            <div class="name" id="nameB">B</div>
+            <div class="pts" id="ptsB">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="lobbyPanel" style="display:none;">
+        <h2 id="lobbyTitle">Waiting for the host…</h2>
+        <div id="lobbyList" class="small muted"></div>
+      </div>
+
+      <div class="panel" id="howtoPanel" style="display:none;">
+        <h2>How it works</h2>
+        <ol class="rules">
+          <li>The host splits everyone into two random teams.</li>
+          <li>Each round shows one question with four possible answers.</li>
+          <li>Talk it over as a team, then one of you taps the answer. There's one vote per team, so agree first.</li>
+          <li>Once both teams have voted, the correct answer and a short explanation are shown.</li>
+          <li>A correct answer scores one point. The first team to reach 3 points (and ahead) wins.</li>
+        </ol>
+        <p class="small muted" style="margin-top:14px;">It's about discussing and reasoning together &mdash; not about being the fastest.</p>
+      </div>
+
+      <div class="panel" id="qpanel" style="display:none;">
+        <div class="qmeta"><span class="topic" id="qtopic"></span> <span class="tier" id="qtier"></span></div>
+        <div class="qtext" id="qtext"></div>
+        <div class="options" id="qoptions"></div>
+        <div id="banner"></div>
+      </div>
+
+      <div class="panel" id="recapPanel" style="display:none;"></div>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/recap.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
