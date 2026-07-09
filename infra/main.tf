@@ -99,8 +99,11 @@ resource "aws_instance" "quiz" {
   tags = {
     Name = var.instance_name
   }
-}
 
+  lifecycle {
+    ignore_changes = [ami]
+  }
+}
 # ---- Stable public address ----
 resource "aws_eip" "quiz" {
   domain = "vpc"
