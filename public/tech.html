@@ -195,8 +195,9 @@
 
       <h2 id="flow">2. How the game works</h2>
       <p>
-        The server holds a single game as a small state machine with five phases:
-        <code>login → ready → question → reveal → gameover</code>.
+        Each room holds one game as a small state machine with five phases:
+        <code>login → ready → question → reveal → gameover</code>. Many rooms run concurrently,
+        one per host, each with its own 4-digit join code.
       </p>
       <ul>
         <li>Players enter a name and land in a lobby.</li>
@@ -257,11 +258,12 @@
 
       <h2 id="frontend">5. Front-ends</h2>
       <p>
-        Two plain HTML/CSS/JS pages share one dark, GitHub-inspired theme:
+        Three plain HTML/CSS/JS pages share one dark, GitHub-inspired theme:
       </p>
       <ul>
-        <li><strong>Player</strong> (<code>index.html</code>) — login, lobby with the chosen set and rules, then the live question and voting.</li>
-        <li><strong>Host</strong> (<code>host.html</code>) — a password-gated control panel: set selector, draw/redraw teams, start/reveal/next, new match, reset history and team-name editing.</li>
+        <li><strong>Player</strong> (<code>index.html</code>) — login, lobby with the chosen set and rules, then the live question and voting, with sound effects on reveal (synthesized in the browser, mutable from the top bar).</li>
+        <li><strong>Host</strong> (<code>host.html</code>) — a password-gated control panel: set selector, draw/redraw teams, start/reveal/next, new match, reset history and team-name editing, plus a one-click "Big screen" link for the room.</li>
+        <li><strong>Big screen</strong> (<code>spectate.html</code>) — a read-only spectator view sized for a projector: scores, live question, vote status and reveals. Spectators join by room code, don't appear in the roster, can't vote, and receive the player view of the state — so the answer stays server-side until reveal, exactly as for players.</li>
       </ul>
       <p>
         There is no front-end framework or build step; the pages talk to the server purely over
@@ -275,6 +277,9 @@
       </p>
       <ul>
         <li><strong>Host authentication</strong> — the control panel requires a host password; the server rejects every host action from an unauthenticated socket, not just hiding the UI.</li>
+        <li><strong>Session tokens, not stored passwords</strong> — a successful admin/super-admin login issues a short-lived, revocable bearer token; the browser keeps only the token (never the password) and resumes sessions with it. A "Sign out" button revokes it server-side, and changing a password invalidates every other session for that account.</li>
+        <li><strong>Per-IP login throttling</strong> — repeated failed admin/super-admin logins from one source IP are blocked for a cooling-off period, independent of how many sockets the client opens. The real client IP is read from the reverse proxy's forwarding headers.</li>
+        <li><strong>Unlinkable player identifiers</strong> — the id broadcast for each player is a server-generated public id, separate from the client's reclaim secret, so seeing another player in the room state grants no ability to take over their session.</li>
         <li><strong>Rate limiting</strong> — a per-socket limiter drops excess events and disconnects sockets that flood, protecting the process from abuse.</li>
         <li><strong>Input validation</strong> — player ids, names (sanitised of control characters and length-capped) and answers are validated server-side; the Socket.IO frame size is capped and the number of in-memory players is bounded.</li>
         <li><strong>Security headers</strong> via Helmet — Content-Security-Policy, HSTS, X-Frame-Options, nosniff, and no <code>X-Powered-By</code>.</li>
@@ -352,6 +357,8 @@ deploy/helm/         Kubernetes chart for the EKS path</pre>
 
       <h2 id="next">12. Possible next steps</h2>
       <ul>
+        <li>Done in v1.10.0: sound on reveal (synthesized with WebAudio, no audio assets, mute toggle) and a read-only big-screen spectator view (<code>spectate.html</code>) for projectors, opened in one click from the host panel. Question loading is now immune to stray dotfiles (e.g. macOS <code>._*.json</code> AppleDouble artefacts).</li>
+        <li>Done in v1.9.0: security hardening from the defensive review. Admin/super-admin sessions moved from client-stored passwords to server-issued, revocable bearer tokens (with a Sign out button); repeated failed logins are throttled per source IP; and player identifiers broadcast to the room became unlinkable public ids, closing a session-takeover vector.</li>
         <li>Done in v1.8.0: container packaging &amp; deploy hardening. The <code>Dockerfile</code> now creates <code>/data</code> owned by the non-root <code>node</code> user and sets <code>ADMINS_FILE</code>, so a mounted volume persists both state and admin accounts; a hardened <code>docker-compose.yml</code> (read-only rootfs, dropped capabilities, optional Caddy HTTPS proxy) is included. The EC2/Terraform infra was aligned to the current admin model (<code>SUPER_ADMIN_USER</code>/<code>SUPER_ADMIN_PASSWORD</code> + <code>ADMINS_FILE</code>, dropping the unused <code>HOST_PASSWORD</code>), the redeploy trigger now hashes the whole app, and CI builds and smoke-tests the image. Includes an independent defensive security review (no critical findings). Library now 16 sets, 534 questions.</li>
         <li>Done in v1.7.0: account model. A super-admin (<code>/admin.html</code>, env-based) creates persistent admin accounts (scrypt-hashed in <code>ADMINS_FILE</code>); each admin signs in at <code>/host.html</code> and hosts one room at a time, controlling only their own. Removing an admin closes their game. The old shared host password is gone.</li>
         <li>Done in v1.6.0: multiple concurrent games. Each host opens a room with a 4-digit code; players join by code; games are fully isolated and swept when idle. RoomManager wraps one GameEngine per room; the single-game API became per-room without touching the engine.</li>
