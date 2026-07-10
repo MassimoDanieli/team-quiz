@@ -3,13 +3,13 @@ const socket = io();
 const KEYS = ['A', 'B', 'C', 'D'];
 
 let hostUser = sessionStorage.getItem('quizHostUser') || '';
-let hostPw = sessionStorage.getItem('quizHostPw') || '';
+let hostToken = sessionStorage.getItem('quizHostToken') || '';
 let authed = false;
 let roomCode = sessionStorage.getItem('quizHostRoom') || '';
 
 function attemptJoin() {
-  if (hostUser && hostPw) {
-    socket.emit('admin:login', { username: hostUser, password: hostPw });
+  if (hostToken) {
+    socket.emit('admin:resume', { token: hostToken });
   } else {
     document.getElementById('hostLogin').style.display = 'block';
   }
@@ -18,14 +18,18 @@ function attemptJoin() {
 attemptJoin();
 
 socket.on('connect', () => {
-  if (hostUser && hostPw) attemptJoin();
+  if (hostToken) attemptJoin();
 });
 
-socket.on('adminAuthOk', ({ code, username } = {}) => {
+socket.on('adminAuthOk', ({ code, username, token } = {}) => {
   authed = true;
   if (username) {
     hostUser = username;
     sessionStorage.setItem('quizHostUser', username);
+  }
+  if (token) {
+    hostToken = token;
+    sessionStorage.setItem('quizHostToken', token);
   }
   if (code) {
     roomCode = code;
@@ -46,8 +50,8 @@ socket.on('roomClosed', () => {
 });
 socket.on('adminAuthError', ({ reason }) => {
   authed = false;
-  hostPw = '';
-  sessionStorage.removeItem('quizHostPw');
+  hostToken = '';
+  sessionStorage.removeItem('quizHostToken');
   sessionStorage.removeItem('quizHostRoom');
   roomCode = '';
   document.getElementById('hostApp').style.display = 'none';
@@ -70,6 +74,13 @@ document.getElementById('closeRoomBtn').onclick = () => {
     location.reload();
   }
 };
+document.getElementById('signOutBtn').onclick = () => {
+  socket.emit('admin:logout');
+  hostToken = '';
+  sessionStorage.removeItem('quizHostToken');
+  sessionStorage.removeItem('quizHostRoom');
+  location.reload();
+};
 
 function doHostLogin() {
   const u = document.getElementById('hostUser').value.trim();
@@ -79,11 +90,9 @@ function doHostLogin() {
     return;
   }
   hostUser = u;
-  hostPw = v;
   sessionStorage.setItem('quizHostUser', u);
-  sessionStorage.setItem('quizHostPw', v);
   document.getElementById('hostLoginError').textContent = '';
-  attemptJoin();
+  socket.emit('admin:login', { username: u, password: v });
 }
 document.getElementById('hostLoginBtn').onclick = doHostLogin;
 document.getElementById('hostUser').addEventListener('keydown', (e) => {
@@ -318,15 +327,16 @@ document.getElementById('pwChangeBtn').onclick = () => {
   msg.textContent = '';
   socket.emit('admin:changePassword', { current, next });
 };
-socket.on('passwordChanged', () => {
+socket.on('passwordChanged', ({ token } = {}) => {
   const msg = document.getElementById('pwMsg');
   msg.style.color = 'var(--green)';
-  msg.textContent = 'Password changed. New host logins will need the new one.';
+  msg.textContent = 'Password changed.';
   document.getElementById('pwCurrent').value = '';
-  const next = document.getElementById('pwNext').value;
   document.getElementById('pwNext').value = '';
-  sessionStorage.setItem('quizHostPw', next);
-  hostPw = next;
+  if (token) {
+    hostToken = token;
+    sessionStorage.setItem('quizHostToken', token);
+  }
 });
 
 document.getElementById('timerBtn').onclick = () => {

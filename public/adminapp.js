@@ -2,7 +2,7 @@
 const socket = io();
 
 let suUser = sessionStorage.getItem('quizSuUser') || '';
-let suPw = sessionStorage.getItem('quizSuPw') || '';
+let suToken = sessionStorage.getItem('quizSuToken') || '';
 
 function esc(s) {
   return String(s).replace(
@@ -12,24 +12,28 @@ function esc(s) {
 }
 
 function attemptLogin() {
-  if (suUser && suPw) {
-    socket.emit('super:login', { username: suUser, password: suPw });
+  if (suToken) {
+    socket.emit('super:resume', { token: suToken });
   } else {
     document.getElementById('superLogin').style.display = 'block';
   }
 }
 attemptLogin();
 socket.on('connect', () => {
-  if (suUser && suPw) attemptLogin();
+  if (suToken) attemptLogin();
 });
 
-socket.on('superAuthOk', () => {
+socket.on('superAuthOk', ({ token } = {}) => {
+  if (token) {
+    suToken = token;
+    sessionStorage.setItem('quizSuToken', token);
+  }
   document.getElementById('superLogin').style.display = 'none';
   document.getElementById('superApp').style.display = 'block';
 });
 socket.on('superAuthError', ({ reason }) => {
-  suPw = '';
-  sessionStorage.removeItem('quizSuPw');
+  suToken = '';
+  sessionStorage.removeItem('quizSuToken');
   document.getElementById('superApp').style.display = 'none';
   document.getElementById('superLogin').style.display = 'block';
   document.getElementById('suLoginError').textContent = reason || 'Sign-in failed';
@@ -131,11 +135,9 @@ function doSuLogin() {
     return;
   }
   suUser = u;
-  suPw = v;
   sessionStorage.setItem('quizSuUser', u);
-  sessionStorage.setItem('quizSuPw', v);
   document.getElementById('suLoginError').textContent = '';
-  attemptLogin();
+  socket.emit('super:login', { username: u, password: v });
 }
 document.getElementById('suLoginBtn').onclick = doSuLogin;
 document.getElementById('suPw').addEventListener('keydown', (e) => {
@@ -144,6 +146,12 @@ document.getElementById('suPw').addEventListener('keydown', (e) => {
 document.getElementById('suUser').addEventListener('keydown', (e) => {
   if (e.key === 'Enter') doSuLogin();
 });
+document.getElementById('suSignOutBtn').onclick = () => {
+  socket.emit('super:logout');
+  suToken = '';
+  sessionStorage.removeItem('quizSuToken');
+  location.reload();
+};
 
 document.getElementById('createBtn').onclick = () => {
   const username = document.getElementById('newUser').value.trim();

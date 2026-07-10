@@ -281,4 +281,5 @@ natural next step; Postgres only if you go multi-instance.
 
 ## Notes / possible next steps
 - Concurrent rooms are already supported: `RoomManager` keys one `GameEngine` per room, so many hosts run isolated games at once (superseding the old single-room model).
-- Easy extensions: sound on reveal, a big-screen spectator view, server-issued session tokens in place of client-stored passwords, and per-IP login throttling (see the security review).
+- **v1.9.0 security hardening** (from the security review): admin/super-admin sessions now use short-lived, server-issued bearer tokens instead of keeping the password in `sessionStorage` (`admin:resume`/`super:resume`, revocable via the new "Sign out" button); repeated failed logins from the same IP are throttled (`src/loginThrottle.js`); and player identifiers broadcast to the room are now unlinkable `publicId`s — knowing one no longer lets another client take over that player's session (`src/game.js`).
+- Remaining easy extensions: sound on reveal, a big-screen spectator view.

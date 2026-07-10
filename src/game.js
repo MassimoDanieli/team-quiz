@@ -1,5 +1,6 @@
 'use strict';
 
+const crypto = require('crypto');
 const { shuffle } = require('./util');
 const { pickTwoNames } = require('./teamNames');
 const { cleanName, validAnswer } = require('./validation');
@@ -62,6 +63,10 @@ class GameEngine {
   }
 
   // ---- Players ----
+  // `playerId` is the reclaim secret (client-generated, sent only on join —
+  // never broadcast). `publicId` is a separate, server-generated identifier
+  // that's safe to show to every client in the room: knowing it grants no
+  // ability to take over that player's session, unlike `playerId`.
   join(playerId, name) {
     const g = this.game;
     const clean = cleanName(name);
@@ -74,9 +79,15 @@ class GameEngine {
       existing.name = clean;
     } else {
       // Late joiners (after a draw) start unassigned; they get a team on next draw.
-      g.players[playerId] = { id: playerId, name: clean, team: null, connected: true };
+      g.players[playerId] = {
+        id: playerId,
+        publicId: crypto.randomBytes(9).toString('base64url'),
+        name: clean,
+        team: null,
+        connected: true
+      };
     }
-    return { ok: true, name: clean };
+    return { ok: true, name: clean, publicId: g.players[playerId].publicId };
   }
 
   setConnected(playerId, connected) {
@@ -289,7 +300,11 @@ class GameEngine {
   // ---- State view ----
   publicState(role) {
     const g = this.game;
-    const players = this.connectedPlayers().map((p) => ({ id: p.id, name: p.name, team: p.team }));
+    const players = this.connectedPlayers().map((p) => ({
+      id: p.publicId,
+      name: p.name,
+      team: p.team
+    }));
     const base = {
       phase: g.phase,
       teams: {
