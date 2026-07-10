@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Quiz · Big screen</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    /* Big-screen scaling on top of the shared stylesheet. */
+    .spect-wrap { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    .spect-score .name { font-size: 2.2rem; }
+    .spect-score .pts { font-size: 4rem; }
+    .spect-q { font-size: 2.4rem; line-height: 1.3; margin: 18px 0; }
+    .spect-topic { font-size: 1.1rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .spect-opts .opt { font-size: 1.8rem; padding: 18px 22px; }
+    .spect-opts .opt .key { font-size: 1.6rem; }
+    .spect-banner .banner { font-size: 1.5rem; }
+    .spect-code { font-size: 1.4rem; letter-spacing: 0.15em; }
+    .spect-join-hint { font-size: 1.2rem; }
+    @media (min-width: 1100px) {
+      .spect-q { font-size: 3rem; }
+      .spect-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap spect-wrap">
+    <!-- JOIN -->
+    <div id="joinScreen">
+      <div class="center">
+        <h1>Big screen</h1>
+        <p class="muted">Read-only view for a projector or shared display</p>
+      </div>
+      <div class="panel">
+        <h2>Show a game</h2>
+        <label class="small muted">Game code</label>
+        <input class="text" id="codeInput" inputmode="numeric" maxlength="4" placeholder="4-digit code from the host" />
+        <div class="spacer"></div>
+        <div id="pwWrap" style="display:none;">
+          <label class="small muted">Password</label>
+          <input class="text" id="pwInput" type="password" placeholder="shared password" />
+          <div class="spacer"></div>
+        </div>
+        <button class="btn" id="joinBtn" style="width:100%;">Show</button>
+        <div id="joinError" class="small" style="color:var(--red);margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <!-- DISPLAY -->
+    <div id="displayScreen" style="display:none;">
+      <div class="topbar">
+        <h1>Team Quiz</h1>
+        <span class="badge spect-code">Join with code <b id="roomCode">····</b></span>
+        <span class="badge" id="phaseBadge">…</span>
+        <span class="badge" id="countdown" style="display:none;">⏱</span>
+        <button class="badge" id="soundToggle" style="cursor:pointer;border:0;" title="Enable sound">🔇</button>
+      </div>
+
+      <div class="panel">
+        <div class="score spect-score">
+          <div class="team A">
+            <div class="name" id="nameA">Team A</div>
+            <div class="pts" id="ptsA">0</div>
+            <span class="dot" id="dotA"></span>
+          </div>
+          <div class="team B">
+            <div class="name" id="nameB">Team B</div>
+            <div class="pts" id="ptsB">0</div>
+            <span class="dot" id="dotB"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="lobbyPanel" style="display:none;">
+        <h2 id="lobbyTitle">Waiting for the host…</h2>
+        <div id="lobbyList" class="spect-join-hint"></div>
+      </div>
+
+      <div class="panel" id="qpanel" style="display:none;">
+        <div class="small muted spect-topic"><span id="qtopic"></span> <span class="tier" id="qtier"></span></div>
+        <div class="spect-q" id="qtext"></div>
+        <div class="spect-opts" id="qoptions"></div>
+        <div class="spect-banner" id="banner" style="margin-top:14px;"></div>
+      </div>
+
+      <div id="recapPanel" style="display:none;"></div>
+    </div>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/sound.js"></script>
+  <script src="/recap.js"></script>
+  <script src="/spectateapp.js"></script>
+</body>
+</html>

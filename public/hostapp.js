@@ -37,6 +37,7 @@ socket.on('adminAuthOk', ({ code, username, token } = {}) => {
     document.getElementById('roomCode').textContent = code;
     const link = location.origin + '/?room=' + code;
     document.getElementById('roomLink').value = link;
+    document.getElementById('bigScreenLink').href = '/spectate.html?room=' + code;
   }
   document.getElementById('hostLogin').style.display = 'none';
   document.getElementById('hostApp').style.display = 'block';

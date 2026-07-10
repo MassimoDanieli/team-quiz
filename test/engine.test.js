@@ -358,3 +358,27 @@ describe('GameEngine v1.9.0 — player identity (publicId vs reclaim secret)', (
     assert.strictEqual(second.publicId, first.publicId);
   });
 });
+
+describe('loadSets (v1.10.0) — dotfile immunity', () => {
+  test('AppleDouble junk ("._*.json") next to real sets is ignored, not parsed', () => {
+    const fs = require('node:fs');
+    const os = require('node:os');
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'quiz-sets-'));
+    fs.writeFileSync(
+      path.join(tmp, 'real.json'),
+      JSON.stringify({
+        id: 'real',
+        name: 'Real set',
+        questions: [{ id: 'q1', topic: 't', text: 'x?', options: ['a', 'b', 'c', 'd'], correct: 0 }]
+      })
+    );
+    // Binary-ish garbage the way macOS scp leaves it — invalid JSON on purpose.
+    fs.writeFileSync(
+      path.join(tmp, '._real.json'),
+      Buffer.from([0x00, 0x05, 0x16, 0x07, 0x4d, 0x61])
+    );
+    const { sets, order } = loadSets(tmp);
+    assert.deepStrictEqual(order, ['real']);
+    assert.ok(sets.real);
+  });
+});

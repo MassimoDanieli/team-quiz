@@ -22,6 +22,15 @@ let joined = false;
 let myPublicId = null;
 let myVote = null;
 let currentQNum = -1;
+let lastPhase = null;
+
+// Sound: unlock on first gesture; toggle in the topbar.
+quizSound.arm();
+const soundBtn = document.getElementById('soundToggle');
+soundBtn.onclick = () => {
+  quizSound.enabled = !quizSound.enabled;
+  soundBtn.textContent = quizSound.enabled ? '🔊' : '🔇';
+};
 
 // password field visibility
 fetch('/config')
@@ -111,6 +120,17 @@ function myTeam(s) {
 }
 
 function render(s) {
+  // Sound on phase transitions (reveal chime keyed to your team's result).
+  if (s.phase !== lastPhase) {
+    const team = myTeam(s);
+    if (s.phase === 'reveal' && s.lastReveal) {
+      quizSound.reveal(team ? !!s.lastReveal.results[team] : null);
+    } else if (s.phase === 'gameover' && lastPhase !== null) {
+      quizSound.fanfare();
+    }
+    lastPhase = s.phase;
+  }
+
   document.getElementById('phaseBadge').textContent = s.phase;
   document.getElementById('nameA').textContent = s.teams.A.name;
   document.getElementById('nameB').textContent = s.teams.B.name;

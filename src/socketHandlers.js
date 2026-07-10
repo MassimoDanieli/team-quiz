@@ -298,6 +298,28 @@ function registerSocketHandlers(io, manager) {
       if (room && room.engine.vote(socket.data.playerId, answer)) broadcastRoom(socket.data.code);
     });
 
+    // ================= SPECTATOR (read-only big screen) =================
+    // Joins the room's player broadcast group but never enters the game:
+    // not in the roster, cannot vote, and sees the player view of the state
+    // (so the correct answer stays hidden until reveal, same as players).
+    socket.on('spectator:join', ({ code, password } = {}) => {
+      if (config.SHARED_PASSWORD && password !== config.SHARED_PASSWORD) {
+        socket.emit('spectateError', { reason: 'Wrong password' });
+        return;
+      }
+      const c = String(code || '').trim();
+      const room = manager.get(c);
+      if (!room) {
+        socket.emit('spectateError', { reason: 'No game with that code', badCode: true });
+        return;
+      }
+      socket.data.role = 'spectator';
+      socket.data.code = c;
+      socket.join(`${c}:players`);
+      socket.emit('spectating', { code: c });
+      socket.emit('state', room.engine.publicState('player'));
+    });
+
     socket.on('disconnect', () => {
       const { code, playerId } = socket.data;
       if (!code || !playerId) return;

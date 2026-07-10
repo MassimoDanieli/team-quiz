@@ -8,7 +8,9 @@ const path = require('path');
 function loadSets(dir) {
   const sets = {};
   const list = [];
-  const files = fs.readdirSync(dir).filter((f) => f.endsWith('.json'));
+  // Skip dotfiles: macOS scp/tar can drop AppleDouble junk ("._foo.json")
+  // next to the real files, and those are binary blobs, not JSON.
+  const files = fs.readdirSync(dir).filter((f) => f.endsWith('.json') && !f.startsWith('.'));
   for (const f of files) {
     const data = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
     const id = data.id || path.basename(f, '.json');

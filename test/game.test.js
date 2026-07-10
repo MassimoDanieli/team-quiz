@@ -542,3 +542,90 @@ describe('login throttling (v1.9.0)', () => {
     s.sock.close();
   });
 });
+
+describe('spectator view (v1.10.0)', () => {
+  let server;
+  before(async () => {
+    server = await startServer();
+  });
+  after(() => server.stop());
+
+  test('spectator joins with a code, is not in the roster, and never sees the answer', async () => {
+    const host = connect(server.url);
+    host.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
+    const code = await waitCode(host.st);
+
+    const p = connect(server.url);
+    p.sock.emit('player:join', { playerId: 'p-' + Math.random(), name: 'Alice', code });
+    await waitFor(host.st, (s) => s.players.length >= 1);
+
+    const spec = connect(server.url);
+    let spectating = null;
+    spec.sock.on('spectating', (x) => (spectating = x));
+    spec.sock.emit('spectator:join', { code });
+    await waitFor(spec.st, (s) => !!s);
+    assert.ok(spectating && spectating.code === code, 'spectating ack with the code');
+    assert.strictEqual(
+      spec.st.cur.players.length,
+      1,
+      'roster contains only the real player, not the spectator'
+    );
+
+    // Move to a live question: the spectator state must not carry the answer.
+    const p2 = connect(server.url);
+    p2.sock.emit('player:join', { playerId: 'q-' + Math.random(), name: 'Bob', code });
+    await waitFor(host.st, (s) => s.players.length >= 2);
+    host.sock.emit('host:drawTeams');
+    await waitFor(host.st, (s) => s.phase === 'ready');
+    host.sock.emit('host:start');
+    await waitFor(spec.st, (s) => s.phase === 'question');
+    assert.strictEqual(spec.st.cur.current.correct, undefined, 'no answer before reveal');
+    assert.strictEqual(spec.st.cur.players.length, 2, 'still only the two real players');
+
+    host.sock.close();
+    p.sock.close();
+    p2.sock.close();
+    spec.sock.close();
+  });
+
+  test('spectator with a wrong code is rejected', async () => {
+    const spec = connect(server.url);
+    let err = null;
+    spec.sock.on('spectateError', (e) => (err = e));
+    spec.sock.emit('spectator:join', { code: '0000' });
+    await sleep(300);
+    assert.ok(err && err.badCode, 'bad code rejected');
+    spec.sock.close();
+  });
+});
+
+describe('spectator password gate (v1.10.0)', () => {
+  let server;
+  before(async () => {
+    server = await startServer({ SHARED_PASSWORD: 'roompass' });
+  });
+  after(() => server.stop());
+
+  test('when a shared password is set, spectators must supply it too', async () => {
+    const host = connect(server.url);
+    host.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
+    const code = await waitCode(host.st);
+
+    const bad = connect(server.url);
+    let err = null;
+    bad.sock.on('spectateError', (e) => (err = e));
+    bad.sock.emit('spectator:join', { code });
+    await sleep(300);
+    assert.ok(err, 'missing password rejected');
+    bad.sock.close();
+
+    const ok = connect(server.url);
+    let spectating = null;
+    ok.sock.on('spectating', (x) => (spectating = x));
+    ok.sock.emit('spectator:join', { code, password: 'roompass' });
+    await sleep(300);
+    assert.ok(spectating, 'correct password admits the spectator');
+    ok.sock.close();
+    host.sock.close();
+  });
+});
