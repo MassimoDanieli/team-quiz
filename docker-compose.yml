@@ -87,7 +87,10 @@ services:
       - "443:443"
     environment:
       QUIZ_DOMAIN: "${QUIZ_DOMAIN:-quiz.example.com}"
-      TLS_EMAIL: "${TLS_EMAIL:-}"
+      # Non-empty default: an empty value would make the Caddyfile's global
+      # `email {$TLS_EMAIL}` directive fail to parse. Set a real address in
+      # .env to receive Let's Encrypt expiry/renewal notices.
+      TLS_EMAIL: "${TLS_EMAIL:-admin@example.com}"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data

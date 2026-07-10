@@ -219,8 +219,12 @@ Add automatic HTTPS with a Caddy reverse proxy (obtains/renews a Let's Encrypt c
 `QUIZ_DOMAIN`, and forwards WebSocket/Socket.IO transparently):
 
 ```bash
-docker compose --profile proxy up -d     # comment out the app `ports:` block first
+docker compose --profile proxy up -d
 ```
+
+By default the app is also bound to `127.0.0.1:3000` on the host for local debugging.
+Remove the `ports:` block under the `app` service if you want Caddy to be the only
+entry point.
 
 Persistence lives on the named `quiz-data` volume. Back it up with:
 
