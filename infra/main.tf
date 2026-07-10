@@ -146,7 +146,7 @@ resource "null_resource" "deploy" {
 
   # Build a clean tarball of just the app (no node_modules / infra / data)
   provisioner "local-exec" {
-    command = "cd ${path.module}/.. && rm -f infra/app.tar.gz && tar -czf infra/app.tar.gz server.js store.js package.json src questions public README.md"
+    command = "cd ${path.module}/.. && rm -f infra/app.tar.gz && tar -czf infra/app.tar.gz server.js store.js package.json package-lock.json src questions public README.md"
   }
 
   provisioner "file" {

@@ -27,7 +27,7 @@ install -d -o ubuntu -g ubuntu /opt/team-quiz
 install -d -o ubuntu -g ubuntu /var/lib/team-quiz
 tar xzf /tmp/app.tar.gz -C /opt/team-quiz
 chown -R ubuntu:ubuntu /opt/team-quiz
-sudo -u ubuntu bash -c 'cd /opt/team-quiz && npm install --omit=dev'
+sudo -u ubuntu bash -c 'cd /opt/team-quiz && npm ci --omit=dev'
 
 echo "==> Writing service environment"
 cat > /etc/team-quiz.env <<EOF
