@@ -19,6 +19,7 @@ const urlCode = new URLSearchParams(location.search).get('room');
 if (urlCode && /^\d{4}$/.test(urlCode)) myCode = urlCode;
 
 let joined = false;
+let myPublicId = null;
 let myVote = null;
 let currentQNum = -1;
 
@@ -92,8 +93,9 @@ socket.on('roomClosed', () => {
   showLoginError('The host closed this game.');
 });
 
-socket.on('joined', () => {
+socket.on('joined', ({ publicId } = {}) => {
   joined = true;
+  myPublicId = publicId || null;
   document.getElementById('loginScreen').style.display = 'none';
   document.getElementById('gameScreen').style.display = 'block';
 });
@@ -104,7 +106,7 @@ socket.on('state', (s) => {
 });
 
 function myTeam(s) {
-  const me = s.players.find((p) => p.id === playerId);
+  const me = s.players.find((p) => p.id === myPublicId);
   return me ? me.team : null;
 }
 

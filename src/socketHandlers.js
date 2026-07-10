@@ -3,6 +3,9 @@
 const config = require('./config');
 const logger = require('./logger');
 const admins = require('./admins');
+const sessions = require('./sessions');
+const loginThrottle = require('./loginThrottle');
+const { clientIp } = require('./util');
 
 // Wire Socket.IO events to per-room game engines (Tappa B: named admins + super-admin).
 //
@@ -31,10 +34,32 @@ function registerSocketHandlers(io, manager) {
     };
   }
 
+  // Shared by admin:login and admin:resume: resolve (or open) the admin's
+  // room and put the socket into the 'admin' role.
+  function openAdminSession(socket, username, token) {
+    let found = manager.findByAdmin(username);
+    if (!found) {
+      const created = manager.create(username);
+      if (!created) {
+        socket.emit('adminAuthError', { reason: 'Server is at capacity, try again shortly' });
+        return;
+      }
+      found = { code: created.code, room: created.room };
+    }
+    socket.data.role = 'admin';
+    socket.data.admin = username;
+    socket.data.code = found.code;
+    socket.data.sessionToken = token;
+    socket.join(`${found.code}:hosts`);
+    socket.emit('adminAuthOk', { code: found.code, username, token });
+    socket.emit('state', found.room.engine.publicState('host'));
+  }
+
   io.on('connection', (socket) => {
     socket.data.role = null; // 'super' | 'admin' | 'player'
     socket.data.code = null;
     socket.data.admin = null;
+    socket.data.sessionToken = null;
 
     // Per-socket rate limiting: drop bursts, disconnect flooders.
     socket.use((packet, next) => {
@@ -74,6 +99,12 @@ function registerSocketHandlers(io, manager) {
 
     // ================= SUPER-ADMIN =================
     socket.on('super:login', ({ username, password } = {}) => {
+      const ip = clientIp(socket, config.TRUST_PROXY);
+      if (loginThrottle.isBlocked(ip)) {
+        logger.warn({ id: socket.id, ip }, 'super-admin login throttled');
+        socket.emit('superAuthError', { reason: 'Too many attempts. Try again later.' });
+        return;
+      }
       if (
         !admins.verifySuper(
           username,
@@ -82,13 +113,37 @@ function registerSocketHandlers(io, manager) {
           config.SUPER_ADMIN_PASSWORD
         )
       ) {
+        loginThrottle.recordFailure(ip);
         logger.warn({ id: socket.id }, 'super-admin auth failed');
         socket.emit('superAuthError', { reason: 'Wrong super-admin credentials' });
         return;
       }
+      loginThrottle.recordSuccess(ip);
+      const token = sessions.issue('super');
       socket.data.role = 'super';
-      socket.emit('superAuthOk');
+      socket.data.sessionToken = token;
+      socket.emit('superAuthOk', { token });
       socket.emit('superState', superSnapshot());
+    });
+
+    // Resume a super-admin session from a previously issued token — no
+    // password involved, so the client never needs to keep one around.
+    socket.on('super:resume', ({ token } = {}) => {
+      const s = sessions.verify(token);
+      if (!s || s.role !== 'super') {
+        socket.emit('superAuthError', { reason: 'Session expired, please sign in again' });
+        return;
+      }
+      socket.data.role = 'super';
+      socket.data.sessionToken = token;
+      socket.emit('superAuthOk', { token });
+      socket.emit('superState', superSnapshot());
+    });
+
+    socket.on('super:logout', () => {
+      if (socket.data.sessionToken) sessions.revoke(socket.data.sessionToken);
+      socket.data.role = null;
+      socket.data.sessionToken = null;
     });
 
     socket.on('super:createAdmin', ({ username, password } = {}) =>
@@ -122,26 +177,38 @@ function registerSocketHandlers(io, manager) {
     // ================= ADMIN (host) =================
     // Login resolves the admin's room: resume the existing one, or open a new one.
     socket.on('admin:login', ({ username, password } = {}) => {
+      const ip = clientIp(socket, config.TRUST_PROXY);
+      if (loginThrottle.isBlocked(ip)) {
+        logger.warn({ id: socket.id, ip }, 'admin login throttled');
+        socket.emit('adminAuthError', { reason: 'Too many attempts. Try again later.' });
+        return;
+      }
       if (!admins.verify(username, password)) {
+        loginThrottle.recordFailure(ip);
         logger.warn({ id: socket.id }, 'admin auth failed');
         socket.emit('adminAuthError', { reason: 'Wrong username or password' });
         return;
       }
-      let found = manager.findByAdmin(username);
-      if (!found) {
-        const created = manager.create(username);
-        if (!created) {
-          socket.emit('adminAuthError', { reason: 'Server is at capacity, try again shortly' });
-          return;
-        }
-        found = { code: created.code, room: created.room };
+      loginThrottle.recordSuccess(ip);
+      openAdminSession(socket, username, sessions.issue('admin', username));
+    });
+
+    // Resume an admin session from a previously issued token — no password
+    // resend on reconnect.
+    socket.on('admin:resume', ({ token } = {}) => {
+      const s = sessions.verify(token);
+      if (!s || s.role !== 'admin') {
+        socket.emit('adminAuthError', { reason: 'Session expired, please sign in again' });
+        return;
       }
-      socket.data.role = 'admin';
-      socket.data.admin = username;
-      socket.data.code = found.code;
-      socket.join(`${found.code}:hosts`);
-      socket.emit('adminAuthOk', { code: found.code, username });
-      socket.emit('state', found.room.engine.publicState('host'));
+      openAdminSession(socket, s.username, token);
+    });
+
+    socket.on('admin:logout', () => {
+      if (socket.data.sessionToken) sessions.revoke(socket.data.sessionToken);
+      socket.data.role = null;
+      socket.data.admin = null;
+      socket.data.sessionToken = null;
     });
 
     socket.on('admin:changePassword', ({ current, next } = {}) => {
@@ -149,7 +216,12 @@ function registerSocketHandlers(io, manager) {
       const r = admins.changePassword(socket.data.admin, current, next);
       if (r.ok) {
         logger.info({ username: socket.data.admin }, 'admin changed own password');
-        socket.emit('passwordChanged');
+        // Force every other signed-in session (other tab/device) to log in
+        // again with the new password, then issue this socket a fresh token.
+        sessions.revokeAllForAdmin(socket.data.admin);
+        const token = sessions.issue('admin', socket.data.admin);
+        socket.data.sessionToken = token;
+        socket.emit('passwordChanged', { token });
       } else {
         socket.emit('hostError', { reason: r.error });
       }
@@ -215,7 +287,7 @@ function registerSocketHandlers(io, manager) {
       socket.data.code = c;
       socket.data.playerId = playerId;
       socket.join(`${c}:players`);
-      socket.emit('joined', { playerId, name: res.name, code: c });
+      socket.emit('joined', { playerId, publicId: res.publicId, name: res.name, code: c });
       socket.emit('state', room.engine.publicState('player'));
       broadcastRoom(c);
     });

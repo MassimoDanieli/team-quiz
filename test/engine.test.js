@@ -316,3 +316,45 @@ describe('GameEngine v1.2.0 — difficulty tiers', () => {
     assert.ok(['medium', 'hard', 'pro'].includes(e.game.history[0].difficulty));
   });
 });
+
+describe('GameEngine v1.9.0 — player identity (publicId vs reclaim secret)', () => {
+  test('join() returns a publicId distinct from the reclaim secret', () => {
+    const e = newEngine();
+    const res = e.join('alice-secret', 'Alice');
+    assert.ok(res.ok);
+    assert.ok(typeof res.publicId === 'string' && res.publicId.length > 0);
+    assert.notStrictEqual(res.publicId, 'alice-secret');
+  });
+
+  test('publicState never exposes the reclaim secret, only the publicId', () => {
+    const e = newEngine();
+    const res = e.join('alice-secret', 'Alice');
+    const st = e.publicState('player');
+    const me = st.players.find((p) => p.name === 'Alice');
+    assert.strictEqual(me.id, res.publicId);
+    assert.notStrictEqual(me.id, 'alice-secret');
+    // the raw secret must not appear anywhere in the serialized broadcast
+    assert.ok(!JSON.stringify(st).includes('alice-secret'));
+  });
+
+  test('knowing a publicId does not let another client take over that identity', () => {
+    const e = newEngine();
+    const alice = e.join('alice-secret', 'Alice');
+    // an attacker who only saw Alice's publicId (from the broadcast) cannot
+    // reclaim her slot by using it as a join playerId — it just becomes a
+    // brand new, unrelated player.
+    const attacker = e.join(alice.publicId, 'Mallory');
+    assert.notStrictEqual(attacker.publicId, alice.publicId);
+    const st = e.publicState('player');
+    assert.strictEqual(st.players.find((p) => p.name === 'Alice').team, null);
+    assert.ok(st.players.some((p) => p.name === 'Mallory'));
+    assert.strictEqual(st.players.length, 2, 'Alice and the attacker are two separate players');
+  });
+
+  test('reconnecting with the real secret preserves the same publicId', () => {
+    const e = newEngine();
+    const first = e.join('alice-secret', 'Alice');
+    const second = e.join('alice-secret', 'Alice again');
+    assert.strictEqual(second.publicId, first.publicId);
+  });
+});

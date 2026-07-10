@@ -414,4 +414,131 @@ describe('admin & super-admin authentication', () => {
     assert.ok(err);
     su.sock.close();
   });
+
+  test('admin:login issues a session token; admin:resume uses it without a password', async () => {
+    const h1 = connect(server.url);
+    let token = null,
+      code1 = null;
+    h1.sock.on('adminAuthOk', (p) => {
+      token = p && p.token;
+      code1 = p && p.code;
+    });
+    h1.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
+    await sleep(300);
+    assert.ok(token, 'login returns a session token');
+    h1.sock.close();
+
+    const h2 = connect(server.url);
+    let code2 = null;
+    h2.sock.on('adminAuthOk', (p) => (code2 = p && p.code));
+    h2.sock.emit('admin:resume', { token });
+    await sleep(300);
+    assert.strictEqual(code2, code1, 'resume reopens the same room, no password sent');
+    h2.sock.close();
+  });
+
+  test('admin:resume rejects an unknown/garbage token', async () => {
+    const h = connect(server.url);
+    let err = null;
+    h.sock.on('adminAuthError', (e) => (err = e));
+    h.sock.emit('admin:resume', { token: 'not-a-real-token' });
+    await sleep(300);
+    assert.ok(err, 'garbage token is rejected');
+    h.sock.close();
+  });
+
+  test('admin:logout revokes the token so a later resume fails', async () => {
+    const h1 = connect(server.url);
+    let token = null;
+    h1.sock.on('adminAuthOk', (p) => (token = p && p.token));
+    h1.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
+    await sleep(300);
+    assert.ok(token);
+    h1.sock.emit('admin:logout');
+    await sleep(200);
+    h1.sock.close();
+
+    const h2 = connect(server.url);
+    let ok = false,
+      err = null;
+    h2.sock.on('adminAuthOk', () => (ok = true));
+    h2.sock.on('adminAuthError', (e) => (err = e));
+    h2.sock.emit('admin:resume', { token });
+    await sleep(300);
+    assert.strictEqual(ok, false);
+    assert.ok(err, 'revoked token no longer resumes a session');
+    h2.sock.close();
+  });
+
+  test('super:login issues a token; super:resume uses it without a password', async () => {
+    const su1 = connect(server.url);
+    let token = null;
+    su1.sock.on('superAuthOk', (p) => (token = p && p.token));
+    su1.sock.emit('super:login', { username: 'root', password: 'rootpass1' });
+    await sleep(300);
+    assert.ok(token);
+    su1.sock.close();
+
+    const su2 = connect(server.url);
+    let ok = false;
+    su2.sock.on('superAuthOk', () => (ok = true));
+    su2.sock.emit('super:resume', { token });
+    await sleep(300);
+    assert.strictEqual(ok, true);
+    su2.sock.close();
+  });
+
+  test('super:logout revokes the token', async () => {
+    const su1 = connect(server.url);
+    let token = null;
+    su1.sock.on('superAuthOk', (p) => (token = p && p.token));
+    su1.sock.emit('super:login', { username: 'root', password: 'rootpass1' });
+    await sleep(300);
+    su1.sock.emit('super:logout');
+    await sleep(200);
+    su1.sock.close();
+
+    const su2 = connect(server.url);
+    let ok = false,
+      err = null;
+    su2.sock.on('superAuthOk', () => (ok = true));
+    su2.sock.on('superAuthError', (e) => (err = e));
+    su2.sock.emit('super:resume', { token });
+    await sleep(300);
+    assert.strictEqual(ok, false);
+    assert.ok(err);
+    su2.sock.close();
+  });
+});
+
+describe('login throttling (v1.9.0)', () => {
+  let server;
+  before(async () => {
+    server = await startServer();
+  });
+  after(() => server.stop());
+
+  test('blocks further attempts from the same IP after repeated failures', async () => {
+    // src/loginThrottle.js blocks after 8 failed attempts in the window.
+    for (let i = 0; i < 8; i++) {
+      const s = connect(server.url);
+      s.sock.emit('admin:login', { username: 'host', password: 'wrong' });
+      await sleep(120);
+      s.sock.close();
+    }
+    // Even correct credentials are now rejected — the block is per-IP, not per-account.
+    const s = connect(server.url);
+    let ok = false,
+      err = null;
+    s.sock.on('adminAuthOk', () => (ok = true));
+    s.sock.on('adminAuthError', (e) => (err = e));
+    s.sock.emit('admin:login', { username: 'host', password: 'hostpass1' });
+    await sleep(300);
+    assert.strictEqual(ok, false);
+    assert.ok(
+      err && /too many attempts/i.test(err.reason || ''),
+      'blocked with a throttle message'
+    );
+    s.sock.close();
+  });
 });
