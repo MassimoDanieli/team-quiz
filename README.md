@@ -279,7 +279,12 @@ match history, leaderboards, or run multiple rooms) you can swap `store.js` for 
 implementation without changing `server.js`. SQLite (single file, no server) is the
 natural next step; Postgres only if you go multi-instance.
 
-## Notes / possible next steps
-- Concurrent rooms are already supported: `RoomManager` keys one `GameEngine` per room, so many hosts run isolated games at once (superseding the old single-room model).
-- **v1.9.0 security hardening** (from the security review): admin/super-admin sessions now use short-lived, server-issued bearer tokens instead of keeping the password in `sessionStorage` (`admin:resume`/`super:resume`, revocable via the new "Sign out" button); repeated failed logins from the same IP are throttled (`src/loginThrottle.js`); and player identifiers broadcast to the room are now unlinkable `publicId`s — knowing one no longer lets another client take over that player's session (`src/game.js`).
+## Changelog (recent)
 - **v1.10.0**: sound on reveal (synthesized via WebAudio — no audio assets; mute toggle in the top bar) and a read-only big-screen spectator view at `/spectate.html` (open it from the host panel's "Big screen" button, or share `/spectate.html?room=CODE`). Spectators see the player view of the state — never the answer before reveal — and don't appear in the roster. `loadSets` now also skips dotfiles, so stray macOS `._*.json` AppleDouble files can no longer crash startup.
+- **v1.9.0** — security hardening (from the security review): admin/super-admin sessions now use short-lived, server-issued bearer tokens instead of keeping the password in `sessionStorage` (`admin:resume`/`super:resume`, revocable via the new "Sign out" button); repeated failed logins from the same IP are throttled (`src/loginThrottle.js`); and player identifiers broadcast to the room are now unlinkable `publicId`s — knowing one no longer lets another client take over that player's session (`src/game.js`).
+- **Earlier versions** (v1.1.0–v1.8.0, including the move to concurrent rooms: `RoomManager` keys one `GameEngine` per room, so many hosts run isolated games at once): see the full version history in the [technical overview](public/tech.html).
+
+## Possible next steps
+- Run multi-replica by moving game state behind a Redis adapter with sticky sessions (only needed for far larger or concurrent sessions).
+- Deploy on the EKS platform using the included Helm chart (`deploy/helm/`).
+- Keep growing the question library as the programme runs.
