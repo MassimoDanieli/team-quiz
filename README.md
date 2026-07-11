@@ -242,7 +242,7 @@ Questions live in `questions/`, one JSON file per set. The host picks which set 
 from a dropdown in the lobby, and the "already asked" history is tracked **per set**, so
 each set exhausts its own pool independently.
 
-16 sets ship in `questions/` (534 questions in total) — Linux, AWS, Azure, Networking,
+18 sets ship in `questions/` (664 questions in total) — Linux, AWS, Azure, Networking,
 Cisco-style, Security, Containers & Kubernetes, CI/CD & IaC, Databases, AI, Java/DevOps
 and a few for fun.
 Every question carries a difficulty tier (`medium` / `hard` / `pro`); the host can filter
@@ -280,6 +280,7 @@ implementation without changing `server.js`. SQLite (single file, no server) is 
 natural next step; Postgres only if you go multi-instance.
 
 ## Changelog (recent)
+- **v1.11.0** — library expansion: two new sets (Observability & Monitoring; Python & Scripting, 30 questions each), Security grown 60→90 with a T-Level-friendly tier, and linux-cli/git-workflow/aws-fundamentals fattened to 40 each. 18 sets, 664 questions, all through the validator (position and length-bias checks included).
 - **v1.10.0**: sound on reveal (synthesized via WebAudio — no audio assets; mute toggle in the top bar) and a read-only big-screen spectator view at `/spectate.html` (open it from the host panel's "Big screen" button, or share `/spectate.html?room=CODE`). Spectators see the player view of the state — never the answer before reveal — and don't appear in the roster. `loadSets` now also skips dotfiles, so stray macOS `._*.json` AppleDouble files can no longer crash startup.
 - **v1.9.0** — security hardening (from the security review): admin/super-admin sessions now use short-lived, server-issued bearer tokens instead of keeping the password in `sessionStorage` (`admin:resume`/`super:resume`, revocable via the new "Sign out" button); repeated failed logins from the same IP are throttled (`src/loginThrottle.js`); and player identifiers broadcast to the room are now unlinkable `publicId`s — knowing one no longer lets another client take over that player's session (`src/game.js`).
 - **Earlier versions** (v1.1.0–v1.8.0, including the move to concurrent rooms: `RoomManager` keys one `GameEngine` per room, so many hosts run isolated games at once): see the full version history in the [technical overview](public/tech.html).

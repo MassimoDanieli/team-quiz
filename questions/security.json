@@ -843,6 +843,426 @@
       ],
       "correct": 2,
       "explanation": "The attacker sets the ID before login; if the app doesn't regenerate it on authentication, the attacker now shares the logged-in session."
+    },
+    {
+      "id": "q061",
+      "topic": "Security",
+      "text": "A long passphrase like \"correct-horse-battery-staple\" beats \"P@ssw0rd!\" mainly because…",
+      "options": [
+        "special characters are ignored by modern systems",
+        "length adds far more guessing work than symbol substitutions do",
+        "common dictionary words are always excluded from attacker wordlists",
+        "passphrases never need to be changed"
+      ],
+      "correct": 1,
+      "explanation": "Entropy grows with length; common substitutions like @ for a are the first thing cracking tools try.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q062",
+      "topic": "Security",
+      "text": "Typosquatting is when an attacker…",
+      "options": [
+        "floods a target's website with deliberately misspelled junk web requests",
+        "guesses passwords using common typos",
+        "registers look-alike domains (gooogle.com) to catch mistyped visits",
+        "renames malware to look like a system file"
+      ],
+      "correct": 2,
+      "explanation": "Look-alike domains harvest credentials or spread malware from users who mistype or don't check the address.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q063",
+      "topic": "Security",
+      "text": "\"Tailgating\" as a physical security attack means…",
+      "options": [
+        "following an authorised person through a secured door without badging in",
+        "parking close to the target's building to intercept its wireless traffic",
+        "following a target's car to learn their address",
+        "queueing behind someone to watch them type a PIN"
+      ],
+      "correct": 0,
+      "explanation": "Attackers exploit politeness — holding the door — to enter controlled areas without credentials.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q064",
+      "topic": "Security",
+      "text": "Locking your screen whenever you leave your desk matters because…",
+      "options": [
+        "the screensaver reduces monitor burn-in",
+        "corporate IT policies require it purely for software licensing reasons",
+        "it saves energy and extends laptop battery",
+        "an unattended session gives anyone your access with zero hacking"
+      ],
+      "correct": 3,
+      "explanation": "An unlocked machine is a free pass: email, files and internal systems, all attributable to you.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q065",
+      "topic": "Security",
+      "text": "Under data protection law (e.g. UK GDPR), \"personal data\" means…",
+      "options": [
+        "any information relating to an identifiable living person",
+        "only financial and medical records",
+        "only data a person has marked confidential",
+        "any data stored on personal rather than work-managed devices"
+      ],
+      "correct": 0,
+      "explanation": "Names, emails, IDs, location data, even opinions about a person count if they can identify someone.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q066",
+      "topic": "Security",
+      "text": "You receive a convincing phishing email at work. The right move is to…",
+      "options": [
+        "delete it quickly so nobody else sees it",
+        "reply asking the sender to remove you",
+        "report it via your organisation's phishing-report route, without clicking anything",
+        "forward it around to all of your colleagues so that they can learn to recognise the scam"
+      ],
+      "correct": 2,
+      "explanation": "Reporting lets security block the campaign for everyone; deleting hides it, and forwarding spreads the risk.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q067",
+      "topic": "Security",
+      "text": "An \"evil twin\" attack involves…",
+      "options": [
+        "malware that silently duplicates itself across two machines",
+        "a fake Wi-Fi hotspot mimicking a legitimate network's name",
+        "two attackers working the same phishing target",
+        "cloning a victim's phone SIM card"
+      ],
+      "correct": 1,
+      "explanation": "Victims join the attacker's look-alike hotspot, letting the attacker observe or manipulate their traffic.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q068",
+      "topic": "Security",
+      "text": "\"MFA fatigue\" (push bombing) attacks work by…",
+      "options": [
+        "exploiting a flaw in the TOTP algorithm",
+        "gradually draining the victim's phone battery to disable MFA",
+        "intercepting SMS codes over the mobile network",
+        "spamming approval prompts until the victim taps accept"
+      ],
+      "correct": 3,
+      "explanation": "With a stolen password, attackers flood push notifications hoping the user accepts one to make them stop — approve only prompts you initiated.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q069",
+      "topic": "Security",
+      "text": "Backups you have never tested restoring are…",
+      "options": [
+        "an unverified hope, not a recovery plan",
+        "fine, since backup software verifies itself",
+        "safer than tested ones, being untouched",
+        "only a problem for databases, not files"
+      ],
+      "correct": 0,
+      "explanation": "Corrupt archives, missing keys and wrong scopes surface only on restore — test before the emergency, not during.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q070",
+      "topic": "Security",
+      "text": "Oversharing on social media helps attackers mainly because…",
+      "options": [
+        "the social platforms sell users' posts directly to organised crime groups",
+        "posted photos contain viruses",
+        "personal details fuel targeted phishing and security-question guessing",
+        "it slows down your connection, easing attacks"
+      ],
+      "correct": 2,
+      "explanation": "Pet names, birthdays, job details and travel plans are raw material for spear phishing and account-recovery abuse (OSINT).",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q071",
+      "topic": "Security",
+      "text": "Before disposing of an old laptop or drive, you should…",
+      "options": [
+        "delete all of the files carefully and then empty the recycle bin afterwards too",
+        "securely wipe or destroy the storage — deletion alone leaves data recoverable",
+        "remove the battery and power supply",
+        "log out of all accounts and shut it down"
+      ],
+      "correct": 1,
+      "explanation": "Deleting only removes references; the data remains until overwritten. Use full-disk encryption plus wipe, or physical destruction.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q072",
+      "topic": "Security",
+      "text": "Downloading \"cracked\" or unofficial software is risky because it…",
+      "options": [
+        "voids the warranty of your hardware",
+        "always runs noticeably slower than the properly licensed versions do",
+        "uses more disk space than official builds",
+        "is a classic malware delivery channel with no vendor accountability"
+      ],
+      "correct": 3,
+      "explanation": "Pirated installers are routinely bundled with trojans and miners; there's no integrity check and no one to hold responsible.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q073",
+      "topic": "Security",
+      "text": "A botnet is…",
+      "options": [
+        "a network of compromised devices remotely controlled by an attacker",
+        "a cluster of servers running chat bots",
+        "a honeypot network run by researchers",
+        "the shared infrastructure behind commercial CAPTCHA-solving services"
+      ],
+      "correct": 0,
+      "explanation": "Infected machines (including IoT devices) are herded into botnets to send spam, mine, or launch DDoS attacks.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q074",
+      "topic": "Security",
+      "text": "A DDoS attack aims to…",
+      "options": [
+        "decrypt traffic between two parties",
+        "overwhelm a service with traffic so legitimate users can't reach it",
+        "steal credentials from a login page",
+        "escalate administrative privileges on an already compromised target host"
+      ],
+      "correct": 1,
+      "explanation": "Distributed denial of service floods bandwidth or resources from many sources — availability is the target, not data.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q075",
+      "topic": "Security",
+      "text": "An \"insider threat\" refers to…",
+      "options": [
+        "stealthy malware that hides itself inside legitimate system processes",
+        "attackers who breached the internal network",
+        "risk from people with legitimate access — malicious or just careless",
+        "vulnerabilities in internally developed software"
+      ],
+      "correct": 2,
+      "explanation": "Employees and contractors already past the perimeter can leak or damage — controls like least privilege and audit logs address it.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q076",
+      "topic": "Security",
+      "text": "A SIEM platform's core job is to…",
+      "options": [
+        "block malware at each endpoint in real time",
+        "manage and schedule the whole organisation's staff security-awareness training programme",
+        "encrypt log files before they leave a host",
+        "aggregate and correlate security events across systems for detection and investigation"
+      ],
+      "correct": 3,
+      "explanation": "Security Information and Event Management pulls logs from everywhere and correlates them so patterns invisible on one host become alerts.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q077",
+      "topic": "Security",
+      "text": "A honeypot is…",
+      "options": [
+        "a decoy system designed to attract and study attackers",
+        "a vault where production secrets are stored",
+        "a compromised internal host the attacker uses as a pivot",
+        "a cache of leaked passwords used for research"
+      ],
+      "correct": 0,
+      "explanation": "Nobody legitimate should touch a honeypot — any interaction is a high-signal indicator and a window into attacker tooling.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q078",
+      "topic": "Security",
+      "text": "Email gateways \"detonate\" attachments in a sandbox, meaning they…",
+      "options": [
+        "delete any attachment with an executable extension",
+        "run the file in an isolated environment to observe its behaviour first",
+        "strip out all attachments and replace them with secure hosted download links",
+        "scan the file's name against a blocklist"
+      ],
+      "correct": 1,
+      "explanation": "Sandboxing catches malware whose signature is unknown by watching what the file actually does in a throwaway VM.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q079",
+      "topic": "Security",
+      "text": "A VPN protects you by encrypting traffic to the VPN endpoint, but it does not…",
+      "options": [
+        "hide your browsing traffic from snoopers on the local coffee-shop Wi-Fi",
+        "carry your traffic across untrusted networks",
+        "protect you from phishing or malicious websites you then visit",
+        "mask your IP address from the destination site"
+      ],
+      "correct": 2,
+      "explanation": "A VPN is an encrypted tunnel, not a bodyguard: beyond the endpoint you're on the open internet, and a phishing page works fine through it.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q080",
+      "topic": "Security",
+      "text": "The core idea of zero trust is…",
+      "options": [
+        "trusting no employee with production access",
+        "removing all passwords in favour of biometrics",
+        "encrypting absolutely everything twice over with two independent keys",
+        "never trusting by network location — verify every request explicitly"
+      ],
+      "correct": 3,
+      "explanation": "\"Never trust, always verify\": being inside the office network grants nothing; identity, device and context are checked per request.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q081",
+      "topic": "Security",
+      "text": "A WAF differs from a network firewall because a WAF…",
+      "options": [
+        "inspects HTTP traffic for application attacks like SQLi and XSS",
+        "operates on ports and IP addresses only",
+        "sits on the client's machine instead of on the server side of the link",
+        "replaces the need for TLS termination"
+      ],
+      "correct": 0,
+      "explanation": "Network firewalls filter by port/IP; a Web Application Firewall understands HTTP and blocks application-layer attack patterns.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q082",
+      "topic": "Security",
+      "text": "Publishing a SHA-256 checksum next to a download lets users verify…",
+      "options": [
+        "that the file contains no malware",
+        "that the file wasn't corrupted or tampered with in transit",
+        "the verified identity of the person who originally uploaded it",
+        "that the download server uses HTTPS"
+      ],
+      "correct": 1,
+      "explanation": "Matching hashes prove integrity (you got the intended bytes); they say nothing about whether those bytes are safe.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q083",
+      "topic": "Security",
+      "text": "Responsible (coordinated) disclosure means a researcher who finds a flaw…",
+      "options": [
+        "publishes it immediately to warn users",
+        "sells the details to the highest bidder",
+        "reports it privately and gives the vendor time to fix before publishing",
+        "keeps it entirely secret indefinitely in order to avoid any legal liability"
+      ],
+      "correct": 2,
+      "explanation": "Private report, agreed fix window, then publication — bug bounty programmes formalise this contract between researchers and vendors.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q084",
+      "topic": "Security",
+      "text": "TOTP codes from an authenticator app work by…",
+      "options": [
+        "the server texting a fresh code to the app",
+        "the app querying a central online code-generation service on every login",
+        "a fixed list of codes generated at enrolment",
+        "hashing a shared secret with the current time window on both sides"
+      ],
+      "correct": 3,
+      "explanation": "Both sides know the seed from the QR-code enrolment; each 30-second window yields the same code offline — no network needed.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q085",
+      "topic": "Security",
+      "text": "Devices running with default credentials (admin/admin) are a classic case of…",
+      "options": [
+        "security misconfiguration — a top real-world breach cause",
+        "an unpatched zero-day vulnerability in the device firmware",
+        "cryptographic failure in the login flow",
+        "an unavoidable trade-off of embedded hardware"
+      ],
+      "correct": 0,
+      "explanation": "Attackers scan for factory defaults constantly; changing them is step zero of hardening anything, from routers to dashboards.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q086",
+      "topic": "Security",
+      "text": "A dependency-confusion attack works by…",
+      "options": [
+        "renaming malicious helper functions so they shadow well-known standard-library ones at import time",
+        "publishing a public package with the same name as a private internal one, at a higher version",
+        "flooding a registry with typo-variants of popular packages",
+        "compromising a maintainer account to push a bad release"
+      ],
+      "correct": 1,
+      "explanation": "Misconfigured resolvers prefer the higher public version over the internal registry's package — build servers then execute attacker code.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q087",
+      "topic": "Security",
+      "text": "An SBOM (software bill of materials) exists so that organisations can…",
+      "options": [
+        "prove their code passed penetration testing",
+        "license their dependencies at a discount",
+        "know exactly which components ship in their software when the next Log4Shell hits",
+        "deliberately obfuscate their software supply chain from competitors and researchers"
+      ],
+      "correct": 2,
+      "explanation": "When a critical CVE lands in a common library, an SBOM turns \"are we affected?\" from weeks of archaeology into a query.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q088",
+      "topic": "Security",
+      "text": "MITRE ATT&CK is best described as…",
+      "options": [
+        "a scoring system for vulnerability severity",
+        "an internationally recognised certification scheme for penetration testers",
+        "a database of known-exploited CVEs",
+        "a knowledge base of real-world attacker tactics and techniques"
+      ],
+      "correct": 3,
+      "explanation": "ATT&CK catalogues how adversaries actually operate (initial access, lateral movement, exfiltration…), giving defenders a shared map for detection coverage.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q089",
+      "topic": "Security",
+      "text": "\"Living off the land\" attacks are hard to detect because the attacker…",
+      "options": [
+        "uses legitimate built-in tools (PowerShell, WMI, ssh) instead of dropping malware",
+        "operates only during business hours to blend in",
+        "physically visits the premises rather than using the network",
+        "encrypts all their command traffic using the victim organisation's own certificates"
+      ],
+      "correct": 0,
+      "explanation": "No foreign binary means nothing for antivirus to flag — defence shifts to spotting anomalous use of trusted tools.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q090",
+      "topic": "Security",
+      "text": "The historic JWT \"alg\": \"none\" attack worked because some libraries…",
+      "options": [
+        "leaked the signing key through timing differences",
+        "accepted unsigned tokens when the header claimed no algorithm, skipping verification",
+        "confused base64 with base64url encoding",
+        "quietly allowed long-expired tokens to keep passing within a configurable grace period"
+      ],
+      "correct": 1,
+      "explanation": "Trusting the attacker-controlled header let forged tokens through with no signature at all — validate the algorithm server-side, never from the token.",
+      "difficulty": "pro"
     }
   ]
 }

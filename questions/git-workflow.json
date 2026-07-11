@@ -367,6 +367,202 @@
       "correct": 2,
       "explanation": "It's a tidy-up tool for local history — combine WIP commits into a clean series before opening a PR.",
       "difficulty": "pro"
+    },
+    {
+      "id": "q027",
+      "topic": "Git",
+      "text": ".gitignore exists to…",
+      "options": [
+        "hide files from other collaborators",
+        "keep listed paths (builds, secrets, node_modules) out of version control",
+        "delete temporary files on every commit",
+        "permanently mark those files as read-only inside the repository's database"
+      ],
+      "correct": 1,
+      "explanation": "Ignored paths never get staged accidentally — build output, dependencies and local config stay out of history.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q028",
+      "topic": "Git",
+      "text": "git status tells you…",
+      "options": [
+        "whether the configured remote repository is currently reachable",
+        "how many commits the project has in total",
+        "what's modified, staged and untracked in your working tree",
+        "which branch was most recently merged"
+      ],
+      "correct": 2,
+      "explanation": "It's the orientation command: current branch, staged vs unstaged changes, and files git isn't tracking yet.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q029",
+      "topic": "Git",
+      "text": "git log --oneline is handy because it shows…",
+      "options": [
+        "only commits from the last 24 hours",
+        "the full diff of the latest commit",
+        "only your very own commits made on the currently checked-out branch",
+        "one compact line per commit — short hash plus message"
+      ],
+      "correct": 3,
+      "explanation": "A dense history view for quick scanning; add --graph to visualise branch structure too.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q030",
+      "topic": "Git",
+      "text": "git diff --staged shows…",
+      "options": [
+        "the changes you've staged, i.e. exactly what the next commit will contain",
+        "all of the differences between your current branch and the upstream main branch",
+        "changes in the working tree not yet staged",
+        "the diff between the last two commits"
+      ],
+      "correct": 0,
+      "explanation": "Plain git diff is working-tree vs index; --staged (or --cached) is index vs HEAD — your pre-commit review.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q031",
+      "topic": "Git",
+      "text": "origin/main in your local repo is…",
+      "options": [
+        "the specific branch your CI system always deploys to production from",
+        "your local snapshot of where main was on the remote at last fetch",
+        "a protected copy of main you cannot modify",
+        "an alias for your local main branch"
+      ],
+      "correct": 1,
+      "explanation": "Remote-tracking branches update on fetch/pull — they can be behind the real remote until you fetch again.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q032",
+      "topic": "Git",
+      "text": "A \"detached HEAD\" state means…",
+      "options": [
+        "the repository's HEAD file is corrupted",
+        "your branch has diverged from its remote",
+        "you've checked out a commit directly, so new commits belong to no branch",
+        "the entire working tree was accidentally deleted while git was still open"
+      ],
+      "correct": 2,
+      "explanation": "Checking out a hash or tag detaches HEAD; commits made there are easy to lose unless you create a branch to hold them.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q033",
+      "topic": "Git",
+      "text": "git revert differs from git reset in that revert…",
+      "options": [
+        "moves the branch pointer back, rewriting history",
+        "discards uncommitted changes in the working tree",
+        "only works when it is applied directly to genuine merge commits themselves",
+        "adds a new commit that undoes a previous one, keeping history intact"
+      ],
+      "correct": 3,
+      "explanation": "Revert is the safe undo for shared branches — history only grows; reset rewrites it and needs force-pushing once published.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q034",
+      "topic": "Git",
+      "text": "git reflog can save you because it records…",
+      "options": [
+        "where HEAD has pointed locally, even across resets and deleted branches",
+        "a complete backup of every historical file version on the remote server",
+        "the SSH connections made to the remote",
+        "who force-pushed to each branch and when"
+      ],
+      "correct": 0,
+      "explanation": "\"Lost\" commits after a bad reset or branch delete are usually still reachable via reflog for ~90 days — find the hash, branch from it.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q035",
+      "topic": "Git",
+      "text": "An annotated tag (git tag -a v1.9.0 -m …) differs from a lightweight one because it…",
+      "options": [
+        "a rule that automatically triggers the release pipeline on push",
+        "is a full object with tagger, date and message — proper release metadata",
+        "can be moved to another commit later",
+        "is visible only in your local repository"
+      ],
+      "correct": 1,
+      "explanation": "Lightweight tags are bare pointers; annotated tags carry authorship and message, which is why releases should use -a.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q036",
+      "topic": "Git",
+      "text": "A git submodule is…",
+      "options": [
+        "a long-lived branch dedicated to one specific project subfolder",
+        "a compressed archive of old history",
+        "another repository embedded at a path, pinned to a specific commit",
+        "a plugin extending git with new commands"
+      ],
+      "correct": 2,
+      "explanation": "The parent repo records the submodule's URL and exact commit — powerful but famously fiddly to keep in sync across a team.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q037",
+      "topic": "Git",
+      "text": "The .git directory at the repo root contains…",
+      "options": [
+        "only the configuration for the remote URLs",
+        "a local cache directory that can be safely deleted to reclaim disk space",
+        "the working copies of files being edited",
+        "the entire history database — delete it and the repo is just plain files"
+      ],
+      "correct": 3,
+      "explanation": "Objects, refs, config, hooks — everything git knows lives there; the working tree is generated from it.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q038",
+      "topic": "Git",
+      "text": "git worktree add lets you…",
+      "options": [
+        "check out multiple branches at once in separate directories from one repo",
+        "split one large repository into several smaller independent ones",
+        "mount the repository as a network filesystem",
+        "restore files deleted from the working tree"
+      ],
+      "correct": 0,
+      "explanation": "Perfect for reviewing a PR or hotfixing while mid-feature: separate directories, shared object store, no stash gymnastics.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q039",
+      "topic": "Git",
+      "text": "CI systems often use git clone --depth 1 because it…",
+      "options": [
+        "verifies the cryptographic integrity of the full commit history first",
+        "fetches only the latest snapshot, making clones much faster and smaller",
+        "clones all branches in parallel connections",
+        "skips the checkout step entirely"
+      ],
+      "correct": 1,
+      "explanation": "A shallow clone omits history — ideal when the pipeline only needs current files, at the cost of commands that require full history.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q040",
+      "topic": "Git",
+      "text": "A pre-commit hook is…",
+      "options": [
+        "a server-side rule blocking force pushes",
+        "a CI job that is automatically triggered by opening a new pull request",
+        "a local script that runs before each commit and can block it (lint, secret scan…)",
+        "a git command that previews the next commit"
+      ],
+      "correct": 2,
+      "explanation": "Hooks in .git/hooks (often managed by tools like pre-commit or husky) catch problems before they ever reach the remote.",
+      "difficulty": "pro"
     }
   ]
 }

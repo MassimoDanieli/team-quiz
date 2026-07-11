@@ -367,6 +367,202 @@
       "correct": 2,
       "explanation": "wc counts lines (-l), words (-w) or bytes/characters (-c) of its input.",
       "difficulty": "medium"
+    },
+    {
+      "id": "q027",
+      "topic": "Linux",
+      "text": "mkdir -p projects/app/src does what that plain mkdir can't?",
+      "options": [
+        "creates the whole path, parents included, without erroring if they exist",
+        "sets full permissions on the new directory",
+        "creates the new directory as a specially protected read-only system folder",
+        "prints the path it created for scripting"
+      ],
+      "correct": 0,
+      "explanation": "-p makes every missing parent and is idempotent — the staple of setup scripts.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q028",
+      "topic": "Linux",
+      "text": "To extract archive.tar.gz you run…",
+      "options": [
+        "tar -czf archive.tar.gz",
+        "tar -xzf archive.tar.gz",
+        "gzip -r archive.tar.gz",
+        "unzip archive.tar.gz"
+      ],
+      "correct": 1,
+      "explanation": "x = extract, z = gzip, f = file. (-czf is the opposite: create. unzip is for .zip files.)",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q029",
+      "topic": "Linux",
+      "text": "find . -name \"*.log\" searches…",
+      "options": [
+        "the file contents for the text *.log",
+        "only the current working directory, ignoring every nested subfolder below it",
+        "the current directory and all subdirectories for files named like *.log",
+        "the whole filesystem starting from root"
+      ],
+      "correct": 2,
+      "explanation": "find recurses from the given start point (here \".\") matching by name; grep is the one that searches contents.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q030",
+      "topic": "Linux",
+      "text": "ln -s /opt/app/config.yml ~/config.yml creates…",
+      "options": [
+        "a compressed copy of the file in your home",
+        "a hard backup that survives deleting the original",
+        "an alias command named config.yml",
+        "a symbolic link — a pointer to the original file"
+      ],
+      "correct": 3,
+      "explanation": "Symlinks reference a path; edits through either name touch the same file, and the link breaks if the target moves.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q031",
+      "topic": "Linux",
+      "text": "There is no dedicated \"rename\" command in basic shell usage because…",
+      "options": [
+        "mv old.txt new.txt does the job — moving within a directory is renaming",
+        "renaming requires editing the filesystem's inode table manually by hand",
+        "cp followed by rm is the only safe approach",
+        "files can only be renamed from a file manager"
+      ],
+      "correct": 0,
+      "explanation": "A rename is just a move to a new name; mv handles both cases with one syntax.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q032",
+      "topic": "Linux",
+      "text": "xargs is used to…",
+      "options": [
+        "display extended attributes of files",
+        "build and run commands from items arriving on stdin",
+        "parse command-line flags inside shell scripts",
+        "repeat the previously run command with new arguments"
+      ],
+      "correct": 1,
+      "explanation": "Classic pattern: find . -name '*.tmp' | xargs rm — xargs turns the piped list into arguments for the next command.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q033",
+      "topic": "Linux",
+      "text": "export VAR=value differs from plain VAR=value because export…",
+      "options": [
+        "writes the variable out to a config file for persistence",
+        "makes the variable read-only in the current shell",
+        "passes the variable to child processes the shell starts",
+        "shares the variable with other logged-in users"
+      ],
+      "correct": 2,
+      "explanation": "Un-exported variables live only in the current shell; exported ones enter the environment your scripts and commands inherit.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q034",
+      "topic": "Linux",
+      "text": "SSH key-based login works because the server's ~/.ssh/authorized_keys file holds…",
+      "options": [
+        "the login passwords allowed for that account, stored hashed",
+        "the private keys of every permitted user",
+        "a list of IP addresses allowed to connect",
+        "the public keys whose private halves may authenticate"
+      ],
+      "correct": 3,
+      "explanation": "The client proves possession of the private key; the server checks it against the stored public key. Private keys never leave the client.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q035",
+      "topic": "Linux",
+      "text": "journalctl -u team-quiz -f shows…",
+      "options": [
+        "the live systemd journal for that service, following new lines",
+        "the complete unit file configuration currently used for that service",
+        "the journal for every unit except that one",
+        "a summary of the service's resource usage"
+      ],
+      "correct": 0,
+      "explanation": "-u filters by unit, -f follows like tail -f — the first stop when a systemd service misbehaves.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q036",
+      "topic": "Linux",
+      "text": "command | tee output.log does what a plain redirect doesn't?",
+      "options": [
+        "appends to the end of the file instead of overwriting it",
+        "writes to the file and still shows the output on screen",
+        "strips colour codes before saving",
+        "compresses the output while writing it"
+      ],
+      "correct": 1,
+      "explanation": "tee splits the stream: one copy to the file, one to stdout — so you watch and record simultaneously.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q037",
+      "topic": "Linux",
+      "text": "strace is the tool you reach for when you need to…",
+      "options": [
+        "profile precisely which functions in your own source code run the slowest",
+        "trace network packets between two hosts",
+        "see every system call a process makes (files opened, calls failing)",
+        "measure disk throughput under load"
+      ],
+      "correct": 2,
+      "explanation": "strace reveals what a process really asks the kernel — gold for \"why can't it find its config file\" mysteries.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q038",
+      "topic": "Linux",
+      "text": "/proc is special because it…",
+      "options": [
+        "stores the boot-critical system binaries and therefore must never be touched",
+        "holds each user's process history logs",
+        "caches recently run programs for faster startup",
+        "is a virtual filesystem exposing live kernel and process state as files"
+      ],
+      "correct": 3,
+      "explanation": "/proc/<pid>/... and files like /proc/meminfo are generated on read — tools like ps and top are largely /proc readers.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q039",
+      "topic": "Linux",
+      "text": "\"Too many open files\" errors relate to…",
+      "options": [
+        "file-descriptor limits (ulimit -n) that the process has exhausted",
+        "the disk running out of inodes",
+        "too many users editing the same file",
+        "the filesystem's write-ahead journals silently filling up over time"
+      ],
+      "correct": 0,
+      "explanation": "Every socket and open file consumes a descriptor; leaks or high concurrency hit the per-process limit, raised via ulimit/systemd.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q040",
+      "topic": "Linux",
+      "text": "set -euo pipefail at the top of a bash script means…",
+      "options": [
+        "run in POSIX-compatibility mode with verbose errors",
+        "exit on any error or unset variable, and fail a pipeline if any stage fails",
+        "log every command executed to a pipe file",
+        "interactively prompt before every potentially destructive command gets executed"
+      ],
+      "correct": 1,
+      "explanation": "-e stops on errors, -u catches typo'd variables, pipefail stops cmd|grep|awk from hiding a failing first stage — the safe-scripting trio.",
+      "difficulty": "pro"
     }
   ]
 }

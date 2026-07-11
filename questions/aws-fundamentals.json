@@ -395,6 +395,174 @@
       "correct": 0,
       "explanation": "KMS creates and controls encryption keys used to protect data across AWS services.",
       "difficulty": "hard"
+    },
+    {
+      "id": "q029",
+      "topic": "AWS",
+      "text": "CloudTrail differs from CloudWatch in that CloudTrail records…",
+      "options": [
+        "application performance metrics over time",
+        "who did what in your account — an audit log of API calls",
+        "the network flow between your VPC subnets",
+        "the daily cost and usage breakdown reported per service"
+      ],
+      "correct": 1,
+      "explanation": "CloudWatch is metrics/logs/alarms for how things run; CloudTrail answers \"who created, changed or deleted this, and when\".",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q030",
+      "topic": "AWS",
+      "text": "SQS is a…",
+      "options": [
+        "relational database for small workloads",
+        "a full-text search index built for log analytics workloads",
+        "message queue that decouples producers from consumers",
+        "scheduler for cron-style tasks"
+      ],
+      "correct": 2,
+      "explanation": "Producers enqueue, consumers process at their own pace — buffering spikes and isolating failures between services.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q031",
+      "topic": "AWS",
+      "text": "Choosing which region to deploy in is mostly driven by…",
+      "options": [
+        "alphabetical order of the region codes",
+        "which of the regions has the most recently built data centres",
+        "the colour coding in the console map",
+        "latency to your users and data-residency/compliance rules"
+      ],
+      "correct": 3,
+      "explanation": "Proximity to users cuts latency; regulations (e.g. UK data staying in eu-west-2) can dictate the choice outright. Price varies too.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q032",
+      "topic": "AWS",
+      "text": "Setting a billing alarm early on a personal AWS account protects you from…",
+      "options": [
+        "surprise costs from forgotten or misconfigured resources",
+        "having your account credentials stolen",
+        "accidentally deleting cloud resources that you still actively need",
+        "AWS raising prices without notice"
+      ],
+      "correct": 0,
+      "explanation": "A NAT gateway or forgotten instance quietly burning money is a rite of passage — an alarm at a few pounds catches it in days, not months.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q033",
+      "topic": "AWS",
+      "text": "An S3 presigned URL lets you…",
+      "options": [
+        "make a bucket permanently public in one call",
+        "grant time-limited access to one object without sharing credentials",
+        "encrypt an object with a customer-managed key",
+        "redirect all of a bucket's download traffic through CloudFront"
+      ],
+      "correct": 1,
+      "explanation": "The URL embeds a signature from your credentials and expires — the standard way to hand someone one file, briefly.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q034",
+      "topic": "AWS",
+      "text": "Access to an S3 object is evaluated from…",
+      "options": [
+        "the bucket policy alone, which always overrides every other access control in the account",
+        "whichever policy was most recently updated",
+        "the union of identity policies, bucket policy and related controls — with any explicit deny winning",
+        "the IAM policy of the bucket's creator"
+      ],
+      "correct": 2,
+      "explanation": "IAM and resource policies combine; an explicit Deny anywhere (including SCPs and Block Public Access) trumps every Allow.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q035",
+      "topic": "AWS",
+      "text": "An Auto Scaling group's job is to…",
+      "options": [
+        "resize a single running instance's CPU and RAM allocation up or down on demand automatically",
+        "distribute traffic between availability zones",
+        "scale S3 storage as objects accumulate",
+        "keep the desired number of instances running, replacing failed ones and scaling on demand"
+      ],
+      "correct": 3,
+      "explanation": "ASGs maintain capacity: health-check failures trigger replacement, and scaling policies add/remove instances with load.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q036",
+      "topic": "AWS",
+      "text": "VPC peering connects two VPCs but notably does not…",
+      "options": [
+        "provide transitive routing — A↔B and B↔C doesn't give A↔C",
+        "work between two VPCs that belong to different AWS accounts",
+        "work between different regions",
+        "carry IPv4 traffic between the VPCs"
+      ],
+      "correct": 0,
+      "explanation": "Peering is strictly pairwise; meshes of VPCs need per-pair peering or a Transit Gateway. Cross-account and cross-region are fine.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q037",
+      "topic": "AWS",
+      "text": "IMDSv2 (Instance Metadata Service v2) improved security by…",
+      "options": [
+        "encrypting the metadata volume at rest",
+        "requiring a session token, blunting SSRF attacks that steal instance credentials",
+        "moving the instance credentials out of metadata and into Secrets Manager",
+        "restricting metadata access to the root user"
+      ],
+      "correct": 1,
+      "explanation": "v1's plain GET meant any SSRF could read IAM credentials at 169.254.169.254; v2's token handshake breaks that attack class.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q038",
+      "topic": "AWS",
+      "text": "A Service Control Policy (SCP) in AWS Organizations…",
+      "options": [
+        "grants additional extra permissions to every member account in the organisation",
+        "applies only to IAM users, not roles",
+        "sets the maximum permissions an account can use — even its admins can't exceed it",
+        "replaces IAM policies inside each account"
+      ],
+      "correct": 2,
+      "explanation": "SCPs are guardrails from the org level: they never grant, only bound. A mysterious AccessDenied despite perfect IAM is often an SCP.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q039",
+      "topic": "AWS",
+      "text": "An IAM permission boundary is…",
+      "options": [
+        "the maximum region count a user may operate in",
+        "a quota on the number of policies per role",
+        "a network-level boundary restricting IAM API calls to inside the VPC",
+        "a policy capping the effective permissions an identity can have, regardless of what's attached"
+      ],
+      "correct": 3,
+      "explanation": "Boundaries let you safely delegate role creation: whatever policies get attached, the effective permissions stay within the boundary.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q040",
+      "topic": "AWS",
+      "text": "Applications on EC2 should get AWS credentials via…",
+      "options": [
+        "an instance profile (IAM role) providing automatic short-lived credentials",
+        "long-lived access keys stored in an .env file on the instance's disk",
+        "the account root credentials, restricted by firewall",
+        "a shared team access key rotated yearly"
+      ],
+      "correct": 0,
+      "explanation": "Roles deliver auto-rotating temporary credentials through the metadata service — no long-lived secrets to leak, commit or rotate by hand.",
+      "difficulty": "pro"
     }
   ]
 }

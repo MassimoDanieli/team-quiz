@@ -142,6 +142,7 @@
         <a href="/host.html">Host</a>
         <a href="/guide.html">How to run it</a>
         <a href="/tech.html" class="active">Technical overview</a>
+        <a href="/admin.html">Admin</a>
       </div>
     </div>
   </nav>
@@ -251,8 +252,8 @@
         The host chooses the active set from a dropdown in the lobby. Crucially, the
         <strong>“already asked” history is tracked per set</strong>, so every set exhausts its own
         pool independently and questions don't repeat until a set runs out. The shipped content is
-        16 sets — 534 questions — covering Java/DevOps, Git, Linux, AWS, Azure, Networking,
-        Security, Containers &amp; Kubernetes, CI/CD &amp; IaC, Databases, AI foundations, general
+        18 sets — 664 questions — covering Java/DevOps, Git, Linux, AWS, Azure, Networking,
+        Security, Containers &amp; Kubernetes, CI/CD &amp; IaC, Databases, Observability, Python, AI foundations, general
         tech trivia and a few harder rounds for fun.
       </p>
 
@@ -357,6 +358,7 @@ deploy/helm/         Kubernetes chart for the EKS path</pre>
 
       <h2 id="next">12. Possible next steps</h2>
       <ul>
+        <li>Done in v1.11.0: library expansion — new Observability &amp; Monitoring and Python &amp; Scripting sets (30 each), Security grown to 90 with a T-Level-friendly tier, and the thinner Linux, Git and AWS sets brought up to 40 questions each. 18 sets, 664 questions, all validated for position and length bias.</li>
         <li>Done in v1.10.0: sound on reveal (synthesized with WebAudio, no audio assets, mute toggle) and a read-only big-screen spectator view (<code>spectate.html</code>) for projectors, opened in one click from the host panel. Question loading is now immune to stray dotfiles (e.g. macOS <code>._*.json</code> AppleDouble artefacts).</li>
         <li>Done in v1.9.0: security hardening from the defensive review. Admin/super-admin sessions moved from client-stored passwords to server-issued, revocable bearer tokens (with a Sign out button); repeated failed logins are throttled per source IP; and player identifiers broadcast to the room became unlinkable public ids, closing a session-takeover vector.</li>
         <li>Done in v1.8.0: container packaging &amp; deploy hardening. The <code>Dockerfile</code> now creates <code>/data</code> owned by the non-root <code>node</code> user and sets <code>ADMINS_FILE</code>, so a mounted volume persists both state and admin accounts; a hardened <code>docker-compose.yml</code> (read-only rootfs, dropped capabilities, optional Caddy HTTPS proxy) is included. The EC2/Terraform infra was aligned to the current admin model (<code>SUPER_ADMIN_USER</code>/<code>SUPER_ADMIN_PASSWORD</code> + <code>ADMINS_FILE</code>, dropping the unused <code>HOST_PASSWORD</code>), the redeploy trigger now hashes the whole app, and CI builds and smoke-tests the image. Includes an independent defensive security review (no critical findings). Library now 16 sets, 534 questions.</li>

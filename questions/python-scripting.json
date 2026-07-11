@@ -1,0 +1,428 @@
+{
+  "id": "python-scripting",
+  "name": "Python & Scripting",
+  "description": "Python for DevOps and automation: syntax, environments, files, subprocess, and the idioms that keep scripts honest.",
+  "order": 18,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Python",
+      "text": "A Python list differs from a tuple in that a list…",
+      "options": [
+        "can hold only items of one type",
+        "is always sorted automatically",
+        "is mutable — you can add, remove and change items",
+        "cannot be looped over with an ordinary for statement"
+      ],
+      "correct": 2,
+      "explanation": "Lists are mutable, tuples are immutable — that's the core distinction; both are ordered and iterable.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q002",
+      "topic": "Python",
+      "text": "A dictionary (dict) stores…",
+      "options": [
+        "key-value pairs with fast lookup by key",
+        "a sorted sequence of guaranteed-unique numbers",
+        "lines of text read from a file",
+        "a fixed-size table of columns"
+      ],
+      "correct": 0,
+      "explanation": "Dicts map keys to values — the workhorse structure for configs, JSON data and lookups.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q003",
+      "topic": "Environments",
+      "text": "A virtual environment (venv) exists to…",
+      "options": [
+        "run Python code inside a lightweight dedicated virtual machine",
+        "compile Python to native machine code",
+        "sandbox scripts away from the network",
+        "isolate a project's dependencies from the system Python"
+      ],
+      "correct": 3,
+      "explanation": "Each venv has its own site-packages, so projects can pin different library versions without fighting each other or the OS.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q004",
+      "topic": "Python",
+      "text": "An f-string like f\"host={host}\" is…",
+      "options": [
+        "a string that is read from a file handle",
+        "string interpolation — {host} is replaced by the variable's value",
+        "a bytes literal for binary protocols",
+        "a strict string that raises whenever host is undefined at import time"
+      ],
+      "correct": 1,
+      "explanation": "f-strings evaluate the expressions in braces at runtime — the modern, readable way to build strings.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q005",
+      "topic": "Files",
+      "text": "The idiomatic way to read a file safely is…",
+      "options": [
+        "with open(path) as f: — the file closes automatically, even on errors",
+        "open(path) followed by carefully remembering to call close() at the end",
+        "os.read(path) which handles closing internally",
+        "file(path).readall() inside a try block"
+      ],
+      "correct": 0,
+      "explanation": "The with statement (context manager) guarantees the file is closed however the block exits — no leaked handles.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q006",
+      "topic": "Errors",
+      "text": "try/except in Python is used to…",
+      "options": [
+        "run two alternative branches of code in parallel",
+        "skip code that has syntax errors",
+        "handle runtime errors instead of crashing",
+        "test code before committing it"
+      ],
+      "correct": 2,
+      "explanation": "Exceptions propagate up until caught; try/except lets you handle expected failures (missing file, bad input) gracefully.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q007",
+      "topic": "Packages",
+      "text": "pip is…",
+      "options": [
+        "Python's built-in code formatter",
+        "the command-line interpreter that actually executes .py files",
+        "a linter that flags unused imports",
+        "Python's package installer, pulling libraries from PyPI"
+      ],
+      "correct": 3,
+      "explanation": "pip installs packages (and their dependencies) from the Python Package Index into the active environment.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q008",
+      "topic": "Python",
+      "text": "range(3) produces…",
+      "options": [
+        "0, 1, 2",
+        "1, 2, 3",
+        "0, 1, 2, 3",
+        "three random integers"
+      ],
+      "correct": 0,
+      "explanation": "range starts at 0 and stops before the end value — so range(3) yields 0, 1, 2.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q009",
+      "topic": "JSON",
+      "text": "To turn a JSON string into Python data you use…",
+      "options": [
+        "json.dumps(text)",
+        "json.loads(text)",
+        "json.open(text)",
+        "json.parse(text)"
+      ],
+      "correct": 1,
+      "explanation": "loads = load from string, load = from file; dumps/dump go the other way. (json.parse is JavaScript!)",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q010",
+      "topic": "Scripting",
+      "text": "The shebang line #!/usr/bin/env python3 at the top of a script…",
+      "options": [
+        "imports the env module before anything else",
+        "pins the script permanently to one exact installed Python version",
+        "lets the OS run the file directly with the python3 found on PATH",
+        "is a comment with no effect of any kind"
+      ],
+      "correct": 2,
+      "explanation": "With the executable bit set, the kernel uses the shebang to pick the interpreter — env finds python3 wherever it lives on PATH.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q011",
+      "topic": "Python",
+      "text": "A list comprehension like [x*2 for x in nums if x > 0]…",
+      "options": [
+        "modifies nums in place for efficiency",
+        "is only valid inside a function body",
+        "runs the loop lazily, producing one item at a time only on demand",
+        "builds a new list by transforming and filtering in one expression"
+      ],
+      "correct": 3,
+      "explanation": "Comprehensions build new lists declaratively; the lazy one-at-a-time variant is a generator expression with round brackets.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q012",
+      "topic": "Pitfalls",
+      "text": "def add(item, bucket=[]) is a classic bug because…",
+      "options": [
+        "the default list is created once and shared across every call",
+        "lists are not allowed as default arguments",
+        "bucket becomes a global variable automatically",
+        "Python deep-copies the entire list on every call, wasting memory"
+      ],
+      "correct": 0,
+      "explanation": "Defaults are evaluated once at function definition — the same list persists between calls. Use bucket=None and create it inside.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q013",
+      "topic": "Subprocess",
+      "text": "The recommended way to run an external command and capture its output is…",
+      "options": [
+        "os.system(cmd), which conveniently returns the output as a string",
+        "subprocess.run([...], capture_output=True, check=True)",
+        "eval(cmd) with the command in backticks",
+        "exec(cmd) inside a try block"
+      ],
+      "correct": 1,
+      "explanation": "subprocess.run with a list of args avoids shell injection, captures stdout/stderr, and check=True raises on non-zero exit.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q014",
+      "topic": "Scripting",
+      "text": "The if __name__ == \"__main__\": guard exists so that…",
+      "options": [
+        "the script refuses to run without root privileges",
+        "Python knows which function to call first",
+        "the block runs when the file is executed directly, but not when imported",
+        "the whole module is fully compiled down to bytecode before ever being executed"
+      ],
+      "correct": 2,
+      "explanation": "When imported, __name__ is the module's name, not \"__main__\" — so the guard keeps script behaviour out of importers.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q015",
+      "topic": "Packages",
+      "text": "requirements.txt with pinned versions (pkg==1.2.3) gives you…",
+      "options": [
+        "automatic security patching for every one of your dependencies",
+        "smaller installed package sizes",
+        "faster imports at runtime",
+        "reproducible installs — the same versions everywhere"
+      ],
+      "correct": 3,
+      "explanation": "Pinning makes CI, teammates and production install identical versions — the same reason the Node world uses lockfiles with npm ci.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q016",
+      "topic": "Python",
+      "text": "enumerate(items) is the idiomatic way to…",
+      "options": [
+        "get both the index and the value in a for loop",
+        "count exactly how many items match a given condition",
+        "sort items while preserving duplicates",
+        "convert any iterable into a dictionary"
+      ],
+      "correct": 0,
+      "explanation": "for i, item in enumerate(items): beats manually maintaining a counter — clearer and less error-prone.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q017",
+      "topic": "Files",
+      "text": "pathlib.Path is generally preferred over string paths because it…",
+      "options": [
+        "loads file contents into memory noticeably faster than open() with strings",
+        "gives portable path joins and rich operations like .exists() and .glob()",
+        "encrypts paths against tampering",
+        "works only on POSIX, avoiding Windows quirks"
+      ],
+      "correct": 1,
+      "explanation": "Path('/data') / 'state.json' handles separators per-OS and bundles file operations on the object itself.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q018",
+      "topic": "Errors",
+      "text": "except Exception: pass scattered through a script is dangerous because it…",
+      "options": [
+        "slows the interpreter down measurably",
+        "only works inside functions, not at top level",
+        "silently swallows every error, hiding real failures",
+        "catches even syntax errors and quietly corrupts the bytecode"
+      ],
+      "correct": 2,
+      "explanation": "Blanket-and-ignore hides bugs and partial failures; catch the narrowest exception you can handle and at least log the rest.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q019",
+      "topic": "CLI",
+      "text": "argparse is the standard-library way to…",
+      "options": [
+        "parse YAML and INI configuration files loaded from disk at startup",
+        "validate JSON request bodies",
+        "split a string on whitespace",
+        "define command-line flags with help text and validation"
+      ],
+      "correct": 3,
+      "explanation": "argparse declares options and arguments, generates --help, converts types and errors out cleanly on bad input.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q020",
+      "topic": "HTTP",
+      "text": "Using the requests library, resp.raise_for_status() is useful because…",
+      "options": [
+        "it raises an exception on 4xx/5xx instead of failing silently later",
+        "it retries the request until it succeeds",
+        "it validates the server's TLS certificate chain manually on each call",
+        "it converts the body to JSON automatically"
+      ],
+      "correct": 0,
+      "explanation": "requests does not raise on HTTP error codes by default — a 500 quietly gives you resp anyway unless you check.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q021",
+      "topic": "Internals",
+      "text": "The GIL (Global Interpreter Lock) in CPython means…",
+      "options": [
+        "imports are locked while any thread runs",
+        "only one thread executes Python bytecode at a time, limiting CPU-bound threading",
+        "garbage collection pauses all I/O operations",
+        "each Python process is permanently limited to a single CPU core for its whole lifetime"
+      ],
+      "correct": 1,
+      "explanation": "Threads still help for I/O-bound work (waiting on network/disk), but CPU-bound parallelism needs multiprocessing or native extensions.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q022",
+      "topic": "Internals",
+      "text": "A generator function (using yield)…",
+      "options": [
+        "runs entirely on first call and caches all results",
+        "spawns a background thread per iteration",
+        "produces values lazily, keeping only its current state in memory",
+        "can only ever be consumed a single time by exactly one iterating for loop"
+      ],
+      "correct": 2,
+      "explanation": "Generators compute each value on demand — ideal for streaming large files or infinite sequences without loading everything.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q023",
+      "topic": "Typing",
+      "text": "Type hints like def fetch(url: str) -> dict: are…",
+      "options": [
+        "enforced at runtime, raising on a wrong type",
+        "strictly required for the code to compile under Python 3.12 and later",
+        "comments that the interpreter strips at parse time",
+        "static annotations checked by tools like mypy, ignored at runtime"
+      ],
+      "correct": 3,
+      "explanation": "Python stays dynamically typed at runtime; hints power linters, IDEs and type checkers — invaluable in bigger codebases.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q024",
+      "topic": "Internals",
+      "text": "A context manager (usable in a with block) is any object that…",
+      "options": [
+        "implements __enter__ and __exit__",
+        "inherits from contextlib.Manager",
+        "is registered in the interpreter's context table",
+        "defines open() and close() methods"
+      ],
+      "correct": 0,
+      "explanation": "with calls __enter__ on entry and __exit__ on exit (even during exceptions) — files, locks and DB transactions all use it.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q025",
+      "topic": "Concurrency",
+      "text": "asyncio helps most with workloads that are…",
+      "options": [
+        "CPU-heavy, like batch image processing and heavyweight encryption",
+        "I/O-bound with many concurrent waits, like thousands of API calls",
+        "memory-bound, like giant in-memory sorts",
+        "single sequential file reads on local disk"
+      ],
+      "correct": 1,
+      "explanation": "The event loop interleaves tasks while they await I/O on one thread; it does nothing for CPU-bound work (see: the GIL).",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q026",
+      "topic": "Pitfalls",
+      "text": "is vs == : the correct usage is…",
+      "options": [
+        "is for numbers, == for strings",
+        "they are interchangeable in modern Python",
+        "== compares values; is compares identity — reserve is for None checks",
+        "is compares the stored values; == compares the underlying memory addresses"
+      ],
+      "correct": 2,
+      "explanation": "x is None is idiomatic because None is a singleton; using is for numbers/strings only works by accident of interning.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q027",
+      "topic": "Packages",
+      "text": "pip freeze > requirements.txt captures…",
+      "options": [
+        "only the packages your code actually imports",
+        "the packages' complete source code bundled together as a tarball",
+        "your project's entry points and scripts",
+        "every package in the current environment with exact versions"
+      ],
+      "correct": 3,
+      "explanation": "freeze snapshots the whole environment — including transitive deps — which is why doing it from a clean venv matters.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q028",
+      "topic": "Scripting",
+      "text": "sys.exit(1) at the end of a failing script matters in automation because…",
+      "options": [
+        "pipelines and shells read the exit code to decide success or failure",
+        "Python otherwise keeps the process alive forever",
+        "exit codes above 0 trigger automatic retries in bash",
+        "it flushes any remaining buffered stdout output, which a bare print does not"
+      ],
+      "correct": 0,
+      "explanation": "CI jobs, cron, and shell && / || all branch on exit status — a script that fails but exits 0 lies to everything downstream.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q029",
+      "topic": "Concurrency",
+      "text": "For CPU-bound parallelism in standard CPython, the usual tool is…",
+      "options": [
+        "threading.Thread with a high thread count",
+        "the multiprocessing module (or ProcessPoolExecutor)",
+        "asyncio.gather over the heavy functions",
+        "inserting time.sleep(0) calls to yield between work chunks"
+      ],
+      "correct": 1,
+      "explanation": "Separate processes sidestep the GIL, each with its own interpreter; threads and asyncio only interleave, they don't parallelise CPU work.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q030",
+      "topic": "Pitfalls",
+      "text": "Mutating a list while iterating over it (for x in items: items.remove(x))…",
+      "options": [
+        "raises a SyntaxError before running",
+        "is perfectly safe in practice as long as the list stays reasonably small",
+        "skips elements unpredictably because indices shift underneath the loop",
+        "deadlocks the interpreter on the second pass"
+      ],
+      "correct": 2,
+      "explanation": "The iterator tracks positions in the shifting list, silently skipping items — iterate over a copy or build a new filtered list.",
+      "difficulty": "pro"
+    }
+  ]
+}

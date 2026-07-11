@@ -1,0 +1,428 @@
+{
+  "id": "observability",
+  "name": "Observability & Monitoring",
+  "description": "Metrics, logs, traces, Prometheus, Grafana, alerting and SLOs — how you know production is healthy.",
+  "order": 17,
+  "questions": [
+    {
+      "id": "q001",
+      "topic": "Observability",
+      "text": "The three classic \"pillars\" of observability are…",
+      "options": [
+        "backups, patching and antivirus scanning",
+        "metrics, logs and traces",
+        "uptime, downtime and maintenance windows",
+        "CPU, memory and disk utilisation"
+      ],
+      "correct": 1,
+      "explanation": "Metrics (numbers over time), logs (event records) and traces (request journeys) are the three complementary signal types.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q002",
+      "topic": "Observability",
+      "text": "Monitoring vs observability — the usual distinction is that observability…",
+      "options": [
+        "is just the new marketing name for monitoring",
+        "only applies to cloud-hosted applications",
+        "lets you ask new questions of a system, not just check known conditions",
+        "replaces the need for any alerting, dashboards or on-call rotas entirely"
+      ],
+      "correct": 2,
+      "explanation": "Monitoring checks known failure modes; observability means the system emits enough signal to investigate questions you didn't anticipate.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q003",
+      "topic": "Metrics",
+      "text": "In Prometheus, a counter metric…",
+      "options": [
+        "only ever goes up (until a process restart resets it)",
+        "goes up and down freely to track the current value of a quantity",
+        "stores a fixed set of percentile values",
+        "records one free-text event per increment"
+      ],
+      "correct": 0,
+      "explanation": "Counters are cumulative and monotonic — you derive useful values like per-second rates from them with rate().",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q004",
+      "topic": "Metrics",
+      "text": "A gauge differs from a counter because a gauge…",
+      "options": [
+        "can only be scraped once per minute",
+        "must always be expressed as a percentage of some fixed maximum value",
+        "is reserved for hardware sensors only",
+        "represents a value that can rise and fall, like memory in use"
+      ],
+      "correct": 3,
+      "explanation": "Gauges snapshot a current level (memory, queue depth, temperature); counters accumulate totals.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q005",
+      "topic": "Prometheus",
+      "text": "Prometheus collects metrics primarily by…",
+      "options": [
+        "receiving pushes initiated by every application it monitors",
+        "scraping HTTP endpoints that expose them (pull model)",
+        "reading application log files from disk",
+        "polling the cloud provider's billing API"
+      ],
+      "correct": 1,
+      "explanation": "Prometheus pulls from /metrics endpoints on a schedule; push exists only via the Pushgateway for special cases like short-lived jobs.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q006",
+      "topic": "Grafana",
+      "text": "Grafana's main role in a monitoring stack is to…",
+      "options": [
+        "store the raw time-series data long term",
+        "replace the need for a metrics database",
+        "visualise data from sources like Prometheus in dashboards",
+        "collect metrics directly from instrumented application code"
+      ],
+      "correct": 2,
+      "explanation": "Grafana is the visualisation and dashboarding layer; storage and collection are done by data sources like Prometheus.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q007",
+      "topic": "Logging",
+      "text": "Structured logging means…",
+      "options": [
+        "emitting logs as machine-parseable fields (e.g. JSON) rather than free text",
+        "writing logs only when an error occurs",
+        "keeping every log forever in cold storage",
+        "printing logs in a fixed column width so they line up neatly for human readers"
+      ],
+      "correct": 0,
+      "explanation": "Structured logs (like pino's JSON output) can be filtered and aggregated by field, which free-text lines make painful.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q008",
+      "topic": "Logging",
+      "text": "Standard log levels ordered from least to most severe are…",
+      "options": [
+        "warn, debug, error, info",
+        "error, warn, info, debug",
+        "info, debug, warn, error",
+        "debug, info, warn, error"
+      ],
+      "correct": 3,
+      "explanation": "debug < info < warn < error is the conventional ordering; production typically runs at info and above.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q009",
+      "topic": "Alerting",
+      "text": "An SLA differs from an SLO in that an SLA is…",
+      "options": [
+        "an internal stretch goal nobody is told about",
+        "a contractual promise to customers, often with penalties",
+        "the dashboard where uptime is displayed",
+        "the raw measurement that the target is ultimately judged against"
+      ],
+      "correct": 1,
+      "explanation": "SLI = the measurement, SLO = your internal target for it, SLA = the external contract (usually looser than the SLO).",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q010",
+      "topic": "Alerting",
+      "text": "\"Alert fatigue\" describes the situation where…",
+      "options": [
+        "alert rules consume too much CPU on the server",
+        "one alert repeats endlessly because it was never acknowledged",
+        "so many noisy alerts fire that real ones get ignored",
+        "engineers receive alerts outside working hours"
+      ],
+      "correct": 2,
+      "explanation": "Noisy, non-actionable alerts train people to ignore pages — the fix is fewer, better alerts tied to real user impact.",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q011",
+      "topic": "PromQL",
+      "text": "rate(http_requests_total[5m]) gives you…",
+      "options": [
+        "the per-second average increase of the counter over 5 minutes",
+        "the cumulative total of requests served since the process first started",
+        "the number of requests in the busiest single second",
+        "a prediction of the request volume 5 minutes ahead"
+      ],
+      "correct": 0,
+      "explanation": "rate() turns a cumulative counter into a per-second rate averaged over the given window — the bread and butter of PromQL.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q012",
+      "topic": "Metrics",
+      "text": "High label cardinality is a problem in Prometheus because…",
+      "options": [
+        "labels beyond the tenth one are silently dropped from every series at scrape time",
+        "each unique label combination creates a separate time series, exploding memory",
+        "PromQL cannot filter on more than three labels",
+        "Grafana refuses to plot more than 100 series"
+      ],
+      "correct": 1,
+      "explanation": "Every unique label set is its own series — putting user IDs or request paths in labels can melt a Prometheus server.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q013",
+      "topic": "Alerting",
+      "text": "Alerting on symptoms rather than causes means preferring alerts like…",
+      "options": [
+        "\"a deployment happened somewhere\" over \"error rate went up\"",
+        "\"disk at 60%\" over \"users see errors\"",
+        "\"a pod restarted somewhere\" over \"latency is high\"",
+        "\"users are getting 5xx errors\" over \"CPU is at 90%\""
+      ],
+      "correct": 3,
+      "explanation": "Symptom alerts fire on real user impact; cause-based alerts (CPU high, pod restarted) are often noise with no visible effect.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q014",
+      "topic": "Tracing",
+      "text": "In distributed tracing, a \"span\" is…",
+      "options": [
+        "the gap in time between two consecutive incidents affecting the same service or host",
+        "the retention period of the tracing backend",
+        "one timed operation within a trace, with a parent-child relationship to others",
+        "the network distance between two services"
+      ],
+      "correct": 2,
+      "explanation": "A trace is a tree of spans; each span records one operation's timing and metadata, linked by trace and parent IDs.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q015",
+      "topic": "Tracing",
+      "text": "A correlation (or request) ID is useful because it…",
+      "options": [
+        "lets you follow one request's log lines across multiple services",
+        "encrypts the log entries end to end",
+        "guarantees log lines arrive in order",
+        "compresses repeated log messages into a single deduplicated entry"
+      ],
+      "correct": 0,
+      "explanation": "Propagating one ID through every hop lets you grep the whole journey of a single request across service boundaries.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q016",
+      "topic": "Alerting",
+      "text": "The \"golden signals\" of monitoring are…",
+      "options": [
+        "commits, builds, deployments and rollbacks",
+        "latency, traffic, errors and saturation",
+        "uptime, cost, capacity and headcount",
+        "CPU, memory, disk and network"
+      ],
+      "correct": 1,
+      "explanation": "Google's SRE book proposes latency, traffic, errors and saturation as the four signals worth watching for any user-facing system.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q017",
+      "topic": "Metrics",
+      "text": "Why prefer p95/p99 latency over the average?",
+      "options": [
+        "percentiles are computationally much cheaper to calculate than a mean",
+        "averages cannot be graphed over time",
+        "Prometheus does not support computing averages",
+        "the average hides the slow tail that your unhappiest users experience"
+      ],
+      "correct": 3,
+      "explanation": "A decent mean can coexist with a terrible p99 — tail percentiles show what the worst-served requests actually experience.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q018",
+      "topic": "Prometheus",
+      "text": "An \"exporter\" in the Prometheus ecosystem is…",
+      "options": [
+        "a job that ships metrics off to cold storage",
+        "the component that emails alert notifications",
+        "a bridge that exposes a third-party system's metrics in Prometheus format",
+        "a Grafana plugin used for exporting dashboard panels as printable PDF reports"
+      ],
+      "correct": 2,
+      "explanation": "Exporters (node_exporter, blackbox_exporter, x509 exporters…) translate systems that don't speak Prometheus into scrapeable /metrics.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q019",
+      "topic": "Alerting",
+      "text": "In the Prometheus stack, Alertmanager is responsible for…",
+      "options": [
+        "grouping, routing and silencing alerts on their way to receivers",
+        "continuously evaluating the alerting rules against the stored metric series",
+        "storing the alert history for compliance",
+        "drawing the alert panels inside Grafana"
+      ],
+      "correct": 0,
+      "explanation": "Prometheus evaluates rules and fires alerts; Alertmanager dedupes, groups, routes (Slack, email, PagerDuty) and handles silences.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q020",
+      "topic": "Grafana",
+      "text": "Grafana dashboard provisioning (dashboards as code/config) is valuable because…",
+      "options": [
+        "provisioned dashboards render measurably faster in the user's browser",
+        "dashboards survive rebuilds and are versioned instead of hand-edited",
+        "it is the only way to use template variables",
+        "it removes the need for a Prometheus datasource"
+      ],
+      "correct": 1,
+      "explanation": "Provisioning from files (e.g. via a Helm chart sidecar watching ConfigMaps) makes dashboards reproducible, reviewable and restorable.",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q021",
+      "topic": "SRE",
+      "text": "An error budget is…",
+      "options": [
+        "the cloud spend reserved each quarter for incident response",
+        "the count of bugs allowed per sprint",
+        "the acceptable amount of unreliability implied by your SLO",
+        "the maximum size of the on-call rota"
+      ],
+      "correct": 2,
+      "explanation": "A 99.9% SLO implies ~43 minutes of failure per month; while budget remains you ship features, when it's spent you prioritise reliability.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q022",
+      "topic": "PromQL",
+      "text": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket[5m])) computes…",
+      "options": [
+        "an estimated p99 latency from histogram buckets",
+        "the exact worst request seen in 5 minutes",
+        "the total count of requests slower than 0.99 seconds",
+        "the 99th slowest endpoint by average latency"
+      ],
+      "correct": 0,
+      "explanation": "It interpolates the 99th percentile from cumulative bucket counters — an estimate whose accuracy depends on bucket boundaries.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q023",
+      "topic": "Metrics",
+      "text": "The USE method for resource analysis checks…",
+      "options": [
+        "uptime, stability, efficiency and overall responsiveness",
+        "utilisation, saturation and errors for every resource",
+        "user sessions and engagement",
+        "updates, security and encryption"
+      ],
+      "correct": 1,
+      "explanation": "Brendan Gregg's USE method: for each resource (CPU, disk, network…) check utilisation, saturation and errors.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q024",
+      "topic": "Prometheus",
+      "text": "The Pushgateway is intended for…",
+      "options": [
+        "speeding up scrapes of slow targets",
+        "buffering alerts when Alertmanager is down",
+        "replacing standard exporters entirely on air-gapped internal networks",
+        "short-lived batch jobs that end before a scrape would reach them"
+      ],
+      "correct": 3,
+      "explanation": "Batch jobs push their final metrics to the Pushgateway, which holds them for Prometheus to scrape; using it as a general proxy is an anti-pattern.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q025",
+      "topic": "Tracing",
+      "text": "OpenTelemetry (OTel) is best described as…",
+      "options": [
+        "a vendor-neutral standard and SDKs for emitting traces, metrics and logs",
+        "Grafana's own proprietary tracing backend for enterprise-licensed customers",
+        "a Kubernetes controller for restarting slow pods",
+        "a log compression format for object storage"
+      ],
+      "correct": 0,
+      "explanation": "OTel standardises instrumentation and wire formats so you can switch backends (Jaeger, Tempo, vendors) without re-instrumenting.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q026",
+      "topic": "Alerting",
+      "text": "A \"burn rate\" alert fires when…",
+      "options": [
+        "the CPU temperature of a node crosses a threshold",
+        "the error budget is being consumed faster than the SLO window allows",
+        "the monthly cloud bill exceeds its agreed forecast by a configured margin",
+        "log volume grows faster than disk can absorb"
+      ],
+      "correct": 1,
+      "explanation": "Burn-rate alerting (e.g. multiwindow multi-burn-rate) pages when you're spending error budget so fast the SLO is at risk.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q027",
+      "topic": "Logging",
+      "text": "Sampling in tracing systems exists because…",
+      "options": [
+        "regulations forbid tracing every user request",
+        "traces are only useful for failed requests",
+        "spans automatically expire after a fixed maximum number of network hops",
+        "recording every trace at scale costs more than the insight is worth"
+      ],
+      "correct": 3,
+      "explanation": "Head- or tail-based sampling keeps a representative or interesting subset (e.g. errors, slow requests) to control cost at high volume.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q028",
+      "topic": "Prometheus",
+      "text": "\"Staleness\" handling in Prometheus means that…",
+      "options": [
+        "counters are automatically reset back to zero every 24 hours of continuous uptime",
+        "old dashboards are archived automatically",
+        "a series that stops being scraped soon stops returning data points in queries",
+        "alerts expire if not acknowledged within an hour"
+      ],
+      "correct": 2,
+      "explanation": "When a target or series disappears, staleness markers stop queries returning its last value forever — important when pods come and go.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q029",
+      "topic": "SRE",
+      "text": "The strongest argument for dashboards-as-code over hand-built ones is…",
+      "options": [
+        "hand-built dashboards cannot use template variables",
+        "dashboards defined as code always execute their queries measurably faster at page load",
+        "Grafana licenses charge per manual edit",
+        "review, reuse and recovery: changes are diffable and environments stay consistent"
+      ],
+      "correct": 3,
+      "explanation": "As-code dashboards go through PR review, can be stamped across environments and are trivially restored — hand edits drift and vanish.",
+      "difficulty": "pro"
+    },
+    {
+      "id": "q030",
+      "topic": "Observability",
+      "text": "Monitoring TLS/x509 certificate expiry with an exporter matters because…",
+      "options": [
+        "expired certificates cause outages that are entirely predictable and preventable",
+        "certificates cannot be renewed without a monitoring system",
+        "browsers now require cryptographic proof of active monitoring before trusting a certificate",
+        "expiry dates change dynamically and must be tracked hourly"
+      ],
+      "correct": 0,
+      "explanation": "Cert expiry is one of the most preventable outage classes: an exporter plus a weeks-ahead alert turns a 2am outage into a routine ticket.",
+      "difficulty": "medium"
+    }
+  ]
+}
