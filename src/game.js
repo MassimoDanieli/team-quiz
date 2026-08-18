@@ -154,8 +154,17 @@ class GameEngine {
 
     let q = null;
     if (set.ai) {
-      // Generated stack: the buffer hands over a question without blocking.
-      q = set.take();
+      // Prefer something already written for this topic and not yet asked.
+      // These cost nothing, have already been through the de-bias pipeline,
+      // and store.js is tracking which of them a cohort has seen — so the
+      // generator is only paid for when the accumulated pool runs out.
+      // recycle:false is the point: an exhausted generated stack must produce
+      // new questions, not start repeating the old ones.
+      q = this._pickFromSet(set, g, { recycle: false });
+
+      // Nothing unused on disk: take a freshly generated one from the buffer.
+      if (!q) q = set.take();
+
       if (!q) {
         // Nothing ready — the API is slow, down, or misconfigured. A round must
         // never stall on that, so this question comes from curated content and
@@ -178,12 +187,15 @@ class GameEngine {
 
   // Pick from a curated set: honour the difficulty filter, avoid anything
   // already asked, and recycle the set once every question has been used.
-  _pickFromSet(set, g) {
+  _pickFromSet(set, g, { recycle = true } = {}) {
     let pool = set.questions.filter((q) => g.difficulty.includes(q.difficulty || 'hard'));
     if (pool.length === 0) pool = set.questions;
     const used = this.store.getUsed(set.id);
     let unused = pool.filter((q) => !used.includes(q.id));
     if (unused.length === 0) {
+      // A curated set is finite, so it recycles once everything has been asked.
+      // A generated one can produce more instead, and the caller says so.
+      if (!recycle) return null;
       this.store.resetUsed(set.id);
       unused = pool.slice();
     }

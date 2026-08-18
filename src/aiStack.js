@@ -20,6 +20,7 @@
 // change and must never await.
 
 const logger = require('./logger');
+const { createGeneratedStore } = require('./generatedStore');
 
 // Generated stacks sort after every curated one. loadSets() defaults a set
 // without an explicit order to 999, so start above that.
@@ -63,13 +64,18 @@ function toEngineQuestion(q, { stackId, topic }) {
  * @param {object} opts.ai         A quiz-ai facade (injected in tests).
  * @param {object} [opts.log]
  */
-function createAiStacks({ topics, ai, log = logger }) {
+function createAiStacks({ topics, ai, generatedStore = null, log = logger }) {
   const stacks = {};
   const order = [];
 
   topics.forEach((topic, i) => {
     const stackId = stackIdFor(topic);
     if (stacks[stackId]) return; // duplicate topic in the env var
+
+    // Everything this topic has produced in earlier sessions. The engine will
+    // prefer these over generating, and store.js already knows which of them
+    // have been asked, so a returning cohort does not see repeats.
+    const persisted = generatedStore ? generatedStore.load(stackId) : [];
 
     const queue = ai.createQueue({
       topic,
@@ -81,6 +87,13 @@ function createAiStacks({ topics, ai, log = logger }) {
         // Warm the explanations while the question sits in the buffer. Fire and
         // forget: a failure here costs a slower reveal, nothing more.
         ai.prewarm({ question }).catch(() => {});
+
+        // Write it down as soon as it exists, not when it is served: a question
+        // generated and never asked is still worth keeping for next time.
+        if (generatedStore) {
+          const engineQuestion = toEngineQuestion(question, { stackId, topic });
+          generatedStore.append(stackId, engineQuestion, stacks[stackId].questions);
+        }
       }
     });
 
@@ -93,10 +106,10 @@ function createAiStacks({ topics, ai, log = logger }) {
       ai: true,
       queue,
 
-      // The engine treats sets[id].questions as an array for its counters. A
-      // generated stack has no fixed contents, so this holds what has actually
-      // been produced — which is what the "used / total" readout should show.
-      questions: [],
+      // The engine treats sets[id].questions as an array it can pick from. For
+      // a generated stack it holds everything ever written for this topic:
+      // loaded from disk at boot, appended to as more is generated.
+      questions: persisted,
 
       /**
        * Hand the engine the next generated question, or null when the buffer
@@ -105,8 +118,16 @@ function createAiStacks({ topics, ai, log = logger }) {
       take() {
         const { question, source } = queue.take();
         if (!question || source !== 'ai') return null;
+
         const engineQuestion = toEngineQuestion(question, { stackId, topic });
-        this.questions.push(engineQuestion);
+        // onEnqueue normally recorded it already; keep this idempotent so the
+        // stack cannot end up holding the same question twice.
+        if (!this.questions.some((q) => q.id === engineQuestion.id)) {
+          // append() is what adds to the array — doing it here as well would
+          // make append see its own question as a duplicate and skip the write.
+          if (generatedStore) generatedStore.append(stackId, engineQuestion, this.questions);
+          else this.questions.push(engineQuestion);
+        }
         return engineQuestion;
       },
 
@@ -115,6 +136,13 @@ function createAiStacks({ topics, ai, log = logger }) {
         return queue.health;
       }
     };
+
+    // Tell the generator what this topic has already covered, or a restart
+    // means paying to rewrite yesterday's questions.
+    if (persisted.length && typeof queue.seedAsked === 'function') {
+      queue.seedAsked(persisted.map((q) => q.text));
+      log.info({ stackId, persisted: persisted.length }, 'ai: loaded generated questions');
+    }
 
     order.push(stackId);
   });
@@ -147,7 +175,7 @@ function createAiStacks({ topics, ai, log = logger }) {
  * Load quiz-ai and build the stacks. Returns null when generation is off or
  * unavailable — the caller then runs exactly as it did before.
  */
-async function initAiStacks({ topics, apiKey, model, log = logger }) {
+async function initAiStacks({ topics, apiKey, model, generatedDir, log = logger }) {
   if (!topics.length) return null;
   if (!apiKey) {
     log.warn('ai: AI_TOPICS is set but ANTHROPIC_API_KEY is not — generated stacks disabled');
@@ -163,9 +191,17 @@ async function initAiStacks({ topics, apiKey, model, log = logger }) {
   }
 
   const ai = createQuizAI({ apiKey, ...(model ? { model } : {}) });
-  const built = createAiStacks({ topics, ai, log });
+  const generatedStore = generatedDir ? createGeneratedStore({ dir: generatedDir, log }) : null;
+  const built = createAiStacks({ topics, ai, generatedStore, log });
   built.prime();
-  log.info({ stacks: built.order.length, model: ai.client.model }, 'ai: generated stacks ready');
+  log.info(
+    {
+      stacks: built.order.length,
+      model: ai.client.model,
+      generated: generatedStore ? generatedStore.describe() : 'not persisted'
+    },
+    'ai: generated stacks ready'
+  );
   return built;
 }
 

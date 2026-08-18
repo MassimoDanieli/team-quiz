@@ -3,7 +3,12 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+
 const { createAiStacks, toEngineQuestion, stackIdFor } = require('../src/aiStack');
+const { createGeneratedStore } = require('../src/generatedStore');
 const { GameEngine } = require('../src/game');
 
 const silent = { info() {}, warn() {}, error() {}, debug() {} };
@@ -83,8 +88,13 @@ function memoryStore() {
   };
 }
 
-function engineWith(ai) {
-  const built = createAiStacks({ topics: ['Kubernetes troubleshooting'], ai, log: silent });
+function engineWith(ai, { generatedStore = null } = {}) {
+  const built = createAiStacks({
+    topics: ['Kubernetes troubleshooting'],
+    ai,
+    generatedStore,
+    log: silent
+  });
   const sets = { curated: curatedSet, ...built.stacks };
   const order = ['curated', ...built.order];
   const engine = new GameEngine({
@@ -239,4 +249,154 @@ test('a generation failure never propagates into the round', () => {
 
   assert.equal(typeof onError, 'function');
   assert.doesNotThrow(() => onError(Object.assign(new Error('401'), { fatal: true })));
+});
+
+
+// ---- persistence ----
+
+const AI_ID = 'ai-kubernetes-troubleshooting';
+
+function tmpStore() {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'quiz-ai-stack-'));
+  return { dir, store: createGeneratedStore({ dir, log: silent }) };
+}
+
+function persistedQuestion(n) {
+  return {
+    id: `persisted-${n}`,
+    topic: 'Kubernetes',
+    difficulty: 'hard',
+    text: `Persisted question ${n}: what blocks scheduling?`,
+    options: ['Taint', 'Image', 'Probe', 'Token'],
+    correct: 0,
+    explanation: 'from an earlier session',
+    generated: true
+  };
+}
+
+test('a generated question is persisted as soon as it is written', () => {
+  const { store } = tmpStore();
+  const ai = fakeAi();
+  engineWith(ai, { generatedStore: store });
+
+  ai.lastQueueOptions.onEnqueue(generated(7));
+
+  const saved = store.load(AI_ID);
+  assert.equal(saved.length, 1);
+  assert.equal(saved[0].text, generated(7).question);
+  assert.equal(saved[0].correct, 0);
+});
+
+test('questions from earlier sessions are loaded into the stack at boot', () => {
+  const { store } = tmpStore();
+  store.save(AI_ID, [persistedQuestion(1), persistedQuestion(2)]);
+
+  const { built } = engineWith(fakeAi(), { generatedStore: store });
+  assert.equal(built.stacks[AI_ID].questions.length, 2);
+});
+
+test('the generator is told what earlier sessions already covered', () => {
+  const { store } = tmpStore();
+  store.save(AI_ID, [persistedQuestion(1)]);
+
+  const ai = fakeAi();
+  ai.queue.seedAsked = (stems) => {
+    ai.queue.seeded = stems;
+    return stems.length;
+  };
+  engineWith(ai, { generatedStore: store });
+
+  assert.deepEqual(ai.queue.seeded, [persistedQuestion(1).text]);
+});
+
+test('the engine serves an unused persisted question before generating', () => {
+  const { store } = tmpStore();
+  store.save(AI_ID, [persistedQuestion(1)]);
+
+  const ai = fakeAi({ supply: 5 });
+  const { engine } = engineWith(ai, { generatedStore: store });
+  engine.game.stackId = AI_ID;
+  engine._nextQuestion();
+
+  assert.equal(engine.game.current.id, 'persisted-1', 'should not have paid to generate');
+  assert.equal(ai.queue.size, 5, 'the buffer was not touched');
+});
+
+test('once persisted questions are used up, generation takes over', () => {
+  const { store } = tmpStore();
+  store.save(AI_ID, [persistedQuestion(1)]);
+
+  const ai = fakeAi({ supply: 3 });
+  const { engine } = engineWith(ai, { generatedStore: store });
+  engine.game.stackId = AI_ID;
+
+  engine._nextQuestion();
+  assert.equal(engine.game.current.id, 'persisted-1');
+
+  engine._nextQuestion();
+  assert.match(engine.game.current.text, /Generated question/);
+  assert.equal(engine.game.currentSetId, AI_ID);
+});
+
+test('an exhausted generated stack never recycles its own questions', () => {
+  const { store } = tmpStore();
+  store.save(AI_ID, [persistedQuestion(1)]);
+
+  // No buffer, so after the persisted one there is nothing generated either.
+  const ai = fakeAi({ supply: 0 });
+  const { engine } = engineWith(ai, { generatedStore: store });
+  engine.game.stackId = AI_ID;
+
+  engine._nextQuestion();
+  assert.equal(engine.game.current.id, 'persisted-1');
+
+  engine._nextQuestion();
+  assert.equal(engine.game.currentSetId, 'curated', 'must fall back, not repeat itself');
+  assert.notEqual(engine.game.current.id, 'persisted-1');
+});
+
+test('a curated stack still recycles when every question has been asked', () => {
+  const { engine } = engineWith(fakeAi());
+  engine.game.stackId = 'curated';
+
+  const seen = new Set();
+  for (let i = 0; i < 7; i += 1) {
+    engine._nextQuestion();
+    seen.add(engine.game.current.id);
+  }
+  assert.equal(engine.game.currentSetId, 'curated');
+  assert.ok(seen.size <= 5, 'a five-question set must repeat after five rounds');
+});
+
+test('serving a generated question persists it even if onEnqueue never ran', () => {
+  const { store } = tmpStore();
+  const ai = fakeAi({ supply: 2 });
+  const { engine } = engineWith(ai, { generatedStore: store });
+  engine.game.stackId = AI_ID;
+
+  engine._nextQuestion();
+  assert.equal(store.load(AI_ID).length, 1);
+});
+
+test('the same question is never persisted twice', () => {
+  const { store } = tmpStore();
+  const ai = fakeAi({ supply: 2 });
+  const { engine } = engineWith(ai, { generatedStore: store });
+  engine.game.stackId = AI_ID;
+
+  // onEnqueue writes it, then the engine serves the same one.
+  ai.lastQueueOptions.onEnqueue(generated(0));
+  engine._nextQuestion();
+
+  assert.equal(store.load(AI_ID).length, 1);
+});
+
+test('everything works with persistence switched off', () => {
+  const ai = fakeAi({ supply: 2 });
+  const { engine } = engineWith(ai);
+  engine.game.stackId = AI_ID;
+
+  assert.doesNotThrow(() => ai.lastQueueOptions.onEnqueue(generated(1)));
+  engine._nextQuestion();
+  assert.match(engine.game.current.text, /Generated question/);
 });

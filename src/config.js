@@ -44,5 +44,10 @@ module.exports = {
     .filter(Boolean),
   ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
   ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL || '',
+  // Where generated questions accumulate, one file per stack. Alongside
+  // state.json so a single mounted volume covers both.
+  GENERATED_DIR:
+    process.env.GENERATED_DIR ||
+    path.join(path.dirname(process.env.DATA_FILE || path.join(ROOT, 'data', 'state.json')), 'generated'),
   PUBLIC_DIR: path.join(ROOT, 'public')
 };

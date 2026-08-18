@@ -28,6 +28,7 @@ initAiStacks({
   topics: config.AI_TOPICS,
   apiKey: config.ANTHROPIC_API_KEY,
   model: config.ANTHROPIC_MODEL,
+  generatedDir: config.GENERATED_DIR,
   log: logger
 }).then((built) => {
   if (!built) return;
