@@ -14,9 +14,28 @@ const { loadSets } = require('./src/questions');
 const { RoomManager } = require('./src/rooms');
 const admins = require('./src/admins');
 const { registerSocketHandlers } = require('./src/socketHandlers');
+const { initAiStacks } = require('./src/aiStack');
 
 // ---- Load content + build the room manager ----
 const { sets, order } = loadSets(config.QUESTIONS_DIR);
+
+// Generated stacks are merged into the same sets/order the engine already uses,
+// so nothing downstream needs to know they exist. initAiStacks() is async (it
+// dynamically imports the ESM quiz-ai package) and returns null when generation
+// is off or unavailable — in which case this is the app exactly as it was.
+let aiStacks = null;
+initAiStacks({
+  topics: config.AI_TOPICS,
+  apiKey: config.ANTHROPIC_API_KEY,
+  model: config.ANTHROPIC_MODEL,
+  log: logger
+}).then((built) => {
+  if (!built) return;
+  aiStacks = built;
+  Object.assign(sets, built.stacks);
+  order.push(...built.order);
+});
+
 const manager = new RoomManager({
   sets,
   order,
@@ -163,6 +182,9 @@ function shutdown(signal) {
   if (shuttingDown) return;
   shuttingDown = true;
   logger.info({ signal }, 'shutting down');
+  // Stop generating: an in-flight refill would otherwise keep the process
+  // alive past the point where it should be gone.
+  if (aiStacks) aiStacks.stop();
   io.close(() => {
     server.close(async () => {
       await redis.quit();

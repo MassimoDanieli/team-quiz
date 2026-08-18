@@ -34,5 +34,15 @@ module.exports = {
   // multiple replicas correct here.
   REDIS_URL: process.env.REDIS_URL || '',
   QUESTIONS_DIR: process.env.QUESTIONS_DIR || path.join(ROOT, 'questions'),
+  // Generated question stacks. Off unless AI_TOPICS is set AND a key is present:
+  // the default behaviour of the app is unchanged, and a missing key degrades to
+  // curated content rather than failing to boot. One stack per comma-separated
+  // topic, offered alongside the curated sets in the host's dropdown.
+  AI_TOPICS: (process.env.AI_TOPICS || '')
+    .split(',')
+    .map((t) => t.trim())
+    .filter(Boolean),
+  ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY || '',
+  ANTHROPIC_MODEL: process.env.ANTHROPIC_MODEL || '',
   PUBLIC_DIR: path.join(ROOT, 'public')
 };

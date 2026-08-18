@@ -29,8 +29,12 @@ class GameEngine {
     this.maxPlayers = maxPlayers || 200;
     this.timerSeconds = Number.isInteger(timerSeconds) ? timerSeconds : 60;
     this.defaultStack = order[0];
+    // Curated sets are fixed, so their tier counts are computed once. A
+    // generated stack grows as questions are written, so its counts are
+    // recomputed on demand in _tiersFor().
     this.tierCounts = {};
     for (const id of order) {
+      if (sets[id].ai) continue;
       const c = { medium: 0, hard: 0, pro: 0 };
       for (const q of sets[id].questions) c[q.difficulty || 'hard']++;
       this.tierCounts[id] = c;
@@ -146,17 +150,22 @@ class GameEngine {
 
   _nextQuestion() {
     const g = this.game;
-    const set = this.sets[g.stackId] || this.sets[this.defaultStack];
-    // Difficulty filter; if the set has no questions in the chosen tiers, fall back to all.
-    let pool = set.questions.filter((q) => g.difficulty.includes(q.difficulty || 'hard'));
-    if (pool.length === 0) pool = set.questions;
-    const used = this.store.getUsed(set.id);
-    let unused = pool.filter((q) => !used.includes(q.id));
-    if (unused.length === 0) {
-      this.store.resetUsed(set.id);
-      unused = pool.slice();
+    let set = this.sets[g.stackId] || this.sets[this.defaultStack];
+
+    let q = null;
+    if (set.ai) {
+      // Generated stack: the buffer hands over a question without blocking.
+      q = set.take();
+      if (!q) {
+        // Nothing ready — the API is slow, down, or misconfigured. A round must
+        // never stall on that, so this question comes from curated content and
+        // the session carries on. set.health() says why, for the host UI.
+        set = this.sets[this.defaultStack];
+      }
     }
-    const q = unused[Math.floor(Math.random() * unused.length)];
+
+    if (!q) q = this._pickFromSet(set, g);
+
     this.store.markUsed(set.id, q.id);
     g.current = q;
     g.currentSetId = set.id;
@@ -165,6 +174,20 @@ class GameEngine {
     g.phase = 'question';
     g.questionNumber++;
     g.deadline = this.timerSeconds > 0 ? Date.now() + this.timerSeconds * 1000 : null;
+  }
+
+  // Pick from a curated set: honour the difficulty filter, avoid anything
+  // already asked, and recycle the set once every question has been used.
+  _pickFromSet(set, g) {
+    let pool = set.questions.filter((q) => g.difficulty.includes(q.difficulty || 'hard'));
+    if (pool.length === 0) pool = set.questions;
+    const used = this.store.getUsed(set.id);
+    let unused = pool.filter((q) => !used.includes(q.id));
+    if (unused.length === 0) {
+      this.store.resetUsed(set.id);
+      unused = pool.slice();
+    }
+    return unused[Math.floor(Math.random() * unused.length)];
   }
 
   reveal() {
@@ -320,6 +343,24 @@ class GameEngine {
     return false;
   }
 
+  // A curated set has a fixed size. A generated one has however many have been
+  // written so far, plus whatever is waiting in the buffer — which is what the
+  // host's "used / total" readout should reflect, rather than a number that
+  // always equals the used count.
+  _totalFor(id) {
+    const set = this.sets[id];
+    if (!set.ai) return set.questions.length;
+    return set.questions.length + (set.queue ? set.queue.size : 0);
+  }
+
+  _tiersFor(id) {
+    const set = this.sets[id];
+    if (!set.ai) return this.tierCounts[id];
+    const c = { medium: 0, hard: 0, pro: 0 };
+    for (const q of set.questions) c[q.difficulty || 'hard']++;
+    return c;
+  }
+
   // ---- State view ----
   publicState(role) {
     const g = this.game;
@@ -345,13 +386,14 @@ class GameEngine {
         id,
         name: this.sets[id].name,
         description: this.sets[id].description,
-        total: this.sets[id].questions.length,
+        total: this._totalFor(id),
         used: this.store.getUsed(id).length,
-        tiers: this.tierCounts[id]
+        tiers: this._tiersFor(id),
+        ai: !!this.sets[id].ai
       })),
       difficulty: g.difficulty.slice(),
       usedCount: this.store.getUsed(g.stackId).length,
-      totalQuestions: (this.sets[g.stackId] || this.sets[this.defaultStack]).questions.length,
+      totalQuestions: this._totalFor(this.sets[g.stackId] ? g.stackId : this.defaultStack),
       deadline: g.deadline,
       timerSeconds: this.timerSeconds,
       currentSetId: g.currentSetId,
