@@ -19,7 +19,7 @@
     "ioredis": "^5.11.1",
     "pino": "^9.3.2",
     "socket.io": "^4.7.5",
-    "quiz-ai": "github:MassimoDanieli/quiz-ai#v0.2.2"
+    "quiz-ai": "github:MassimoDanieli/quiz-ai#v0.2.3"
   },
   "devDependencies": {
     "eslint": "^8.57.0",
