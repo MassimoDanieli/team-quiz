@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-# Provisions the Team Quiz app on a fresh Ubuntu 22.04 box.
+# Provisions the Team Quiz app on an Ubuntu 22.04 box.
+# Safe to re-run on a box that is already live: it redeploys the app and
+# restarts the service, but leaves a certbot-managed nginx site (HTTPS) alone
+# and backs up /etc/team-quiz.env before changing it.
 # Usage: sudo bash setup.sh /path/to/team-quiz.env
 set -euo pipefail
 
@@ -30,7 +33,10 @@ chown -R ubuntu:ubuntu /opt/team-quiz
 sudo -u ubuntu bash -c 'cd /opt/team-quiz && npm ci --omit=dev'
 
 echo "==> Writing service environment"
-cat > /etc/team-quiz.env <<EOF
+SERVICE_ENV=/etc/team-quiz.env
+NEW_ENV="$(mktemp)"
+chmod 600 "$NEW_ENV"
+cat > "$NEW_ENV" <<EOF
 PORT=3000
 WIN_SCORE=${WIN_SCORE}
 SHARED_PASSWORD=${SHARED_PASSWORD}
@@ -39,7 +45,19 @@ SUPER_ADMIN_PASSWORD=${SUPER_ADMIN_PASSWORD}
 DATA_FILE=/var/lib/team-quiz/state.json
 ADMINS_FILE=/var/lib/team-quiz/admins.json
 EOF
-chmod 600 /etc/team-quiz.env
+if [ -f "$SERVICE_ENV" ] && cmp -s "$NEW_ENV" "$SERVICE_ENV"; then
+  echo "    unchanged"
+  rm -f "$NEW_ENV"
+else
+  if [ -f "$SERVICE_ENV" ]; then
+    # Hand edits on the box would otherwise be lost silently.
+    ENV_BACKUP="${SERVICE_ENV}.bak-$(date +%Y%m%d-%H%M%S)"
+    cp -p "$SERVICE_ENV" "$ENV_BACKUP"
+    echo "    existing env differs; previous version saved to ${ENV_BACKUP}"
+  fi
+  install -m 600 -o root -g root "$NEW_ENV" "$SERVICE_ENV"
+  rm -f "$NEW_ENV"
+fi
 
 echo "==> Installing systemd unit"
 cat > /etc/systemd/system/team-quiz.service <<'EOF'
@@ -59,10 +77,26 @@ User=ubuntu
 WantedBy=multi-user.target
 EOF
 systemctl daemon-reload
-systemctl enable --now team-quiz
+systemctl enable team-quiz
+# restart (not "enable --now"): on a redeploy the service is already running
+# and would otherwise keep serving the old code.
+systemctl restart team-quiz
+sleep 3
+systemctl is-active --quiet team-quiz || {
+  echo "team-quiz failed to start; last log lines:" >&2
+  journalctl -u team-quiz -n 30 --no-pager >&2 || true
+  exit 1
+}
 
 echo "==> Configuring nginx reverse proxy"
-cat > /etc/nginx/sites-available/team-quiz <<EOF
+NGINX_SITE=/etc/nginx/sites-available/team-quiz
+if [ -f "$NGINX_SITE" ] && grep -Eq 'listen[^;]*443|managed by Certbot' "$NGINX_SITE"; then
+  # certbot has already rewritten this file to serve HTTPS. Regenerating the
+  # plain-HTTP template here would drop the 443 server block and take the
+  # site offline until enable-https.sh is run again.
+  echo "    HTTPS site already configured; leaving ${NGINX_SITE} untouched"
+else
+cat > "$NGINX_SITE" <<EOF
 server {
     listen 80;
     server_name ${DOMAIN};
@@ -80,6 +114,7 @@ server {
     }
 }
 EOF
+fi
 ln -sf /etc/nginx/sites-available/team-quiz /etc/nginx/sites-enabled/team-quiz
 rm -f /etc/nginx/sites-enabled/default
 nginx -t
